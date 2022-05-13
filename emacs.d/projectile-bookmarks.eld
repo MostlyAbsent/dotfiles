@@ -1,1 +1,0 @@
-("~/Desktop/ngiwa/" "~/Desktop/liawa/" "~/Desktop/" "~/Desktop/niche/" "~/.emacs.d.old/" "~/Desktop/the-lit-centre/")
