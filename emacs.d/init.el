@@ -48,7 +48,7 @@
 (set-face-attribute 'default nil
 		    :font "Source Code Pro"
 		    :slant 'normal
-		    :height 150)
+		    :height 120)
 
 (load-theme 'cyberpunk t)
 
