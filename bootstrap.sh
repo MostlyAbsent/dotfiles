@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Set permissions
+# There will need to be executable flags on the helper scripts
+
 # Install Brew
 if ! command -v brew &> /dev/null; then
   echo "Installing Brew"
@@ -53,3 +56,17 @@ if ! command -v bb &>/dev/null; then
 
   brew install borkdude/brew/babashka
 fi
+
+# Configure Fedora
+helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
+		     "move-to-monitor-left" \
+		     "[]"
+helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
+		     "move-to-monitor-right" \
+		     "[]"
+helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
+		     "move-to-workspace-left" \
+		     "[]"
+helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
+		     "move-to-workspace-right" \
+		     "[]"
