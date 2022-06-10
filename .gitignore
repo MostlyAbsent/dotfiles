@@ -3,3 +3,4 @@ emacs.d/elpa
 emacs.d/elpa/*
 emacs.d/elpa/**
 emacs.d/transient
+emacs.d/auto-save-list
