@@ -57,16 +57,3 @@ if ! command -v bb &>/dev/null; then
   brew install borkdude/brew/babashka
 fi
 
-# Configure Fedora
-helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
-		     "move-to-monitor-left" \
-		     "[]"
-helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
-		     "move-to-monitor-right" \
-		     "[]"
-helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
-		     "move-to-workspace-left" \
-		     "[]"
-helpers/gsettings.sh "org.gnome.desktop.wm.keybindings" \
-		     "move-to-workspace-right" \
-		     "[]"
