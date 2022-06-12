@@ -57,3 +57,7 @@ if ! command -v bb &>/dev/null; then
   brew install borkdude/brew/babashka
 fi
 
+# Add to emacs config
+# forward paragraph to ,-f
+# backward paragraph to ,-b
+# comment region to ,-#
