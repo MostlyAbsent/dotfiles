@@ -75,6 +75,10 @@
 (add-hook 'html-mode-hook 'subword-mode)
 (setq js-indent-level 2)
 
+(add-hook 'yaml-mode-hook
+          (lambda ()
+            (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
 ;; Install Packages
 ;;(require-package 'fullframe)
 (require-package 'cl-lib)
@@ -101,7 +105,6 @@
 	 ("C-c s" .   org-set-property)
 	 ("C-c M-l" . org-insert-last-stored-link))
   :config
-  (add-to-list 'org-latex-logfiles-extensions "tex")
   (setq org-blank-before-new-entry '((heading . t)
 				     (plan-list-item . t)))
   (setq org-insert-heading-respect-content t)
