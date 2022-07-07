@@ -1,0 +1,9 @@
+set ruler
+syntax enable
+set backspace=2
+set nobackup
+set nowb
+set noswapfile
+set expandtab
+set shiftwidth=4
+set tabstop=4

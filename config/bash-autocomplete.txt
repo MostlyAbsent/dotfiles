@@ -1,0 +1,16 @@
+
+# Homebrew autocompletion
+
+if type brew &>/dev/null
+then
+  HOMEBREW_PREVIEW="$(brew --prefix)"
+  if [[ -r "${HOMEBREW_PREVIEW}/etc/profile.d/bash_completion.sh" ]]
+  then
+    source "${HOMEBREW_PREVIEW}/etc/profile.d/bash_completion.sh"
+  else
+    for COMPLETION in "${HOMEBREW_PREVIEW}/etc/bash_completion.d/"*
+    do
+      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+    done
+  fi
+fi
