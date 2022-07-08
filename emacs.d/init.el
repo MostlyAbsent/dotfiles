@@ -75,10 +75,6 @@
 (add-hook 'html-mode-hook 'subword-mode)
 (setq js-indent-level 2)
 
-(add-hook 'yaml-mode-hook
-          (lambda ()
-            (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-
 ;; Install Packages
 ;;(require-package 'fullframe)
 (require-package 'cl-lib)
@@ -206,6 +202,13 @@
 
 (use-package org-contrib
   :ensure t)
+
+(use-package yaml-mode
+  :ensure t
+  :config
+  (add-hook 'yaml-mode-hook
+          (lambda ()
+            (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
 
 ;; (use-package flycheck
 ;;   :ensure t
