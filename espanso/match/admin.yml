@@ -1,0 +1,19 @@
+# espanso match file
+
+# General admin matches
+
+matches:
+  - trigger: "\\date"
+    replace: "{{td}}"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%Y-%m-%d"
+  - trigger: "\\date"
+    replace: "{{td}}"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%d/%m/%Y"
