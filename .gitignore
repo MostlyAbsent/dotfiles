@@ -7,3 +7,4 @@ emacs.d/auto-save-list
 /emacs.d/eshell/
 /emacs.d/cider-history
 emacs.d/session*
+emacs.d/custom.el
