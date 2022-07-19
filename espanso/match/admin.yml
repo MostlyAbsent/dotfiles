@@ -3,17 +3,56 @@
 # General admin matches
 
 matches:
-  - trigger: "\\date"
+  - trigger: "\\isodate"
     replace: "{{td}}"
+    label: "ISO"
     vars:
       - name: td
         type: date
         params:
           format: "%Y-%m-%d"
-  - trigger: "\\date"
+          
+  - trigger: "\\awstdate"
     replace: "{{td}}"
+    label: "AWST"
     vars:
       - name: td
         type: date
         params:
           format: "%d/%m/%Y"
+          
+  - trigger: "\\date"
+    replace: "{{isodate}}, (JD): "
+    label: "Date Stamp"
+    vars:
+      - name: isodate
+        type: match
+        params:
+          trigger: "\\awstdate"
+          
+  - trigger: "\\time"
+    replace: "{{td}} on {{date}}"
+    label: "Time Stamp"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%H:%M:%S"
+      - name: date
+        type: match
+        params:
+          trigger: "\\date"
+          
+  - trigger: "\\week"
+    replace: "{{td}}"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%Y-W-%U"
+          
+  - trigger: "\\bank"
+    form: "\nIf you choose to pay by bank transfer please use the details below and email a transaction receipt to info@macs4u.com.au\n\nReference: [[ref]]\nAccount Name: WebEquip Pty Ltd\nBank: NAB\nBSB: 086 288\nAccount Number: 488973497"
+
+  - trigger: "\\sig"
+    replace: "Kind regards,\nJacob Doran\nService Manager at Macs-4-U\nTel: 08 9274 7111"

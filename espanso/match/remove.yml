@@ -1,0 +1,7 @@
+# espanso match file
+
+# Removals of parts notes
+
+matches:
+  - trigger: "\\rm\\bc"
+    replace: Removed the Bottom Case to access the machine internals. 

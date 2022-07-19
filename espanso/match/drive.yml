@@ -1,0 +1,50 @@
+# espanso match file
+
+# Drive related Diagnostic notes
+
+matches:
+  - trigger: "\\drive\\m"
+    label: Drive Metrics
+    replace: "{{output}}"
+    vars:
+      - name: input
+        type: form
+        params:
+          layout: |
+            Fusion [[fusion]]
+            Type [[drivetype]]
+            Capacity [[capacity]]
+            Data [[data]]
+            OS [[os]]
+            Age [[age]]
+          fields:
+            fusion:
+              type: choice
+              values:
+                - na
+                - TRUE
+                - FALSE
+            drivetype:
+              type: choice
+              values:
+                - solid-state
+                - rotational
+            capacity:
+              default: "0"
+            data:
+              default: "0"
+            os:
+              default: "0"
+            age:
+              default: "0"
+      - name: output
+        type: script
+        params:
+          args:
+            - /Users/jacob/.bin/drivemetrics
+            - "{{input.fusion}}"
+            - "{{input.drivetype}}"
+            - "{{input.capacity}}"
+            - "{{input.data}}"
+            - "{{input.os}}"
+            - "{{input.age}}"

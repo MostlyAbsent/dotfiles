@@ -1,0 +1,7 @@
+# espanso matches file
+
+# Cleaning Notes
+
+matches:
+  - trigger: "\\clean"
+    replace: Cleaned general dust buildup, additional attention was given to the fans and heat exchangers.

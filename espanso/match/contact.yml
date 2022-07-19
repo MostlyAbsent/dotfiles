@@ -1,0 +1,52 @@
+# espanso match file
+
+# Contact Notes
+
+matches:
+  - trigger: "\\cc\\call"
+    replace: "{{time}}called the customer; "
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
+  - trigger: "\\cc\\message"
+    replace: "{{time}}Called the customer, rang out, asked for a callback. Messaged for a callback."
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
+  - trigger: "\\cc\\email"
+    replace: "{{time}}Emailed the customer."
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
+  - trigger: "\\cc\\text"
+    replace: "{{time}}Messaged the customer."
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
+  - trigger: "\\cc\\rfc"
+    replace: "{{time}}Messaged, ready for collection."
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
+  - trigger: "\\cc\\quote"
+    replace: "{{time}}Emailed and messaged the customer about their quote."
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"

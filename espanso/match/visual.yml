@@ -1,0 +1,7 @@
+# espanso match file
+
+# Visual inspection notes
+
+matches:
+  - trigger: "\\vis\\0"
+    replace: Visual inspection did not reveal anything of note.

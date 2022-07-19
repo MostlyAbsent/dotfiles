@@ -1,0 +1,39 @@
+# espanso match file
+
+# Action Needed Notes
+
+matches:
+  - trigger: "\\an\\h"
+    replace: "{{td}}"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "=== Action Needed - [JD %d/%m/%Y]\n  - "
+
+  - trigger: "\\an\\c"
+    replace: "{{anh}}Continue repair as quoted"
+    vars:
+      - name: anh
+        type: match
+        params:
+          trigger: "\\an\\h"
+
+  - trigger: "\\an\\q"
+    replace: "{{anh}}Contact with {{output.choice}}"
+    vars:
+      - name: anh
+        type: match
+        params:
+          trigger: "\\an\\h"
+      - name: output
+        type: form
+        params:
+          layout: |
+            Contact with [[choice]]
+          fields:
+            choice:
+              type: list
+              values:
+                - Quote
+                - Report

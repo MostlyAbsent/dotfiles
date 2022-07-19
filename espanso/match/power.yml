@@ -1,0 +1,36 @@
+# espanso match file
+
+# Power related diagnostics
+
+matches:
+  - trigger: "\\pwr\\b"
+    replace: No response to pressing the Power Button.
+
+  - trigger: "\\mgsf\\a"
+    label: Attache MagSafe or USB-C Power Adapter
+    replace: "Attached a known good {{pa.choice}} Power Adapter."
+    vars:
+      - name: pa
+        type: form
+        params:
+          layout: "Type [[choice]]"
+          fields:
+            choice:
+              type: list
+              values:
+                - MagSafe
+                - USB-C
+          
+  - trigger: "\\smc"
+    replace: "Performed a System Management Controller reset. {{outcome.choice}}"
+    vars:
+      - name: outcome
+        type: form
+        params:
+          layout: "Outcome [[choice]]"
+          fields:
+            choice:
+              type: list
+              values:
+                - No changes to the symptoms were observed.
+                - Normal functionality was restored.
