@@ -65,3 +65,6 @@ fi
 # Workstation Specific setup
 
 # Mac Specific Setup?
+# brew install --cask --no-quarantine syntax-highlight
+
+# xattr -r -d com.apple.quarantine {{unsigned app}}
