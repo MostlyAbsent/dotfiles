@@ -62,6 +62,14 @@
 
 (add-hook 'text-mode-hook 'flyspell-mode)
 
+;; Make it so keyboard-escape-quit doesn't delete-other-windows
+(require 'cl-lib)
+(defadvice keyboard-escape-quit
+    (around keyboard-escape-quit-dont-delete-other-windows activate)
+  (cl-letf (((symbol-function 'delete-other-windows)
+             (lambda () nil)))
+    ad-do-it))
+
 ;; General Keybindings
 (define-key global-map "\M-Q" 'unfill-paragraph)
 
