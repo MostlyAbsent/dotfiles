@@ -62,6 +62,8 @@
 
 (add-hook 'text-mode-hook 'flyspell-mode)
 
+(setq show-trailing-whitespace t)
+
 ;; Make it so keyboard-escape-quit doesn't delete-other-windows
 (require 'cl-lib)
 (defadvice keyboard-escape-quit
