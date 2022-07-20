@@ -43,7 +43,7 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\quote"
+  - trigger: "\\cc\\q"
     replace: "{{time}}Emailed and messaged the customer about their quote."
     vars:
       - name: time

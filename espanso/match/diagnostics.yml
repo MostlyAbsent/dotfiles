@@ -1,0 +1,16 @@
+# espanso match file
+
+# General Diagnostic notes
+
+matches:
+  - trigger: "\\initial"
+    replace: "Began initial condition assessment;"
+
+  - trigger: "\\minconf"
+    replace: "Reduced the machine to its minimum configuration by disconnecting or detaching as many components as possible, leaving only the systems vital to powering on the machine."
+
+  - trigger: "\\nochange"
+    replace: "No changes to the symptoms were observed."
+
+  - trigger: "\\normal"
+    replace: "Normal functionality was {{choice}}."

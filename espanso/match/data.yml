@@ -24,4 +24,25 @@ matches:
                 - Replacement Drive
                 - External Drive
                 - Replacement Machine
-            
+
+  - trigger: "\\backup"
+    replace: Began backing up the {{input.source}} into the {{input.tartet}}.
+    vars:
+      - name: input
+        type: form
+        params:
+          layout: |
+            Source [[source]]
+            Target [[target]]
+          fields:
+            source:
+              type: choice
+              values:
+                - Original Drive
+                - Backup
+            target:
+              type: choice
+              values:
+                - Replacement Drive
+                - External Drive
+                - Replacement Machine
