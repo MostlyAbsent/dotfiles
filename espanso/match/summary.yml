@@ -18,6 +18,9 @@ matches:
   - trigger: "\\sum\\drive\\rot"
     replace: Since macOS Catalina Apple has been using the APFS format for its storage drives. This format is heavily optimised for Solid State drives, and it's able to more effectively and efficiently store data on Solid State drives. Unfortunately those optimisations negitively impact the speed and utility of rotational drives. You are using a rotational drive with APFS formatting, limiting the speed and responsiveness of your machine. We recommend replacing this rotational drive with a Solid State Drive to take advantage of the new features in APFS.
 
+  - trigger: "\\sum\\drive\\full"
+    replace: The storage drive is quite full, with less than 10 GB of available we find machines frequently have unusual symptoms - slowness, failures to load, and other issues.
+
   - trigger: "\\sum\\test"
     form:
       These tests indicate a fault with the [[part]]. Repair of this fault would require a replacement [[part]].
