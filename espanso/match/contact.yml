@@ -28,7 +28,7 @@ matches:
           trigger: "\\time"
 
   - trigger: "\\cc\\text"
-    replace: "{{time}}Messaged the customer."
+    replace: "{{time}}Messaged the customer; "
     vars:
       - name: time
         type: match
