@@ -13,4 +13,19 @@ matches:
     replace: "No changes to the symptoms were observed."
 
   - trigger: "\\normal"
-    replace: "Normal functionality was {{choice}}."
+    replace: "Normal functionality was {{choice.output}}."
+    vars:
+      - name: choice
+        type: form
+        params:
+          layout: |
+            Normal functionality was [[output]]
+          fields:
+            output:
+              type: list
+              values:
+                - restored
+                - noted
+
+  - trigger: "\\pnov"
+    replace: "Confirmed Power No Video symptoms."
