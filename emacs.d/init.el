@@ -31,7 +31,7 @@
 (global-hl-line-mode 1)
 
 (setq indicate-empty-lines t)
-(setq show-trailing-whitespace t)
+(setq-default show-trailing-whitespace t)
 (setq indent-tabs-mode nil)
 
 (setq visible-bell t)
