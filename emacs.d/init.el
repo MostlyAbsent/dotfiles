@@ -100,11 +100,6 @@
 (require 'init-evil)
 (evil-mode 1)
 
-(use-package paredit
-  :ensure t
-  :config
-  (add-hook 'eldoc-mode-hook 'enable-paredit-mode))
-
 (use-package org
   :ensure t
   :bind (("C-c l" .   org-store-link)
@@ -219,6 +214,14 @@
   (add-hook 'yaml-mode-hook
           (lambda ()
             (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
+
+(use-package parinfer-rust-mode
+  :ensure t
+  :init
+  (setq parinfer-rust-auto-download t)
+  :config
+  (add-hook 'eldoc-mode-hook 'parinfer-rust-mode)
+  (add-hook 'yaml-mode-hook 'parinfer-rust-mode))
 
 ;; (use-package flycheck
 ;;   :ensure t
