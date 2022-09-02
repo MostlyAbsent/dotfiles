@@ -51,6 +51,15 @@ matches:
         type: match
         params:
           trigger: "\\time"
+
+  - trigger: "\\cc\\ft"
+    replace: "{{time}}Sent a follow up text."
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
   # Contacts Incoming
   - trigger: "\\cci\\c"
     replace: "{{time}}The customer called; "
