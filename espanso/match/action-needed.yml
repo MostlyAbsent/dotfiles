@@ -9,7 +9,7 @@ matches:
       - name: td
         type: date
         params:
-          format: "=== Action Needed - [JD %d/%m/%Y]\n  - "
+          format: "=== Action Needed - [JD %d/%m/%Y]\n- "
 
   - trigger: "\\an\\c"
     replace: "{{anh}}Continue repair as quoted"
