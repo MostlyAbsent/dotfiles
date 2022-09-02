@@ -5,3 +5,19 @@
 matches:
   - trigger: "\\vis\\0"
     replace: Visual inspection did not reveal anything of note.
+
+  - trigger: "\\vis\\x"
+    replace: "Visual inspection noted {{output.choice}} in the machine."
+    vars:
+      - name: output
+        type: form
+        params:
+          layout: |
+            Inspection found [[choice]]
+          fields:
+            choice:
+              type: list
+              values:
+                - liquid residue
+                - significant dust build-up
+                - corrosion on some components
