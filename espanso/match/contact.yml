@@ -4,6 +4,7 @@
 
 matches:
   - trigger: "\\cc\\call"
+  # Contacts Outgoing
     replace: "{{time}}called the customer; "
     vars:
       - name: time
@@ -45,6 +46,30 @@ matches:
 
   - trigger: "\\cc\\q"
     replace: "{{time}}Emailed and messaged the customer about their quote."
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+  # Contacts Incoming
+  - trigger: "\\cci\\c"
+    replace: "{{time}}The customer called; "
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
+  - trigger: "\\cci\\email"
+    replace: "{{time}}The customer emailed; "
+    vars:
+      - name: time
+        type: match
+        params:
+          trigger: "\\time"
+
+  - trigger: "\\cci\\t"
+    replace: "{{time}}The customer messaged; "
     vars:
       - name: time
         type: match
