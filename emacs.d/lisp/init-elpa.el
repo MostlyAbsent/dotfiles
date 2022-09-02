@@ -3,6 +3,7 @@
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("melpa" . "http://melpa.org/packages/")
+			 ("melpa-stable" . "https://stable.melpa.org/packages/")
 			 ("elpy" . "https://jorgenschaefer.github.io/packages/")
 			 ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
