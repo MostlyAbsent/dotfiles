@@ -3,8 +3,8 @@
 # Contact Notes
 
 matches:
-  - trigger: "\\cc\\call"
   # Contacts Outgoing
+  - trigger: "\\cc\\c"
     replace: "{{time}}called the customer; "
     vars:
       - name: time
@@ -28,7 +28,7 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\text"
+  - trigger: "\\cc\\t"
     replace: "{{time}}Messaged the customer; "
     vars:
       - name: time
