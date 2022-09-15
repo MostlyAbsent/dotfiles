@@ -215,13 +215,19 @@
           (lambda ()
             (define-key yaml-mode-map "\C-m" 'newline-and-indent))))
 
-(use-package parinfer-rust-mode
+(use-package smartparens
   :ensure t
-  :init
-  (setq parinfer-rust-auto-download t)
   :config
-  (add-hook 'eldoc-mode-hook 'parinfer-rust-mode)
-  (add-hook 'yaml-mode-hook 'parinfer-rust-mode))
+  (add-hook 'eldoc-mode-hook 'smartparens-mode)
+  (add-hook 'yaml-mode-hook 'smartparens-mode))
+
+;; (use-package parinfer-rust-mode
+;;   :ensure t
+;;   :init
+;;   (setq parinfer-rust-auto-download t)
+;;   :config
+;;   (add-hook 'eldoc-mode-hook 'parinfer-rust-mode)
+;;   (add-hook 'yaml-mode-hook 'parinfer-rust-mode))
 
 ;; (use-package flycheck
 ;;   :ensure t
