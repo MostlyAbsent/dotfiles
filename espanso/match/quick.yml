@@ -1,0 +1,7 @@
+# espanso match file
+
+# This is a quick file for temporary matches.
+
+matches:
+  - trigger: kata
+    replace: "Katharine"
