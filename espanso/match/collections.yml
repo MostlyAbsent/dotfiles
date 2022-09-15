@@ -1,0 +1,40 @@
+# espanso match file
+
+# Collection Notes
+
+matches:
+  - trigger: "\\cn\\h"
+    replace: "=== Collection Notes ===\n"
+
+  - trigger: "\\cn\\a"
+    replace: "- AppleID needs passwords to complete setup"
+
+  - trigger: "\\cn\\b"
+    replace: "- "
+
+  - trigger: "\\cn\\off"
+    replace: "- Office needs to be activated to complete setup"
+
+  - trigger: "\\cn\\tmb"
+    replace: "- Time Machine {{choice.output}}"
+    vars:
+      - name: choice
+        type: form
+        params:
+          layout: |
+            TMB [[output]]
+          fields:
+            output:
+              type: list
+              values:
+                - "last backed up on "
+                - is not configured.
+
+  - trigger: "\\cn\\pass"
+    replace: "- {{choice.output}} needs passwords to complete setup"
+    vars:
+      - name: choice
+        type: form
+        params:
+          layout: |
+            Application [[output]]
