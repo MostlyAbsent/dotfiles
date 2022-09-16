@@ -10,3 +10,4 @@ emacs.d/session*
 emacs.d/custom.el
 /emacs.d/parinfer-rust/
 *.DS_Store
+/bin/test.sh
