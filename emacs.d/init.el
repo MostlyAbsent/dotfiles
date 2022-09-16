@@ -164,7 +164,6 @@
   :config
   (add-hook 'clojure-mode-hook
 	    (lambda ()
-	      (enable-paredit-mode)
 	      (subword-mode)
 	      (rainbow-delimiters-mode))))
 
