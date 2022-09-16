@@ -9,3 +9,4 @@ emacs.d/auto-save-list
 emacs.d/session*
 emacs.d/custom.el
 /emacs.d/parinfer-rust/
+*.DS_Store
