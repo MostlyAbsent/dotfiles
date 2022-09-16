@@ -218,7 +218,9 @@
   :ensure t
   :config
   (add-hook 'eldoc-mode-hook 'smartparens-mode)
-  (add-hook 'yaml-mode-hook 'smartparens-mode))
+  (add-hook 'yaml-mode-hook 'smartparens-mode)
+  (add-hook 'prog-mode-hook 'smartparens-mode)
+  (add-hook 'shell-mode-hook 'smartparens-mode))
 
 ;; (use-package parinfer-rust-mode
 ;;   :ensure t
