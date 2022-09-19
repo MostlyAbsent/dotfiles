@@ -1,6 +1,9 @@
 #!/usr/bin/env zsh
 
-# some function to read in all edn config files
-# test for app existance
-# test for idempotency
-# and apply any with missing keys
+# Dock Config
+output=$(defaults read com.apple.dock persistent-apps 2>/dev/null)
+
+if [[ -n $output ]]; then
+  defaults delete com.apple.dock persistent-apps
+  killall Dock
+fi
