@@ -34,3 +34,4 @@ fi
 
 ./bin/apptest.sh rectangle
 ./bin/apptest.sh quicksilver
+./bin/apptest.sh syntax-highlight
