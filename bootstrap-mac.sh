@@ -35,3 +35,13 @@ fi
 ./bin/apptest.sh rectangle
 ./bin/apptest.sh quicksilver
 ./bin/apptest.sh syntax-highlight
+./bin/apptest.sh espanso
+./bin/apptest.sh quicksilver
+./bin/apptest.sh appcleaner
+./bin/apptest.sh openjdk
+./bin/apptest.sh terminal-notifier
+./bin/apptest.sh thefuck
+./bin/apptest.sh fd
+./bin/apptest.sh leiningen
+./bin/apptest.sh clojure
+./bin/apptest.sh hunspell
