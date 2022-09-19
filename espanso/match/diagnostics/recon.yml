@@ -1,0 +1,29 @@
+# espanso match file
+
+# Part re-connection matches
+matches:
+
+  # Reconnections
+  - trigger: "\\recon"
+    label: "Display"
+    replace: "Reconnected the Display cable to test the Display Module."
+
+  - trigger: "\\recon"
+    label: "Drive"
+    replace: "Reconnected the storage Drive."
+
+  - trigger: "\\recon"
+    label: "Battery"
+    replace: "Reconnected the Battery for additional testing."
+
+  - trigger: "\\recon"
+    label: "Keyboard flex"
+    replace: "Reconnected the Keyboard Flex cable for additional testing."
+
+  - trigger: "\\recon"
+    label: "Trackpad flex"
+    replace: "Reconnected the Trackpad Flex cable for additional testing."
+
+  - trigger: "\\recon"
+    label: "HID flex"
+    replace: "Reconnected the HID Interconnect Flex cable for additional testing."

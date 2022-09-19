@@ -1,0 +1,21 @@
+# espanso match file
+
+# Symptom matches
+matches:
+
+  # Symptoms
+  - trigger: "\\symp"
+    label: "Power No Video"
+    replace: "Confirmed Power No Video symptoms."
+
+  - trigger: "\\symp"
+    label: "No Power"
+    replace: "Confirmed No Power symptoms."
+
+  - trigger: "\\symp"
+    label: "Unexpected Shutdown"
+    replace: "Confirmed Unexpected Shutdown symptoms."
+
+  - trigger: "\\symp"
+    label: "Stalled at Loading bar"
+    replace: "Confirmed failing to startup, stalling at loading bar symptoms."

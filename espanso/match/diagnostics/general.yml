@@ -1,8 +1,9 @@
 # espanso match file
 
-# General Diagnostic notes
-
+# General Diagnostics matches
 matches:
+
+  # General Diagnostic notes
   - trigger: "\\initial"
     replace: "Began initial condition assessment;"
 
@@ -22,10 +23,7 @@ matches:
             Normal functionality was [[output]]
           fields:
             output:
-              type: list
+              type: choice
               values:
                 - restored
                 - noted
-
-  - trigger: "\\pnov"
-    replace: "Confirmed Power No Video symptoms."

@@ -1,0 +1,20 @@
+# espanso match file
+
+# Final matches
+matches:
+
+  # Final Checks Notes
+  - trigger: "\\mail"
+    replace: "Opened Mail.app to ensure its database upgrades correctly."
+
+  - trigger: "\\photos"
+    replace: "Opened Photos.app to ensure its database upgrades correctly."
+
+  - trigger: "\\music"
+    form: "Opened [[program]] to ensure its database upgrades correctly."
+    form_fields:
+      program:
+        type: choice
+        values:
+          - Music
+          - iTunes

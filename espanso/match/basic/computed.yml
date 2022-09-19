@@ -1,0 +1,40 @@
+# espanso match file
+
+# Basic computed values
+matches:
+
+  # Basic computed values
+  - trigger: "\\uuid"
+    replace: "{{output}}"
+    label: "Generate a new UUID"
+    vars:
+    - name: output
+      type: shell
+      params:
+        cmd: "/usr/bin/uuidgen"
+
+  - trigger: "\\isodate"
+    replace: "{{td}}"
+    label: "Current Date in ISO format"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - trigger: "\\awstdate"
+    replace: "{{td}}"
+    label: "Current Date in AWST format"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%d/%m/%Y"
+
+  - trigger: "\\week"
+    replace: "{{td}}"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%Y-W-%U"

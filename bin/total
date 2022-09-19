@@ -1,0 +1,9 @@
+#!/usr/bin/env bb
+
+(def sequence *command-line-args*)
+
+;;(println (type (first sequence)))
+
+(->> sequence
+     (map (fn [x] (Float/parseFloat x)))
+     (reduce +))

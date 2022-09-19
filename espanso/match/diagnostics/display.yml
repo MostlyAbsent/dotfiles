@@ -1,0 +1,32 @@
+# espanso match file
+
+# Display matches
+matches:
+
+  # Display notes
+  - trigger: "\\disp"
+    label: "Tested the installed display"
+    form: "Tested the [[replacement]] Display Module for quality of picture, correct WiFi and Bluetooth use, and correct use of the integrated camera."
+    form_fields:
+      replacement:
+        default: replacement
+
+  - trigger: "\\disp"
+    label: "Tested w/ External"
+    form: "Tested the unit with an external Display. [[result]]"
+    form_fields:
+      result:
+        type: choice
+        values: |
+          No response noted on the external display.
+          Normal external display behaviour noted.
+
+  - trigger: "\\disp"
+    label: "Tested w/ External Only"
+    form: "Tested the unit with an external Display only. [[result]]"
+    form_fields:
+      result:
+        type: choice
+        values: |
+          No response noted on the external display.
+          Normal external display behaviour noted.

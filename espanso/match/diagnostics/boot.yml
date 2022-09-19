@@ -1,0 +1,17 @@
+# espanso match file
+
+# Boot matches
+matches:
+
+  # Boot related notes
+  - trigger: "\\boot"
+    label: "External Boot"
+    replace: "Started the machine from external media for diagnostics."
+
+  - trigger: "\\boot"
+    label: "Normal Boot"
+    replace: "Started the machine normally."
+
+  - trigger: "\\boot"
+    label: "Attempted Boot"
+    replace: "Attempted to start the machine normally, instead of completing a normal boot it "

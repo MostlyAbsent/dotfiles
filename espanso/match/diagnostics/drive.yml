@@ -1,0 +1,103 @@
+# espanso match file
+
+# Drive matches
+matches:
+
+  # Drive related Diagnostic notes
+  - trigger: "\\drive"
+    label: "Drive Metrics"
+    replace: "{{output}}"
+    vars:
+      - name: input
+        type: form
+        params:
+          layout: |
+            Fusion [[fusion]]
+            Type [[drivetype]]
+            Capacity [[capacity]]
+            Data [[data]]
+            OS [[os]]
+            Age [[age]]
+          fields:
+            fusion:
+              type: choice
+              values:
+                - na
+                - TRUE
+                - FALSE
+            drivetype:
+              type: choice
+              values:
+                - solid-state
+                - rotational
+            capacity:
+              default: "0"
+            data:
+              default: "0"
+            os:
+              default: "0"
+            age:
+              default: "0"
+      - name: output
+        type: script
+        params:
+          args:
+            - /Users/jacob/.bin/drivemetrics
+            - "{{input.fusion}}"
+            - "{{input.drivetype}}"
+            - "{{input.capacity}}"
+            - "{{input.data}}"
+            - "{{input.os}}"
+            - "{{input.age}}"
+
+  - trigger: "\\users"
+    label: "Number of users"
+    form: "This machine has [[number]] user accounts."
+    form_fields:
+      number:
+        default: "two"
+
+  - trigger: "\\drive"
+    label: "Attached"
+    replace: "Attached the drive to a Known Good machine for assessment."
+
+  - trigger: "\\drive"
+    label: "Not detected by controller"
+    replace: "The drive is not detected by the controller."
+
+  - trigger: "\\drive"
+    label: "Drive Age"
+    form: "The drive is approximately [[years]] old."
+
+  - trigger: "\\dd"
+    label: "Bootcamp Metrics"
+    replace: "Confirmed the drive is {{form.drivetype}}, with a total capacity of {{form.capacity}} GB, containing a macOS volume and a Windows Bootcamp volume.
+The macOS volume has a capacity of {{form.macSize}} GB, with about {{form.macData}} GB of data, running {{output}}.
+The Windows volume has a capacity of {{form.winSize}} GB, with about {{form.winData}} GB of data, running {{form.winOS}}."
+    vars:
+      - name: form
+        type: form
+        params:
+          layout: |
+            Choices
+            Drive Type [[drivetype]]
+            Drive Capacity [[capacity]]
+            macOS [[macOS]]
+            macData [[macData]]
+            winOS [[winOS]]
+            winData [[winData]]
+          fields:
+            drivetype:
+              type: list
+              values: |
+                rotational
+                solid state
+                Fusion
+            macData:
+              default: 0
+            winData:
+              default: 0
+      - name: output
+        type: shell
+        params:
+          cmd: "macos {{form.macOS}}"

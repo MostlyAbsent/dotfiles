@@ -1,0 +1,12 @@
+# espanso match file
+
+# General repair matches
+matches:
+
+  # General Repair notes
+  - trigger: "\\root"
+    label: "Temporary User account"
+    replace: "Created a temporary user account to continue the repair."
+
+  - trigger: "\\clean"
+    replace: "Cleaned general dust buildup, additional attention was given to the fans and heat exchangers."

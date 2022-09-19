@@ -1,0 +1,65 @@
+# espanso match file
+
+# Conclusion matches
+matches:
+
+  # Concluding Statements
+  - triggers: ["\\conc", "local.ohjelmoida.conc.ld"]
+    label: "Liquid Damage"
+    replace: "A repair is not economical or recommended as Liquid damaged units are unpredictable, other faults may present themselves at any time, and we are unable to guarantee how long the unit will remain useable, even after a repair is completed. {{wur}}"
+    vars:
+      - name: wur
+        type: match
+        params:
+          trigger: "local.ohjelmoida.conc.wur"
+
+  - trigger: "\\conc"
+    label: "Logic Boards unavailable"
+    replace: "A repair is not economical as replacement Logic Boards for this machine are no longer available, and there is a significant risk of secondary faults. {{wur}}"
+    vars:
+      - name: wur
+        type: match
+        params:
+          trigger: "local.ohjelmoida.conc.wur"
+
+  - trigger: "\\conc"
+    label: "Expensive"
+    replace: "A repair is not economical as the cost of repair approaches or exceeds the value of the machine, additionally there is significant risk of secondary repairs being required. {{wur}}"
+    vars:
+      - name: wur
+        type: match
+        params:
+          trigger: "local.ohjelmoida.conc.wur"
+
+  - triggers: ["\\conc\\wur", "local.ohjelmoida.conc.wur"]
+    replace: "macs4u recommends a whole unit replacement."
+
+  - trigger: "\\conc"
+    label: "Upgrade OS"
+    replace: "The currently installed Operating System is {{current_s}}, we recommend upgrading to {{recommended_s}} to take advantage of modern features and security protocols."
+    vars:
+      - name: systems
+        type: form
+        params:
+          layout: |
+            Current OS [[current]]
+            Recommended OS [[recommended]]
+      - name: current_s
+        type: shell
+        params:
+          cmd: "macos {{systems.current}}"
+      - name: recommended_s
+        type: shell
+        params:
+          cmd: "macos {{systems.recommended}}"
+
+  - trigger: "\\conc"
+    label: "Vintage warning"
+    replace: "Please note this machine is not capable of running the latest Operating System, this may limit its usefulness to you."
+
+  - trigger: "\\conc"
+    label: "Unsupported Office warning"
+    replace: "The installed version of Office for Mac is now unsupported. We recommend upgrading to Office for Mac 2021."
+
+  - trigger: "\\h\\conc"
+    replace: "=== Conclusion and Diagnosis"

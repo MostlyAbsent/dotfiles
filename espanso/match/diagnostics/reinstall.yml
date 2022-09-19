@@ -1,0 +1,34 @@
+# espanso match file
+
+# Part re-installation matches
+matches:
+
+  # Reinstalled
+  - trigger: "\\reinst"
+    label: "Fans"
+    replace: "Reinstalled the fans to continue diagnostics."
+
+  - trigger: "\\reinst"
+    label: "Logic Board"
+    replace: "Reinstalled the Logic Board to continue diagnostics."
+
+  - trigger: "\\reinst"
+    label: "Display"
+    replace: "Reinstalled the Display Module to continue diagnostics."
+
+  - trigger: "\\reinst"
+    label: "Memory"
+    replace: "Reinstalled the memory to continue diagnostics."
+
+  - trigger: "\\reinst"
+    label: "Storage Drive"
+    replace: "Reinstalled the Storage Drive to continue diagnostics."
+
+  - trigger: "\\reinst"
+    label: "Battery"
+    replace: "Reinstalled the original Battery to continue diagnostics."
+
+  # Test Summary Notes
+  - trigger: "\\test"
+    label: "Display Module"
+    replace: "These tests indicate a fault with the Display Module, repair would require a replacement Display."

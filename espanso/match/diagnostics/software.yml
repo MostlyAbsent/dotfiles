@@ -1,0 +1,17 @@
+# espanso match file
+
+# Software matches
+matches:
+
+  # Software diags
+  - trigger: "\\off"
+    label: "Office Version"
+    replace: "This machine has Office version [[version]] installed."
+
+  - trigger: "\\out"
+    label: "Outlook emails"
+    replace: "Outlook has around [[data]] GB of emails and calendar events."
+
+  - trigger: "\\noout"
+    label: "No Outlook emails"
+    replace: "There don't appear to be any emails in Outlook."

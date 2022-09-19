@@ -1,0 +1,17 @@
+# espanso match file
+
+# General quote matches
+matches:
+
+  - trigger: "local.ohjelmoida.quote.fineprint"
+    label: "Quote fine print"
+    replace: "* assuming no other faults are identified that require additional remedies, excluding the diagnostic fee"
+
+  - trigger: "\\quote"
+    label: "Trim Enabler"
+    replace: "  — support software — Trim Enabler — ${{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "getprice trim | dollarformatter"

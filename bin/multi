@@ -1,0 +1,3 @@
+#!/usr/bin/env bb
+
+(print (* (Integer/parseInt (first *command-line-args*)) (Integer/parseInt (last *command-line-args*))))

@@ -1,0 +1,46 @@
+# espanso match file
+
+# Memory matches
+matches:
+
+  # Memory diagnostics
+  - trigger: "\\mem"
+    label: "Memory Metrics"
+    replace: "This machine has {{form.number}} modules of {{form.size}} GB {{form.speed}} MHz memory, totalling {{math}} GB, with {{form.free}} slots free."
+    vars:
+      - name: form
+        type: form
+        params:
+          layout: |
+            Number of modules [[number]]
+            Size of modules [[size]]
+            Speed of modules [[speed]]
+            Number of free slots [[free]]
+      - name: math
+        type: shell
+        params:
+          cmd: "multi {{form.number}} {{form.size}}"
+
+  - trigger: "\\mem"
+    label: "Maximum memory"
+    replace: "This machine can have at most {{form.number}} modules of {{form.size}} GB {{form.speed}} MHz memory, totalling {{math}} GB."
+    vars:
+      - name: form
+        type: form
+        params:
+          layout: |
+            Number of modules [[number]]
+            Size of modules [[size]]
+            Speed of modules [[speed]]
+      - name: math
+        type: shell
+        params:
+          cmd: "multi {{form.number}} {{form.size}}"
+
+  - trigger: "\\mem"
+    label: "KG memory testing"
+    replace: "Removed the original memory and installed Known Good modules for diagnostics."
+
+  - trigger: "\\mem"
+    label: "Memory isolation"
+    replace: "Began isolating the memory fault by testing each module and slot individually, using Known Good modules as needed."

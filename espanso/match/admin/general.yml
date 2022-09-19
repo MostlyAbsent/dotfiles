@@ -1,0 +1,26 @@
+# espanso match file
+
+# General admin matches
+matches:
+
+  # General admin matches
+  - trigger: "\\bank"
+    label: "Bank template for use in emails"
+    replace: "\nIf you choose to pay by bank transfer please use the details below and email a transaction receipt to info@macs4u.com.au\n\nReference: {{output.ref}}\n{{bank}}"
+    vars:
+      - name: output
+        type: form
+        params:
+          layout: |
+            Document reference [[ref]]
+      - name: bank
+        type: match
+        params:
+          trigger: "\\rawbank"
+
+  - trigger: "\\rawbank"
+    label: "Raw bank details"
+    replace: "Account Name: WebEquip Pty Ltd\nBank: NAB\nBSB: 086 288\nAccount Number: 488973497"
+
+  - trigger: "\\sig"
+    replace: "Kind regards,\nJacob Doran\nService Manager at Macs-4-U\nTel: 08 9274 7111"

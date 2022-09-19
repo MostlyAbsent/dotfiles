@@ -1,0 +1,22 @@
+#!/usr/bin/env bb
+
+(def operating-systems {"100" "Mac OS X 10.0"
+                        "101" "Mac OS X 10.1"
+                        "102" "Mac OS X Jaguar"
+                        "103" "Mac OS X Panther"
+                        "104" "Mac OS X Tiger"
+                        "105" "Mac OS X Leopard"
+                        "106" "Mac OS X Snow Leopard"
+                        "107" "OS X Lion"
+                        "108" "OS X Mountain Lion"
+                        "109" "OS X Mavericks"
+                        "1010" "OS X Yosemite"
+                        "1011" "OS X El Capitan"
+                        "1012" "macOS Sierra"
+                        "1013" "macOS High Sierra"
+                        "1014" "macOS Mojave"
+                        "1015" "macOS Catalina"
+                        "11" "macOS Big Sur"
+                        "12" "macOS Monterey"})
+
+(print (get operating-systems (first *command-line-args*)))

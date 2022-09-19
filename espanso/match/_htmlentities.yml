@@ -1,0 +1,17 @@
+# espanso match file
+
+# Reserved for when editing ebooks
+
+matches:
+  - trigger: "..."
+    replace: "&#8230;"
+  - trigger: "\\ld"
+    replace: "&#8220;"
+  - trigger: "\\ls"
+    replace: "&#8216;"
+  - trigger: "\\rd"
+    replace: "&#8221;"
+  - trigger: "\\rs"
+    replace: "&#8217;"
+  - trigger: "\\break"
+    replace: "<p class='center'>*****</p>"

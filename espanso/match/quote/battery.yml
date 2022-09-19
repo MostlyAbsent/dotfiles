@@ -1,0 +1,54 @@
+# espanso match file
+
+# Battery matches
+matches:
+
+  - trigger: "\\quote"
+    label: "MBP R 13 Battery"
+    replace: "Replacement Battery — ${{battery}}\nLabour to install replacement — ${{labour}}\n\nTotal repair cost* — ${{total}}\n\n{{fineprint}}"
+    vars:
+      - name: bapmbpr13
+        type: shell
+        params:
+          cmd: "getprice bapmbpr13"
+      - name: battery
+        type: shell
+        params:
+          cmd: "echo {{bapmbpr13}} | dollarformatter"
+      - name: srobmbp13
+        type: shell
+        params:
+          cmd: "getprice srob-mbp-13"
+      - name: labour
+        type: shell
+        params:
+          cmd: "echo {{srobmbp13}} | dollarformatter"
+      - name: total
+        type: shell
+        params:
+          cmd: "total {{srobmbp13}} {{bapmbpr13}} | dollarformatter"
+      - name: fineprint
+        type: match
+        params:
+          trigger: "local.ohjelmoida.quote.fineprint"
+
+  - trigger: "\\quote"
+    label: "MBP 13 Battery"
+    replace: "Replacement Battery — ${{battery}}\n\nTotal repair cost* — ${{total}}\n\n{{fineprint}}"
+    vars:
+      - name: bapmbp13
+        type: shell
+        params:
+          cmd: "getprice bapmbp13"
+      - name: battery
+        type: shell
+        params:
+          cmd: "echo {{bapmbp13}} | dollarformatter"
+      - name: total
+        type: shell
+        params:
+          cmd: "total {{bapmbp13}} | dollarformatter"
+      - name: fineprint
+        type: match
+        params:
+          trigger: "local.ohjelmoida.quote.fineprint"

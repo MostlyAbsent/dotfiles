@@ -1,0 +1,33 @@
+# espanso match file
+
+# Part disconnection matches
+matches:
+
+  # Disconnection notes
+  - trigger: "\\disco"
+    label: "Battery"
+    replace: "Disconnected the Battery for machine safety and hardware System Management Controller reset."
+
+  - trigger: "\\disco"
+    label: "Drive"
+    replace: "Disconnected the storage Drive."
+
+  - trigger: "\\disco"
+    label: "Display"
+    replace: "Disconnected the Display cable for visual inspection."
+
+  - trigger: "\\disco"
+    label: "Keyboard Flex"
+    replace: "Disconnected the Keyboard Flex cable for visual inspection."
+
+  - trigger: "\\disco"
+    label: "Trackpad Flex"
+    replace: "Disconnected the Trackpad Flex cable for visual inspection."
+
+  - trigger: "\\disco"
+    label: "HID Interconnect Flex"
+    replace: "Disconnected the HID Interconnect Flex cable for visual inspection."
+
+  - trigger: "\\disco"
+    label: "Interconnect Flex"
+    replace: "Disconnected the Interconnect Flex cable for visual inspection."

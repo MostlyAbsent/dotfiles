@@ -1,9 +1,11 @@
 # espanso match file
 
 # Waiting for customer matches
-
 matches:
-  - trigger: "\\wfc\\q"
+
+ # Waiting for customer
+  - trigger: "\\wfc"
+    label: "Quote"
     replace: "=== Waiting for Customer - [JD {{td}}]\n- To respond to the quote."
     vars:
       - name: td

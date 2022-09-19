@@ -1,0 +1,21 @@
+# espanso match file
+
+# Visual inspection matches
+matches:
+
+  # Visual inspection notes
+  - trigger: "\\visual"
+    label: "Nothing"
+    replace: "Visual inspection did not reveal anything of note."
+
+  - trigger: "\\visual"
+    label: "Dust"
+    replace: "Visual inspection noted significant dust build-up in the machine."
+
+  - trigger: "\\visual"
+    label: "Corrosion"
+    replace: "Visual inspection noted corrosion on some components in the machine."
+
+  - trigger: "\\visual"
+    label: "Liquid residue"
+    replace: "Visual inspection noted liquid residue in the machine."

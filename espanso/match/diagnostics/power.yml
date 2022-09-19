@@ -1,0 +1,71 @@
+# espanso match file
+
+# Power matches
+matches:
+
+  # Power related diagnostics
+  - trigger: "\\pwr"
+    label: "No response"
+    replace: "No response to pressing the Power Button."
+
+  - trigger: "\\pwr"
+    label: "Auto Power"
+    replace: "The machine automatically powered on."
+
+  - trigger: "\\mgsf"
+    label: "Attached MagSafe or USB-C Power Adapter"
+    replace: "Attached a known good {{pa.choice}} Power Adapter."
+    vars:
+      - name: pa
+        type: form
+        params:
+          layout: "Type [[choice]]"
+          fields:
+            choice:
+              type: list
+              values: |
+                MagSafe
+                USB-C
+
+  - trigger: "\\mgsf"
+    label: "No response"
+    replace: "No response from the LED was seen."
+
+  - trigger: "\\mgsf"
+    label: "Green -> Amber"
+    replace: "The LED turned green then amber."
+
+  - trigger: "\\mgsf"
+    label: "Green Only"
+    replace: "The LED turned green, but not amber."
+
+  - trigger: "\\mgsf"
+    label: "Power Adapter Only"
+    replace: "Attempted to power on the machine with power only from a MagSafe Power Adapter."
+
+  - trigger: "\\smc"
+    label: "Reset System Management Controller"
+    replace: "Performed a System Management Controller reset. {{outcome.choice}}"
+    vars:
+      - name: outcome
+        type: form
+        params:
+          layout: "Outcome [[choice]]"
+          fields:
+            choice:
+              type: list
+              values:
+                - No changes to the symptoms were observed.
+                - Normal functionality was restored.
+
+  - trigger: "\\batt"
+    label: "Battery Metrics"
+    form: "Confirmed the battery reports its condition as [[condition]], has a cycle count of [[cycle]], and a total charge capacity of [[capacity]] mAh."
+    form_fields:
+      condition:
+        type: choice
+        values: |
+          Service Now
+          Service Recommended
+          Replace Now
+          Replace Soon

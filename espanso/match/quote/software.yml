@@ -1,0 +1,13 @@
+# espanso match file
+
+# Software matches
+matches:
+
+  - trigger: "\\quote"
+    label: "Upgrade OS"
+    replace: "Labour to install an Operating System — ${{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "getprice sros-osi | dollarformatter"

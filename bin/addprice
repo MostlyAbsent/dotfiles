@@ -1,0 +1,17 @@
+#!/usr/bin/env bb
+
+(require '[clojure.edn :as edn]
+         '[clojure.tools.cli :refer [parse-opts]])
+
+(def cli-options
+  "Destructuring vector for cli options"
+  [["-c" "--code code"]
+   ["-p" "--price price"
+    :parse-fn #(Float/parseFloat %)]])
+
+(def prices (edn/read-string (slurp (str (System/getProperty "user.home") "/Documents/macs4u/prices.edn"))))
+
+(as-> (parse-opts *command-line-args* cli-options) $
+  (:options $)
+  (assoc prices (last (first $)) (last (last $)))
+  (spit (str (System/getProperty "user.home") "/Documents/macs4u/prices.edn")  $))

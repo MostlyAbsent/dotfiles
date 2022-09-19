@@ -1,10 +1,11 @@
 # espanso match file
 
-# Contact Notes
-
+# Contact matches
 matches:
+
   # Contacts Outgoing
-  - trigger: "\\cc\\c"
+  - trigger: "\\cco"
+    label: "Called"
     replace: "{{time}}called the customer; "
     vars:
       - name: time
@@ -12,7 +13,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\message"
+  - trigger: "\\cco"
+    label: "Requested callback"
     replace: "{{time}}Called the customer, rang out, asked for a callback. Messaged for a callback."
     vars:
       - name: time
@@ -20,7 +22,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\email"
+  - trigger: "\\cco"
+    label: "Emailed"
     replace: "{{time}}Emailed the customer."
     vars:
       - name: time
@@ -28,7 +31,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\t"
+  - trigger: "\\cco"
+    label: "Messaged"
     replace: "{{time}}Messaged the customer; "
     vars:
       - name: time
@@ -36,7 +40,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\rfc"
+  - trigger: "\\cco"
+    label: "Ready for collection"
     replace: "{{time}}Messaged, ready for collection."
     vars:
       - name: time
@@ -44,7 +49,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\q"
+  - trigger: "\\cco"
+    label: "Quoted"
     replace: "{{time}}Emailed and messaged the customer about their quote."
     vars:
       - name: time
@@ -52,7 +58,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cc\\ft"
+  - trigger: "\\cco"
+    label: "Follup Text"
     replace: "{{time}}Sent a follow up text."
     vars:
       - name: time
@@ -61,7 +68,8 @@ matches:
           trigger: "\\time"
 
   # Contacts Incoming
-  - trigger: "\\cci\\c"
+  - trigger: "\\cci"
+    label: "Called"
     replace: "{{time}}The customer called; "
     vars:
       - name: time
@@ -69,7 +77,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cci\\email"
+  - trigger: "\\cci"
+    label: "Emailed"
     replace: "{{time}}The customer emailed; "
     vars:
       - name: time
@@ -77,7 +86,8 @@ matches:
         params:
           trigger: "\\time"
 
-  - trigger: "\\cci\\t"
+  - trigger: "\\cci"
+    label: "Messaged"
     replace: "{{time}}The customer messaged; "
     vars:
       - name: time

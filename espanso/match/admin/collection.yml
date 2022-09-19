@@ -1,21 +1,23 @@
 # espanso match file
 
-# Collection Notes
-
+# Collection matches
 matches:
-  - trigger: "\\cn\\h"
+
+  # Collection Notes
+  - trigger: "\\h\\cn"
+    label: "Collection Notes Header"
     replace: "=== Collection Notes ===\n"
-
-  - trigger: "\\cn\\a"
+  - trigger: "\\cn"
+    label: "Collection Notes AppleID"
     replace: "- AppleID needs passwords to complete setup"
-
-  - trigger: "\\cn\\b"
+  - trigger: "\\cn"
+    label: "Collection Notes Blank"
     replace: "- "
-
-  - trigger: "\\cn\\off"
+  - trigger: "\\cn"
+    label: "Collection Notes Office"
     replace: "- Office needs to be activated to complete setup"
-
-  - trigger: "\\cn\\tmb"
+  - trigger: "\\cn"
+    label: "Collection Notes Time Machine"
     replace: "- Time Machine {{choice.output}}"
     vars:
       - name: choice
@@ -29,8 +31,8 @@ matches:
               values:
                 - "last backed up on "
                 - is not configured.
-
-  - trigger: "\\cn\\pass"
+  - trigger: "\\cn"
+    label: "Collection Notes Passwords"
     replace: "- {{choice.output}} needs passwords to complete setup"
     vars:
       - name: choice

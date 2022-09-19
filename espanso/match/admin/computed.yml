@@ -1,0 +1,44 @@
+# espanso match file
+
+# Admin computed values
+matches:
+
+  # LightSpeed computed values
+  - trigger: "\\date"
+    replace: "{{isodate}}, (JD): "
+    label: "Date Stamp"
+    vars:
+      - name: isodate
+        type: match
+        params:
+          trigger: "\\awstdate"
+
+  - trigger: "\\auth"
+    label: "Customer authorisation"
+    form: "[[name]] has authorised the repair as quoted."
+
+  - trigger: "\\completed"
+    label: "Completed"
+    replace: "Completed without apparent error."
+
+  - trigger: "\\par"
+    label: "Wrap in parens"
+    replace: "({{output}})"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: pbpaste
+
+  - trigger: "\\time"
+    replace: "{{td}} on {{date}}"
+    label: "Time Stamp"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%H:%M:%S"
+      - name: date
+        type: match
+        params:
+          trigger: "\\date"

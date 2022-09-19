@@ -1,0 +1,10 @@
+#!/usr/bin/env bb
+
+(require '[clojure.edn :as edn])
+
+(-> (System/getProperty "user.home")
+    (str "/Documents/macs4u/prices.edn")
+    slurp
+    edn/read-string
+    (get (first *command-line-args*))
+    println)

@@ -1,7 +1,0 @@
-# espanso match file
-
-# Disconnection notes
-
-matches:
-  - trigger: "\\disco\\b"
-    replace: Disconnected the Battery for machine safety and hardware System Management Controller reset.
