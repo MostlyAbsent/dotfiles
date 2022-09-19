@@ -44,6 +44,7 @@
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
+(add-hook 'write-file-hooks 'delete-trailing-whitespace)
 
 (set-face-attribute 'default nil
 		    :font "Source Code Pro"
