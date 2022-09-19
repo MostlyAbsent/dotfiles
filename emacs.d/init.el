@@ -57,7 +57,9 @@
 	  (lambda () (setq display-line-numbers-type 'relative)))
 (global-display-line-numbers-mode)
 
-(setq ispell-program-name "/usr/local/bin/hunspell")
+(if (file-directory-p "/opt/homebrew")
+    (setq ispell-program-name "/opt/homebrew/bin/hunspell")
+  (setq ispell-program-name "/usr/local/bin/hunspell"))
 
 (put 'narrow-to-region 'disabled nil)
 
