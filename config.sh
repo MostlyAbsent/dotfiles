@@ -7,3 +7,7 @@ if [[ -n $output ]]; then
   defaults delete com.apple.dock persistent-apps
   killall Dock
 fi
+
+# Something to setup the brew auto-updater
+
+# Something for my hunspell dictionaries
