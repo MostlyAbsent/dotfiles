@@ -22,7 +22,9 @@ fi
 # Link in zshrc
 if ! [[ -h ~/.zshrc ]]; then
   rm ~/.zshrc
-  ln -s ~/Documents/dotfiles/zshrc .zshrc
+  ln -s ~/Documents/dotfiles/zshrc ~/.zshrc
+fi
+
 fi
 
 # Test for rectangle and install if not found
