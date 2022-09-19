@@ -25,6 +25,9 @@ if ! [[ -h ~/.zshrc ]]; then
   ln -s ~/Documents/dotfiles/zshrc ~/.zshrc
 fi
 
+# Link in scripts
+if ! [[ -h ~/.bin ]]; then
+  ln -s ~/Documents/dotfiles/bin ~/.bin
 fi
 
 # Test for rectangle and install if not found
