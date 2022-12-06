@@ -1,0 +1,3 @@
+[submodule "rebinder.el"]
+	path = rebinder.el
+	url = https://github.com/darkstego/rebinder.el
