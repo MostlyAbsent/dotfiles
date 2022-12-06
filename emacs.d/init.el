@@ -122,7 +122,8 @@
   (setq org-insert-heading-respect-content t)
   (setq org-pretty-entities t)
   (setq org-startup-truncated t)
-  (add-hook 'org-mode-hook 'org-indent-mode))
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (require 'org-collector))
 
 (use-package evil-org
   :ensure t
