@@ -253,6 +253,9 @@
 	 ("C-c o b" . org-roam-buffer-current-node))
   :config (require 'init-roam))
 
+(use-package org-roam-ui
+  :ensure t)
+
 (use-package ligature
   :ensure t
   :config
