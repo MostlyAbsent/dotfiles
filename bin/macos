@@ -17,6 +17,7 @@
                         "1014" "macOS Mojave"
                         "1015" "macOS Catalina"
                         "11" "macOS Big Sur"
-                        "12" "macOS Monterey"})
+                        "12" "macOS Monterey"
+                        "13" "macOS Ventura"})
 
 (print (get operating-systems (first *command-line-args*)))
