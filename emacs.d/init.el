@@ -238,7 +238,8 @@
   (add-hook 'prog-mode-hook 'smartparens-mode)
   (add-hook 'shell-mode-hook 'smartparens-mode)
   (sp-pair "'" "'" :actions nil)
-  (sp-pair "<" ">"))
+  (sp-pair "<" ">")
+  (define-key global-map (kbd "M-(") 'sp-wrap-round))
 
 ;; (use-package flycheck
 ;;   :ensure t
