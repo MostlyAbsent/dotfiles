@@ -241,6 +241,10 @@
   (sp-pair "<" ">")
   (define-key global-map (kbd "M-(") 'sp-wrap-round))
 
+(use-package ivy
+   :ensure t
+   :config (ivy-mode 1))
+
 (use-package ligature
   :ensure t
   :config
