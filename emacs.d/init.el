@@ -53,9 +53,9 @@
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
 
 (set-face-attribute 'default nil
-		    :font "Source Code Pro"
-		    :slant 'normal
-		    :height 120)
+		    :font "Fira Code"
+		    :slant 'Normal
+		    :height 130)
 
 (load-theme 'cyberpunk t)
 
@@ -243,5 +243,20 @@
 ;;   :ensure t
 ;;   :config
 ;;   (add-hook 'after-init-hook 'global-flycheck-mode))
+(use-package ligature
+  :ensure t
+  :config
+  (ligature-set-ligatures 't '("www"))
+  (ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+                                     ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+                                     "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+                                     "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+                                     "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+                                     "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+                                     "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+                                     "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+                                     "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+                                     "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
+  (global-ligature-mode 't))
 
 (provide 'init)
