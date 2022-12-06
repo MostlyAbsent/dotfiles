@@ -32,6 +32,7 @@ fi
 
 # Test for rectangle and install if not found
 
+./bin/apptest.sh bettertouchtool
 ./bin/apptest.sh quicksilver
 ./bin/apptest.sh syntax-highlight
 ./bin/apptest.sh espanso
