@@ -265,6 +265,18 @@
     (cljr-add-keybindings-with-prefix "C-c C-m"))
   (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
 
+(use-package impatient-mode
+  :ensure t
+  :config
+  (defun my-html-mode-hook ()
+  "Starts the `simple-httpd' server if it is not already running, and turns
+on `impatient-mode' for the current buffer."
+  (unless (get-process "httpd")
+    (message "starting httpd server...")
+    (httpd-start))
+  (impatient-mode))
+  (add-hook 'html-mode-hook 'my-html-mode-hook))
+
 (use-package ligature
   :ensure t
   :config
