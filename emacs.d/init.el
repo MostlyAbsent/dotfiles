@@ -241,10 +241,6 @@
   (sp-pair "<" ">")
   (define-key global-map (kbd "M-(") 'sp-wrap-round))
 
-;; (use-package flycheck
-;;   :ensure t
-;;   :config
-;;   (add-hook 'after-init-hook 'global-flycheck-mode))
 (use-package ligature
   :ensure t
   :config
