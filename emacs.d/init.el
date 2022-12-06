@@ -232,10 +232,13 @@
 (use-package smartparens
   :ensure t
   :config
+  (require 'smartparens-config)
   (add-hook 'eldoc-mode-hook 'smartparens-mode)
   (add-hook 'yaml-mode-hook 'smartparens-mode)
   (add-hook 'prog-mode-hook 'smartparens-mode)
-  (add-hook 'shell-mode-hook 'smartparens-mode))
+  (add-hook 'shell-mode-hook 'smartparens-mode)
+  (sp-pair "'" "'" :actions nil)
+  (sp-pair "<" ">"))
 
 ;; (use-package flycheck
 ;;   :ensure t
