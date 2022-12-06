@@ -198,7 +198,8 @@
   (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode)))
 
 (use-package projectile
-  :ensure t
+  :demand t
+  :bind-keymap (("C-c p" . projectile-command-map))
   :config (projectile-global-mode))
 
 (use-package tagedit
