@@ -123,7 +123,10 @@
   (setq org-pretty-entities t)
   (setq org-startup-truncated t)
   (add-hook 'org-mode-hook 'org-indent-mode)
-  (require 'org-collector))
+  (require 'org-collector)
+  (customize-set-value 'org-latex-hyperref-template "
+\\hypersetup{\n pdfauthor={%a},\n pdftitle={%t},\n pdfkeywords={%k},
+ pdfsubject={%d},\n pdfcreator={%c},\n pdflang={%L},\n hidelinks=true}\n"))
 
 (use-package evil-org
   :ensure t
