@@ -73,6 +73,9 @@
 
 (setq show-trailing-whitespace t)
 
+(define-key minibuffer-local-completion-map "\M- "
+    (lambda () (interactive) (insert " ")))
+
 (setq completion-ignore-case t)
 
 ;; Make it so keyboard-escape-quit doesn't delete-other-windows
