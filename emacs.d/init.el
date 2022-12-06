@@ -73,6 +73,8 @@
 
 (setq show-trailing-whitespace t)
 
+(setq completion-ignore-case t)
+
 ;; Make it so keyboard-escape-quit doesn't delete-other-windows
 (require 'cl-lib)
 (defadvice keyboard-escape-quit
