@@ -20,6 +20,9 @@
 
 ;; Emacs Configurations
 
+(require 'rebinder)
+(define-key global-map (kbd "C-u") (rebinder-dynamic-binding "C-x"))
+
 (setq inhibit-splash-screen t
       inhibit-startup-message t
       inhibit-startup-echo-area-message t)
