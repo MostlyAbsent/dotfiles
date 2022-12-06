@@ -236,14 +236,6 @@
   (add-hook 'prog-mode-hook 'smartparens-mode)
   (add-hook 'shell-mode-hook 'smartparens-mode))
 
-;; (use-package parinfer-rust-mode
-;;   :ensure t
-;;   :init
-;;   (setq parinfer-rust-auto-download t)
-;;   :config
-;;   (add-hook 'eldoc-mode-hook 'parinfer-rust-mode)
-;;   (add-hook 'yaml-mode-hook 'parinfer-rust-mode))
-
 ;; (use-package flycheck
 ;;   :ensure t
 ;;   :config
