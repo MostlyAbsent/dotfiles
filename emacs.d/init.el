@@ -40,6 +40,10 @@
 (setq-default show-trailing-whitespace t)
 (setq indent-tabs-mode nil)
 
+(add-hook 'display-line-numbers-mode-hook
+	  (lambda () (setq display-line-numbers-type 'relative)))
+(global-display-line-numbers-mode)
+
 (setq visible-bell t)
 (setq custom-safe-themes t)
 (column-number-mode t)
