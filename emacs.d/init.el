@@ -20,12 +20,6 @@
 
 ;; Emacs Configurations
 
-(require 'rebinder)
-(define-key global-map (kbd "C-u") (rebinder-dynamic-binding "C-x"))
-
-(define-key global-map (kbd "C-c C-u") 'evil-upcase)
-(put 'upcase-region 'disabled nil)
-
 (setq inhibit-splash-screen t
       inhibit-startup-message t
       inhibit-startup-echo-area-message t)
@@ -61,28 +55,17 @@
 		    :slant 'Normal
 		    :height 130)
 
-(load-theme 'cyberpunk t)
-
-(add-hook 'display-line-numbers-mode-hook
-	  (lambda () (setq display-line-numbers-type 'relative)))
-(global-display-line-numbers-mode)
-
 (if (file-directory-p "/opt/homebrew")
     (setq ispell-program-name "/opt/homebrew/bin/hunspell")
   (setq ispell-program-name "/usr/local/bin/hunspell"))
 
-(put 'narrow-to-region 'disabled nil)
-
 (add-hook 'text-mode-hook 'flyspell-mode)
-
-(setq show-trailing-whitespace t)
 
 (define-key minibuffer-local-completion-map "\M- "
     (lambda () (interactive) (insert " ")))
 
 (setq completion-ignore-case t)
 
-;; Make it so keyboard-escape-quit doesn't delete-other-windows
 (require 'rebinder)
 (define-key global-map (kbd "C-u") (rebinder-dynamic-binding "C-x"))
 
@@ -102,9 +85,6 @@
              (lambda () nil)))
     ad-do-it))
 
-;; General Keybindings
-(define-key global-map "\M-Q" 'unfill-paragraph)
-
 ;; Language Specific Configurations
 (add-hook 'sh-mode-hook (lambda ()
 			  (setq sh-basic-offset 2)
@@ -116,7 +96,6 @@
 (setq js-indent-level 2)
 
 ;; Install Packages
-;;(require-package 'fullframe)
 (require-package 'cl-lib)
 (require 'cl-lib)
 
