@@ -201,9 +201,13 @@
   (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode)))
 
 (use-package projectile
-  :demand t
-  :bind-keymap (("C-c p" . projectile-command-map))
-  :config (projectile-global-mode))
+  :ensure t
+  :pin melpa-stable
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+              ("s-p" . projectile-command-map)
+              ("C-c p" . projectile-command-map)))
 
 (use-package tagedit
   :ensure t
