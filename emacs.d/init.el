@@ -296,6 +296,9 @@ on `impatient-mode' for the current buffer."
                                      "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
   (global-ligature-mode 't))
 
+(use-package powershell
+  :ensure t)
+
 (use-package spacemacs-theme
   :defer t
   :init (load-theme 'spacemacs-dark t))
