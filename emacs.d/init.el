@@ -91,6 +91,9 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
+;; General Keybindings
+(define-key global-map "\M-Q" 'unfill-paragraph)
+
 (require 'cl-lib)
 (defadvice keyboard-escape-quit
     (around keyboard-escape-quit-dont-delete-other-windows activate)
