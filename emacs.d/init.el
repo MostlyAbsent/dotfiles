@@ -140,7 +140,6 @@
 (use-package smart-mode-line
 	     :ensure t
 	     :config
-	     (setq sml/theme 'dark)
 	     (sml/setup))
 
 (use-package s
