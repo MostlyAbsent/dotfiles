@@ -6,4 +6,5 @@
 
 (->> sequence
      (map (fn [x] (Float/parseFloat x)))
-     (reduce +))
+     (reduce +)
+     (println))
