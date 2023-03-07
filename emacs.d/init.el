@@ -124,12 +124,14 @@
 				     (plan-list-item . t)))
   (setq org-insert-heading-respect-content t)
   (setq org-pretty-entities t)
+  (setq org-tags-column -50)
   (setq org-startup-truncated t)
   (add-hook 'org-mode-hook 'org-indent-mode)
   (require 'org-collector)
   (customize-set-value 'org-latex-hyperref-template "
 \\hypersetup{\n pdfauthor={%a},\n pdftitle={%t},\n pdfkeywords={%k},
- pdfsubject={%d},\n pdfcreator={%c},\n pdflang={%L},\n hidelinks=true}\n"))
+ pdfsubject={%d},\n pdfcreator={%c},\n pdflang={%L},\n hidelinks=true}\n")
+  (setq org-agenda-files '("~/Documents/job_notes/daily.org")))
 
 (use-package evil-org
   :ensure t
