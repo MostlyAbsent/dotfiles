@@ -7,7 +7,10 @@
    "'" 'toggle-comment-on-line
    "l" 'whitespace-mode
    "w" 'save-buffer
-   "y" 'yank-to-x-clipboard))
+   "y" 'yank-to-x-clipboard
+   "i" 'org-clock-in
+   "o" 'org-clock-out
+   "a" 'org-agenda))
 
 (defun jdc--config-evil ()
   "Configure evil mode."
@@ -19,10 +22,11 @@
 			 (kbd "/") 'evil-search-forward
 			 (kbd "n") 'evil-search-next
 			 (kbd "N") 'evil-search-previous)
-  
+
   (evil-define-key 'normal global-map (kbd "<down>") 'evil-next-visual-line)
   (evil-define-key 'normal global-map (kbd "<up>") 'evil-previous-visual-line)
   (evil-define-key 'normal global-map (kbd "C-e") 'end-of-line)
+  (define-key evil-normal-state-map "u" nil)
   (evil-define-key 'insert global-map (kbd "C-v") 'yank)
 
   (define-key evil-normal-state-map [escape] 'keyboard-escape-quit)
