@@ -5,19 +5,19 @@ matches:
 
   # Collection Notes
   - trigger: "\\h\\cn"
-    label: "Collection Notes Header"
+    label: "Collection Notes: Header"
     replace: "=== Collection Notes ===\n"
   - trigger: "\\cn"
-    label: "Collection Notes AppleID"
+    label: "Collection Notes: AppleID"
     replace: "- AppleID needs passwords to complete setup"
   - trigger: "\\cn"
-    label: "Collection Notes Blank"
+    label: "Collection Notes: Blank"
     replace: "- "
   - trigger: "\\cn"
-    label: "Collection Notes Office"
+    label: "Collection Notes: Office"
     replace: "- Office needs to be activated to complete setup"
   - trigger: "\\cn"
-    label: "Collection Notes Time Machine"
+    label: "Collection Notes: Time Machine"
     replace: "- Time Machine {{choice.output}}"
     vars:
       - name: choice
@@ -32,7 +32,7 @@ matches:
                 - "last backed up on "
                 - is not configured.
   - trigger: "\\cn"
-    label: "Collection Notes Passwords"
+    label: "Collection Notes: Passwords"
     replace: "- {{choice.output}} needs passwords to complete setup"
     vars:
       - name: choice
