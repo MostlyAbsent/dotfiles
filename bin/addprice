@@ -13,6 +13,5 @@
 
 (as-> (parse-opts *command-line-args* cli-options) $
   (:options $)
-  (println $)
   (assoc prices (last (first $)) (last (last $)))
   (spit (str (System/getProperty "user.home") "/Documents/macs4u/prices.edn")  $))
