@@ -94,6 +94,7 @@
 ;; General Keybindings
 (define-key global-map "\M-Q" 'unfill-paragraph)
 
+;;;; Make it so keyboard-escape-quit doesn't delete-other-windows
 (require 'cl-lib)
 (defadvice keyboard-escape-quit
     (around keyboard-escape-quit-dont-delete-other-windows activate)
