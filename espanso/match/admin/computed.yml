@@ -21,7 +21,7 @@ matches:
     label: "Completed"
     replace: "Completed without apparent error."
 
-  - trigger: "\\par"
+  - trigger: "\\pars"
     label: "Wrap in parens"
     replace: "({{output}})"
     vars:
