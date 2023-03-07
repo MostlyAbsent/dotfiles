@@ -40,3 +40,21 @@ matches:
         params:
           layout: |
             Application [[output]]
+  - trigger: "\\cn"
+    label: "Collection Note: Screen Time"
+    replace: "- You can set up Screen Time in System Preferences"
+  - trigger: "\\cn"
+    label: "Collection Note: TouchID"
+    replace: "- You can set up TouchID in System Preferences"
+  - trigger: "\\cn"
+    label: "Collection Note: Hey Siri"
+    replace: "- You can set up Hey Siri in System Preferences"
+  - trigger: "\\cn"
+    label: "Collection Note: Unsupported Office"
+    replace: "- The installed version of Office for Mac is unsupported"
+  - trigger: "\\cn"
+    label: "Collection Note: FileVault"
+    replace: "- You can set up FileVault in System Preferences"
+  - trigger: "\\cn"
+    label: "Time Machine Backup"
+    replace: "- Time Machine last completed a backup on "
