@@ -23,4 +23,13 @@ matches:
     replace: "Account Name: WebEquip Pty Ltd\nBank: NAB\nBSB: 086 288\nAccount Number: 488973497"
 
   - trigger: "\\sig"
+    label: Basic
     replace: "Kind regards,\nJacob Doran\nService Manager at Macs-4-U\nTel: 08 9274 7111"
+
+  - trigger: "\\sig"
+    label: gofundme
+    replace: "Best Regards,\n\nJacob Doran\n
+Macs-4-U | Service Manager\n(08) 9274 7111 | j.doran.admin@macs4u.com.au\n\nmacs4u.au | macs4u.com.au | restorationmac.com.au | facebook.com/macs4usales\nIf you have any questions or require any assistance, please don’t hesitate to contact us by phone or reply to this email.\nIf you’re satisfied with our service and would like to support Macs4u in our efforts to renovate our shop and educate the next generation of computer enthusiasts, please consider donating to our GoFundMe campaign:\nhttps://www.gofundme.com/f/renovate-macs-educate-with-macs4uau\nYou can also help us out by leaving a review:\nhttps://restorationmac.com.au/feedback/\nAs a reminder, it is recommended to back up your data.\n\n**Disclaimer: Any suggestions, recommendations, or instructions expressed in this email are my own opinions and do not necessarily reflect the views of Macs-4-U as a business. Technical instructions should only be carried out by a qualified technician if fully understood.\nMacs-4-U intends the content of this email or any attachment for the use of the intended recipient(s) only. Macs-4-U strictly prohibits unauthorized use, disclosure, distribution, copying, or taking any action based on the contents of the email or attachment. If you are not the intended recipient of this email or the attachment(s), please notify the sender immediately by return email and delete it and any attachment(s) from your system. Thank you."
+
+  - trigger: "\\black"
+    replace: "0410 501 441"
