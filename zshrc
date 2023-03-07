@@ -5,4 +5,5 @@ source $ZSH/oh-my-zsh.sh
 export PATH="$HOME/.bin":$PATH
 eval $(thefuck --alias)
 
-alias ls="ls -al"
+alias ls="ls -alG"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
