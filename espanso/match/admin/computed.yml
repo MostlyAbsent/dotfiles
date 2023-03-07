@@ -42,3 +42,18 @@ matches:
         type: match
         params:
           trigger: "\\date"
+
+  - trigger: "\\parts"
+    replace: "=== Parts Ordered\n- "
+
+  - trigger: "\\trim"
+    label: "Insert Trim key"
+    replace: "Trim Key: {{paste}}"
+    vars:
+      - name: paste
+        type: shell
+        params:
+          cmd: pbpaste
+
+  - trigger: "\\ts"
+    form: "Time Spent: JD [[time]] minutes"
