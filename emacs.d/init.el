@@ -79,6 +79,9 @@
 (setq completion-ignore-case t)
 
 ;; Make it so keyboard-escape-quit doesn't delete-other-windows
+(require 'rebinder)
+(define-key global-map (kbd "C-u") (rebinder-dynamic-binding "C-x"))
+
 (require 'cl-lib)
 (defadvice keyboard-escape-quit
     (around keyboard-escape-quit-dont-delete-other-windows activate)
