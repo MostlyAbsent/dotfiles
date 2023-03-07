@@ -4,6 +4,23 @@
 matches:
 
   - trigger: "\\quote"
+    label: "MBA 13 Battery"
+    replace: "Replacement Battery — ${{battery}}\n\nTotal repair cost* — ${{battery}}\n\n{{fineprint}}"
+    vars:
+      - name: bapmba13
+        type: shell
+        params:
+          cmd: "getprice bapmba13"
+      - name: battery
+        type: shell
+        params:
+          cmd: "echo {{bapmba13}} | dollarformatter"
+      - name: fineprint
+        type: match
+        params:
+          trigger: "local.ohjelmoida.quote.fineprint"
+
+  - trigger: "\\quote"
     label: "MBP R 13 Battery"
     replace: "Replacement Battery — ${{battery}}\nLabour to install replacement — ${{labour}}\n\nTotal repair cost* — ${{total}}\n\n{{fineprint}}"
     vars:

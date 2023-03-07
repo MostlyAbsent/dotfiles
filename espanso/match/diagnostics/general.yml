@@ -27,3 +27,7 @@ matches:
               values:
                 - restored
                 - noted
+
+  - trigger: "\\nvram"
+    label: "Reset nvram."
+    replace: "Reset the machines NVRAM."

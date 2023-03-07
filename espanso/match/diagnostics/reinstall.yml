@@ -27,8 +27,3 @@ matches:
   - trigger: "\\reinst"
     label: "Battery"
     replace: "Reinstalled the original Battery to continue diagnostics."
-
-  # Test Summary Notes
-  - trigger: "\\test"
-    label: "Display Module"
-    replace: "These tests indicate a fault with the Display Module, repair would require a replacement Display."

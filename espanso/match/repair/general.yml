@@ -10,3 +10,7 @@ matches:
 
   - trigger: "\\clean"
     replace: "Cleaned general dust buildup, additional attention was given to the fans and heat exchangers."
+
+  - trigger: "\\reass"
+    label: "Reassembly"
+    replace: "Reassembled the machine"

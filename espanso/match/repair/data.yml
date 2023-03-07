@@ -19,14 +19,15 @@ matches:
             source:
               type: choice
               values:
-                - Original Drive
-                - Backup
+                - original machine
+                - original drive
+                - backup
             target:
               type: choice
               values:
-                - Replacement Drive
-                - External Drive
-                - Replacement Machine
+                - replacement drive
+                - external drive
+                - new machine
 
   - trigger: "\\data"
     label: "Backup"

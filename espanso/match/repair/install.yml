@@ -97,6 +97,10 @@ matches:
           cmd: "macos {{input.number}}"
 
   - trigger: "\\inst"
+    label: "MagSafe Board"
+    replace: "Installed replacement MagSafe Board."
+
+  - trigger: "\\inst"
     label: "Trackpad"
     replace: "Installed replacement Trackpad."
 
@@ -107,3 +111,17 @@ matches:
   - trigger: "\\inst"
     label: "Trim"
     replace: "Installed Trim Enable Software to prevent unnecessary SSD wear."
+
+  - trigger: "\\updates"
+    label: "Install updates"
+    replace: "Began installing software updates."
+
+  - trigger: "\\inst"
+    label: "Install Office"
+    form: "Began installing [[choices]]"
+    form_fields:
+      choices:
+        type: list
+        values:
+          - Office 2021
+          - Office 2019

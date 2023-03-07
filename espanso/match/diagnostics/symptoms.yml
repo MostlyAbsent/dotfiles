@@ -5,6 +5,10 @@ matches:
 
   # Symptoms
   - trigger: "\\symp"
+    label: "Confirmed reported symptoms"
+    replace: "Confirmed the reported sypmtoms; "
+
+  - trigger: "\\symp"
     label: "Power No Video"
     replace: "Confirmed Power No Video symptoms."
 

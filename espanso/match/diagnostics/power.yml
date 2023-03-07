@@ -12,6 +12,10 @@ matches:
     label: "Auto Power"
     replace: "The machine automatically powered on."
 
+  - trigger: "\\pwr"
+    label: "Diagnostic LEDS"
+    replace: "The diagnostic LEDs indicate; "
+
   - trigger: "\\mgsf"
     label: "Attached MagSafe or USB-C Power Adapter"
     replace: "Attached a known good {{pa.choice}} Power Adapter."
@@ -65,7 +69,16 @@ matches:
       condition:
         type: choice
         values: |
+          Normal
           Service Now
           Service Recommended
           Replace Now
           Replace Soon
+
+  - trigger: "\\batt"
+    label: "Battery Indicator Light charge level"
+    form: "Checked the battery charge level using the Battery Indicator Light, [[number]] of eight lights activated."
+
+  - trigger: "\\post"
+    label: "Power On Self Test"
+    replace: "The machine chimed, indicating it passed the Power On Self Test (P.O.S.T.)"

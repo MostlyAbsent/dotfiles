@@ -39,16 +39,9 @@ matches:
             age:
               default: "0"
       - name: output
-        type: script
+        type: shell
         params:
-          args:
-            - /Users/jacob/.bin/drivemetrics
-            - "{{input.fusion}}"
-            - "{{input.drivetype}}"
-            - "{{input.capacity}}"
-            - "{{input.data}}"
-            - "{{input.os}}"
-            - "{{input.age}}"
+          cmd: "drivemetrics.clj --fusion {{input.fusion}} --drive {{input.drivetype}} --capacity {{input.capacity}} --data {{input.data}} --os {{input.os}} --age {{input.age}}"
 
   - trigger: "\\users"
     label: "Number of users"
@@ -68,6 +61,10 @@ matches:
   - trigger: "\\drive"
     label: "Drive Age"
     form: "The drive is approximately [[years]] old."
+
+  - trigger: "\\drive"
+    label: "Doesn't mount"
+    replace: "The drive doesn't auto mount."
 
   - trigger: "\\dd"
     label: "Bootcamp Metrics"
@@ -101,3 +98,7 @@ The Windows volume has a capacity of {{form.winSize}} GB, with about {{form.winD
         type: shell
         params:
           cmd: "macos {{form.macOS}}"
+
+  - trigger: "\\fv"
+    label: "FileVault is enabled."
+    replace: "FileVault is enabled."

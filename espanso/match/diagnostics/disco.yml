@@ -14,20 +14,36 @@ matches:
 
   - trigger: "\\disco"
     label: "Display"
-    replace: "Disconnected the Display cable for visual inspection."
+    replace: "Disconnected the Display cable."
 
   - trigger: "\\disco"
     label: "Keyboard Flex"
-    replace: "Disconnected the Keyboard Flex cable for visual inspection."
+    replace: "Disconnected the Keyboard Flex cable."
 
   - trigger: "\\disco"
     label: "Trackpad Flex"
-    replace: "Disconnected the Trackpad Flex cable for visual inspection."
+    replace: "Disconnected the Trackpad Flex cable."
 
   - trigger: "\\disco"
     label: "HID Interconnect Flex"
-    replace: "Disconnected the HID Interconnect Flex cable for visual inspection."
+    replace: "Disconnected the HID Interconnect Flex cable."
 
   - trigger: "\\disco"
     label: "Interconnect Flex"
-    replace: "Disconnected the Interconnect Flex cable for visual inspection."
+    replace: "Disconnected the Interconnect Flex cable."
+
+  - trigger: "\\disco"
+    label: "Audio Port"
+    replace: "Disconnected the Audio Port cable."
+
+  - trigger: "\\disco"
+    label: "USB C Port"
+    replace: "Disconnected the USB C Port cable."
+
+  - trigger: "\\disco"
+    label: "Camera"
+    replace: "Disconnected the Camera cable."
+
+  - trigger: "\\disco"
+    label: "Fan"
+    replace: "Disconnected the Fan cable."

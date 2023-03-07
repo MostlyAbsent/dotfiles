@@ -33,6 +33,10 @@ matches:
     replace: "Removed the Logic Board."
 
   - trigger: "\\rm"
+    label: "MagSafe Board"
+    replace: "Removed the MagSafe Board."
+
+  - trigger: "\\rm"
     label: "Left I/O Board"
     replace: "Removed the Left I/O Board for inspection."
 

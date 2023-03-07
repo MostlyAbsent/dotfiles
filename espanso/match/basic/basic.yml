@@ -50,6 +50,10 @@ matches:
     replace: "System Management Controller"
   - trigger: "\\TMB"
     replace: "Time Machine Backup"
+  - trigger: "\\PA"
+    replace: "Power Adapter"
+  - trigger: "\\POST"
+    replace: "P.O.S.T."
 
   # Parts abbreviations
   - trigger: "\\frontbracket"
@@ -65,7 +69,7 @@ matches:
   - trigger: "\\LB"
     replace: "Logic Board"
   - trigger: "\\LCI"
-    replace: "Liquid COntact Indicator"
+    replace: "Liquid Contact Indicator"
   - trigger: "\\LIO"
     replace: "Left I/O Board"
   - trigger: "\\LIO"

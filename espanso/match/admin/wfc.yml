@@ -12,3 +12,12 @@ matches:
         type: match
         params:
           trigger: "\\awstdate"
+
+  - trigger: "\\wfc"
+    label: "Blank"
+    replace: "=== Waiting for Customer - [JD {{td}}]\n-"
+    vars:
+      - name: td
+        type: match
+        params:
+          trigger: "\\awstdate"

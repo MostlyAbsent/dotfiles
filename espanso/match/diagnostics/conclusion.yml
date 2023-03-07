@@ -55,11 +55,20 @@ matches:
 
   - trigger: "\\conc"
     label: "Vintage warning"
-    replace: "Please note this machine is not capable of running the latest Operating System, this may limit its usefulness to you."
+    replace: "Please note this machine is limited to running {{macos}}."
+    vars:
+      - name: macos
+        type: match
+        params:
+          trigger: "\\macos"
 
   - trigger: "\\conc"
     label: "Unsupported Office warning"
     replace: "The installed version of Office for Mac is now unsupported. We recommend upgrading to Office for Mac 2021."
+
+  - trigger: "\\conc"
+    label: "Office activation warning"
+    replace: "Please note if we complete the replacement Storag Drive your copy of Office will need to be reactivated, as it is an out-of-date version this may no longer be possible. If you rely on this software let us know and we can discuss some options for you."
 
   - trigger: "\\h\\conc"
     replace: "=== Conclusion and Diagnosis"
