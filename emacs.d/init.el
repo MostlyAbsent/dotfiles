@@ -296,6 +296,10 @@ on `impatient-mode' for the current buffer."
                                      "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
   (global-ligature-mode 't))
 
+(use-package spacemacs-theme
+  :defer t
+  :init (load-theme 'spacemacs-dark t))
+
 (use-package auto-package-update
    :ensure t
    :config
