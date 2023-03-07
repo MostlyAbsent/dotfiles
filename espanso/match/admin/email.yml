@@ -1,0 +1,8 @@
+# espanso match file
+
+# Matches for use in emails
+matches:
+
+  - trigger: "\\email"
+    label: "Quote"
+    replace: "I've completed the diagnostics on your machine and attached the report below. In summary; "

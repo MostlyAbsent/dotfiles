@@ -1,0 +1,8 @@
+# espanso match file
+
+# Software repair matches
+matches:
+
+  - trigger: "\\backup"
+    label: "New Backup"
+    replace: "Began creating a Time Machine Backup to the new external drive."
