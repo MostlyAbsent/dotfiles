@@ -86,6 +86,11 @@
 (require 'rebinder)
 (define-key global-map (kbd "C-u") (rebinder-dynamic-binding "C-x"))
 
+;;;; Enabled Commands
+(put 'upcase-region 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
 (require 'cl-lib)
 (defadvice keyboard-escape-quit
     (around keyboard-escape-quit-dont-delete-other-windows activate)
