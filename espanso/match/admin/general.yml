@@ -6,7 +6,7 @@ matches:
   # General admin matches
   - trigger: "\\bank"
     label: "Bank template for use in emails"
-    replace: "\nIf you choose to pay by bank transfer please use the details below and email a transaction receipt to info@macs4u.com.au\n\nReference: {{output.ref}}\n{{bank}}"
+    replace: "If you choose to pay by bank transfer please use the details below and email a transaction receipt to info@macs4u.com.au\n\nReference: {{output.ref}}\n{{bank}}"
     vars:
       - name: output
         type: form
