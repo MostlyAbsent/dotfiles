@@ -266,17 +266,6 @@
    :ensure t
    :config (ivy-mode 1))
 
-(use-package org-roam
-  :ensure t
-  :bind (("C-c o f" .   org-roam-node-find)
-	 ("C-c o c" .   org-roam-capture)
-	 ("C-c o i" . org-roam-node-insert)
-	 ("C-c o b" . org-roam-buffer-current-node))
-  :config (require 'init-roam))
-
-(use-package org-roam-ui
-  :ensure t)
-
 (use-package clj-refactor
   :ensure t
   :config
@@ -312,9 +301,6 @@ on `impatient-mode' for the current buffer."
 		"<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<"
 		"<<-" "<<=" "<<<" "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
   (global-ligature-mode 't))
-
-(use-package powershell
-  :ensure t)
 
 (use-package spacemacs-theme
   :defer t
