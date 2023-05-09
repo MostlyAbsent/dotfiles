@@ -5,7 +5,7 @@
    "," 'other-window
    ":" 'eval-expression
    "'" 'toggle-comment-on-line
-   "l" 'whitespace-mode
+   "l" 'evil-execute-macro
    "w" 'save-buffer
    "y" 'yank-to-x-clipboard
    "i" 'org-clock-in
