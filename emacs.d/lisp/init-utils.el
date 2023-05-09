@@ -24,4 +24,10 @@
         (emacs-lisp-docstring-fill-column t))
     (fill-paragraph nil region)))
 
+(defun jtt-next-right-par ()
+  "Move the cursor to the next right paren or simplar"
+  (interactive)
+  (re-search-forward (regexp-opt '(")" "]" "}")) nil t)
+  (backward-char 1))
+
 (provide 'init-utils)
