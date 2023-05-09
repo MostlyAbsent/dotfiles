@@ -316,4 +316,7 @@ on `impatient-mode' for the current buffer."
 (use-package lua-mode
   :ensure t)
 
+(use-package vterm
+  :ensure t)
+
 (provide 'init)
