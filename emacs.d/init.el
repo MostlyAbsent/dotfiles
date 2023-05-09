@@ -313,4 +313,7 @@ on `impatient-mode' for the current buffer."
          auto-package-update-interval 4)
    (auto-package-update-maybe))
 
+(use-package lua-mode
+  :ensure t)
+
 (provide 'init)
