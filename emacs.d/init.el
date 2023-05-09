@@ -174,13 +174,17 @@
 (use-package rainbow-delimiters
   :ensure t)
 
+(use-package flycheck-clj-kondo
+  :ensure t)
+
 (use-package clojure-mode
   :ensure t
   :config
   (add-hook 'clojure-mode-hook
 	    (lambda ()
 	      (subword-mode)
-	      (rainbow-delimiters-mode))))
+	      (rainbow-delimiters-mode)
+	      (flycheck-mode))))
 
 (use-package cider
   :ensure t
