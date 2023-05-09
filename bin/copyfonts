@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+
+fonts=$HOME'/Documents/compile-epub/resources/prototype/fonts/'
+
+mkdir $1'/Chapters/'
+cp -r $fonts $1'/Chapters/fonts'
