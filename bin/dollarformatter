@@ -1,5 +1,0 @@
-#!/usr/bin/env bb
-
-(if (== *input* (.intValue *input*))
-  (println (format "%.0f" *input*))
-  (println (format "%.2f" *input*)))
