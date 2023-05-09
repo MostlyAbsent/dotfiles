@@ -76,6 +76,7 @@
 
 ;; General Keybindings
 (define-key global-map "\M-Q" 'unfill-paragraph)
+(define-key global-map "\M-." 'jtt-next-right-par)
 
 ;;;; Make it so keyboard-escape-quit doesn't delete-other-windows
 (require 'cl-lib)
@@ -242,7 +243,20 @@
   (add-hook 'shell-mode-hook 'smartparens-mode)
   (sp-pair "'" "'" :actions nil)
   (sp-pair "<" ">")
-  (define-key global-map (kbd "M-(") 'sp-wrap-round))
+  (sp-local-pair 'mhtml-mode "{%" "%}")
+  (define-key global-map (kbd "M-(") 'sp-wrap-round)
+  (define-key global-map (kbd "M-[") 'sp-wrap-square)
+  (define-key global-map (kbd "M-q") 'sp-indent-defun)
+  (defun my-create-newline-and-enter-sexp (&rest _ignored)
+    "Open a new brace or bracket expression, with relevant newlines and indent. "
+    (newline)
+    (indent-according-to-mode)
+    (forward-line -1)
+    (indent-according-to-mode))
+  (sp-local-pair 'css-mode
+		 "{"
+		 nil
+		 :post-handlers '((my-create-newline-and-enter-sexp "RET"))))
 
 (use-package ivy
    :ensure t
