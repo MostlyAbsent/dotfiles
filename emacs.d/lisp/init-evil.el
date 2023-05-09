@@ -25,7 +25,7 @@
 
   (evil-define-key 'normal global-map (kbd "<down>") 'evil-next-visual-line)
   (evil-define-key 'normal global-map (kbd "<up>") 'evil-previous-visual-line)
-  (evil-define-key 'normal global-map (kbd "C-e") 'end-of-line)
+  (evil-define-key '(normal insert) global-map (kbd "C-e") 'end-of-line)
   (define-key evil-normal-state-map "u" nil)
   (evil-define-key 'insert global-map (kbd "C-v") 'yank)
 
