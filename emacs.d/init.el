@@ -174,7 +174,7 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-(use-package flycheck-clj-kondo
+(use-package lsp-mode
   :ensure t)
 
 (use-package clojure-mode
@@ -184,7 +184,7 @@
 	    (lambda ()
 	      (subword-mode)
 	      (rainbow-delimiters-mode)
-	      (flycheck-mode))))
+	      (lsp))))
 
 (use-package cider
   :ensure t
@@ -265,15 +265,6 @@
 (use-package ivy
    :ensure t
    :config (ivy-mode 1))
-
-(use-package clj-refactor
-  :ensure t
-  :config
-  (defun my-clojure-mode-hook ()
-    (clj-refactor-mode 1)
-    (yas-minor-mode 1) ; for adding require/use/import statements
-    (cljr-add-keybindings-with-prefix "C-c C-m"))
-  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
 
 (use-package impatient-mode
   :ensure t
