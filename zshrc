@@ -1,5 +1,5 @@
 export ZSH="$HOME/.oh-my-zsh/"
-ZSH_THEME="fox"
+ZSH_THEME="eastwood"
 plugins=(git lein thefuck)
 source $ZSH/oh-my-zsh.sh
 export PATH="$HOME/.bin":$PATH
