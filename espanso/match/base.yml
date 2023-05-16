@@ -71,3 +71,6 @@ matches:
 
   - trigger: "\\break"
     replace: "<p class='center'>*****</p>"
+
+  - trigger: "\\kata"
+    replace: "Solution to codewars kata: "
