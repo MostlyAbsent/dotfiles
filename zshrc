@@ -9,3 +9,5 @@ alias ls="ls -alG"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 source /opt/homebrew/Cellar/chruby/0.3.9/share/chruby/chruby.sh
+
+eval `keychain --eval --agents ssh --inherit any id_ed25519`
