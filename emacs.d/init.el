@@ -172,7 +172,9 @@
   :ensure t)
 
 (use-package lsp-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.node_modules\\'"))
 
 (use-package clojure-mode
   :ensure t
