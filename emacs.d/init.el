@@ -137,11 +137,6 @@
   :config
   (add-hook 'org-mode-hook 'evil-org-mode))
 
-(use-package smart-mode-line
-	     :ensure t
-	     :config
-	     (sml/setup))
-
 (use-package s
   :ensure t
   :defer t)
