@@ -297,8 +297,8 @@
   :ensure t
   :config
   (defun my-html-mode-hook ()
-  "Starts the `simple-httpd' server if it is not already running, and turns
-on `impatient-mode' for the current buffer."
+  "Starts the `simple-httpd' server if it is not already running,
+and turns on `impatient-mode' for the current buffer."
   (unless (get-process "httpd")
     (message "starting httpd server...")
     (httpd-start))
