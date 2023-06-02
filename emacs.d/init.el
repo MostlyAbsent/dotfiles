@@ -457,4 +457,8 @@ and turns on `impatient-mode' for the current buffer."
 (use-package dockerfile-mode
   :ensure t)
 
+(use-package web-mode
+  :ensure t
+  :config (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
+
 (provide 'init)
