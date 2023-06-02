@@ -453,4 +453,8 @@ and turns on `impatient-mode' for the current buffer."
 (use-package js2-mode
   :ensure t
   :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+(use-package dockerfile-mode
+  :ensure t)
+
 (provide 'init)
