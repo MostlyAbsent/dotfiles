@@ -189,7 +189,7 @@
   :ensure t
   :config
   (add-hook 'cider-mode-hook 'eldoc-mode)
-  (setq cider-repl-pop-to-buffer-on-connect t)
+  (setq cider-repl-pop-to-buffer-on-connect nil)
   (setq cider-show-error-buffer t)
   (setq cider-auto-select-error-buffer t)
   (setq cider-repl-history-file "~/.emacs.d/cider-history")
