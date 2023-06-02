@@ -272,6 +272,13 @@
 	vertico-count 17
 	vertico-cycle t))
 
+(use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless basic)
+	completion-category-defaults nil
+	completion-category-overrides '((files (styles partial-completion)))))
+
 
 (use-package impatient-mode
   :ensure t
