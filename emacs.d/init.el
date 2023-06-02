@@ -447,6 +447,9 @@ and turns on `impatient-mode' for the current buffer."
   :after (treemacs magit)
   :ensure t)
 
+(use-package restclient
+  :ensure t)
+
 (use-package js2-mode
   :ensure t
   :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
