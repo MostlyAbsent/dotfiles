@@ -337,6 +337,13 @@ and turns on `impatient-mode' for the current buffer."
 (use-package vterm
   :ensure t)
 
+(use-package undo-tree
+  :ensure t
+  :config
+  (global-undo-tree-mode)
+  (global-set-key (kbd "s-z") 'undo-tree-undo)
+  (global-set-key (kbd "s-y") 'undo-tree-redo))
+
 (use-package js2-mode
   :ensure t
   :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
