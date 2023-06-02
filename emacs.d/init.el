@@ -264,9 +264,6 @@
 		 nil
 		 :post-handlers '((my-create-newline-and-enter-sexp "RET"))))
 
-(use-package ivy
-   :ensure t
-   :config (ivy-mode 1))
 
 (use-package impatient-mode
   :ensure t
