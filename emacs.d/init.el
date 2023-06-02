@@ -95,8 +95,6 @@
 			  (setq sh-basic-offset 2)
 			  (setq sh-indentation 2)))
 
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
-(add-hook 'js-mode-hook 'subword-mode)
 (add-hook 'html-mode-hook 'subword-mode)
 (setq js-indent-level 2)
 
@@ -314,4 +312,7 @@ on `impatient-mode' for the current buffer."
 (use-package vterm
   :ensure t)
 
+(use-package js2-mode
+  :ensure t
+  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 (provide 'init)
