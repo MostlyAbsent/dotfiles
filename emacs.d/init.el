@@ -241,17 +241,24 @@
   (add-hook 'prog-mode-hook 'smartparens-mode)
   (add-hook 'shell-mode-hook 'smartparens-mode)
   (sp-pair "'" "'" :actions nil)
-  (sp-pair "<" ">")
   (sp-local-pair 'mhtml-mode "{%" "%}")
   (define-key global-map (kbd "M-(") 'sp-wrap-round)
   (define-key global-map (kbd "M-[") 'sp-wrap-square)
+  (define-key global-map (kbd "M-{") 'sp-wrap-curly)
   (define-key global-map (kbd "M-q") 'sp-indent-defun)
+  (define-key global-map (kbd "C-<left>") 'sp-backward-sexp)
+  (define-key global-map (kbd "C-<right>") 'sp-forward-sexp)
+  (define-key global-map (kbd "C-<down>") 'sp-down-sexp)
+  (define-key global-map (kbd "C-<up>") 'sp-backward-up-sexp)
+  (define-key global-map (kbd "M-<down>") 'sp-forward-slurp-sexp)
+  (define-key global-map (kbd "M-<up>") 'sp-forward-barf-sexp)
   (defun my-create-newline-and-enter-sexp (&rest _ignored)
     "Open a new brace or bracket expression, with relevant newlines and indent. "
     (newline)
     (indent-according-to-mode)
     (forward-line -1)
     (indent-according-to-mode))
+  (sp-local-pair 'html-mode "<" ">")
   (sp-local-pair 'css-mode
 		 "{"
 		 nil
