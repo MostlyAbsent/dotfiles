@@ -209,10 +209,6 @@
               ("s-p" . projectile-command-map)
               ("C-c p" . projectile-command-map)))
 
-(use-package tagedit
-  :ensure t
-  :config (add-hook 'html-mode-hook 'tagedit-mode))
-
 (use-package magit
   :ensure t
   :defer t
