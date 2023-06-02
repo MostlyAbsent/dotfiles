@@ -264,6 +264,14 @@
 		 nil
 		 :post-handlers '((my-create-newline-and-enter-sexp "RET"))))
 
+(use-package vertico
+  :ensure t
+  :config
+  (vertico-mode)
+  (setq vertico-resize nil
+	vertico-count 17
+	vertico-cycle t))
+
 
 (use-package impatient-mode
   :ensure t
