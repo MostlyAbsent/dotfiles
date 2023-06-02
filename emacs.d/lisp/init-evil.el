@@ -1,6 +1,6 @@
 (defun jdc--config-evil-leader ()
   "Configure evil leader mode."
-  (evil-leader/set-leader ",")
+  (evil-leader/set-leader "SPC")
   (evil-leader/set-key
    "," 'other-window
    ":" 'eval-expression
@@ -10,7 +10,10 @@
    "y" 'yank-to-x-clipboard
    "i" 'org-clock-in
    "o" 'org-clock-out
-   "a" 'org-agenda))
+   "a" 'org-agenda
+   "u" 'jtt-upcase-word-at-point
+   "d" 'jtt-downcase-word-at-point
+   "c" 'jtt-capitalize-word-at-point))
 
 (defun jdc--config-evil ()
   "Configure evil mode."
