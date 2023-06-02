@@ -75,8 +75,11 @@
 (put 'downcase-region 'disabled nil)
 
 ;; General Keybindings
-(define-key global-map "\M-Q" 'unfill-paragraph)
-(define-key global-map "\M-." 'jtt-next-right-par)
+(define-key global-map (kbd "M-Q") 'unfill-paragraph)
+(setq mac-option-modifier 'meta)
+(setq mac-command-modifier 'super)
+(global-set-key (kbd "s-n") 'make-frame)
+(global-set-key (kbd "s-w") 'delete-frame)
 
 ;;;; Make it so keyboard-escape-quit doesn't delete-other-windows
 (require 'cl-lib)
