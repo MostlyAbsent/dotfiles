@@ -61,6 +61,7 @@
 
 (add-hook 'text-mode-hook 'flyspell-mode)
 
+;; Allow using a space in the minibuffer without triggering completion
 (define-key minibuffer-local-completion-map "\M- "
     (lambda () (interactive) (insert " ")))
 
