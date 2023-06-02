@@ -279,6 +279,19 @@
 	completion-category-defaults nil
 	completion-category-overrides '((files (styles partial-completion)))))
 
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :ensure t
+  :init
+  (setq doom-modeline-bar-width 3
+	doom-modeline-github t
+	doom-modeline-major-mode-icon t
+	doom-modeline-buffer-file-name-style 'relative-from-project)
+  :config
+  (add-hook 'after-setting-font-hook #'+modeline-resize-for-font-h)
+  (custom-set-faces
+   `(mode-line ((t (:background "#303030"))))
+   `(mode-line-emphasis ((t (:foreground "#AAAAAA"))))))
 
 (use-package impatient-mode
   :ensure t
