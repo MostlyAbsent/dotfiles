@@ -95,7 +95,6 @@
 			  (setq sh-basic-offset 2)
 			  (setq sh-indentation 2)))
 
-(add-hook 'html-mode-hook 'subword-mode)
 (setq js-indent-level 2)
 
 ;; Install Packages
@@ -303,7 +302,7 @@ and turns on `impatient-mode' for the current buffer."
     (message "starting httpd server...")
     (httpd-start))
   (impatient-mode))
-  (add-hook 'html-mode-hook 'my-html-mode-hook))
+  (add-hook 'web-mode-hook 'my-html-mode-hook))
 
 (use-package ligature
   :ensure t
@@ -459,6 +458,41 @@ and turns on `impatient-mode' for the current buffer."
 
 (use-package web-mode
   :ensure t
-  :config (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode)))
+  :init
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  :config
+  (defun my-web-mode-hook ()
+    (setq web-mode-enable-auto-pairing nil))
+
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
+
+  (defun sp-web-mode-is-code-context (id action context)
+    (and (eq action 'insert)
+	 (not (or (get-text-property (point) 'part-side)
+                  (get-text-property (point) 'block-side)))))
+
+  (sp-local-pair 'web-mode "<" nil :when '(sp-web-mode-is-code-context))
+  :bind
+  (("C-c C-g +" . web-mode-element-extract)
+   ("C-c C-g -" . web-mode-element-contract)
+   ("C-c C-g /" . web-mode-element-close)
+   ("C-c C-g I" . web-mode-element-insert-at-point)
+   ("C-c C-g a" . web-mode-element-content-select)
+   ("C-c C-g b" . web-mode-element-beginning)
+   ("C-c C-g c" . web-mode-element-clone)
+   ("C-c C-g d" . web-mode-element-child)
+   ("C-c C-g e" . web-mode-element-end)
+   ("C-c C-g f" . web-mode-element-children-fold-or-unfold)
+   ("C-c C-g i" . web-mode-element-insert)
+   ("C-c C-g k" . web-mode-element-kill)
+   ("C-c C-g m" . web-mode-element-mute-blanks)
+   ("C-c C-g n" . web-mode-element-next)
+   ("C-c C-g p" . web-mode-element-previous)
+   ("C-c C-g r" . web-mode-element-rename)
+   ("C-c C-g s" . web-mode-element-select)
+   ("C-c C-g t" . web-mode-element-transpose)
+   ("C-c C-g u" . web-mode-element-parent)
+   ("C-c C-g v" . web-mode-element-vanish)
+   ("C-c C-g w" . web-mode-element-wrap)))
 
 (provide 'init)
