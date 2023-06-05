@@ -146,8 +146,9 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-(use-package lsp-mode
+(use-package lsp-ui
   :ensure t
+  :commands lsp-ui-mode
   :config
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.node_modules\\'"))
 
