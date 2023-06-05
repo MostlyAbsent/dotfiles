@@ -109,32 +109,8 @@
   (require 'use-package))
 
 (require 'init-evil)
+(require 'init-org)
 (evil-mode 1)
-
-(use-package org
-  :ensure t
-  :bind (("C-c l" .   org-store-link)
-	 ("C-c s" .   org-set-property)
-	 ("C-c M-l" . org-insert-last-stored-link))
-  :config
-  (setq org-blank-before-new-entry '((heading . t)
-				     (plan-list-item . t)))
-  (setq org-insert-heading-respect-content t)
-  (setq org-pretty-entities t)
-  (setq org-tags-column -50)
-  (setq org-startup-truncated t)
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (require 'org-collector)
-  (customize-set-value 'org-latex-hyperref-template "
-\\hypersetup{\n pdfauthor={%a},\n pdftitle={%t},\n pdfkeywords={%k},
- pdfsubject={%d},\n pdfcreator={%c},\n pdflang={%L},\n hidelinks=true}\n")
-  (setq org-agenda-files '("~/Documents/job_notes/daily.org")))
-
-(use-package evil-org
-  :ensure t
-  :after org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode))
 
 (use-package s
   :ensure t

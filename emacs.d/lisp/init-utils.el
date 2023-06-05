@@ -48,7 +48,7 @@ Forwards the points to `callback' as (`callback' p1 p2), if present."
       (funcall callback $p1 $p2))
     (list $p1 $p2)))
 
-(defun jtt-capitalize-region ()
+(defun jtt-capitalize-region (p1 p2)
   (downcase-region p1 p2)
   (upcase-initials-region p1 p2))
 
