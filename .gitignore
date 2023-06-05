@@ -17,3 +17,4 @@ emacs.d/custom.el
 /emacs.d/.last-package-update-day
 /emacs.d/projects
 /emacs.d/.lsp*
+/emacs.d/*.cache
