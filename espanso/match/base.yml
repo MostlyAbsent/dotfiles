@@ -74,3 +74,6 @@ matches:
 
   - trigger: "\\kata"
     replace: "Solution to codewars kata: "
+
+  - trigger: "\\job"
+    replace: "---\ncontact: \nsource: \nstatus: \nresponse: \ntags: \n---"
