@@ -1,8 +1,15 @@
+(defun jtt-org-agenda-redo ()
+  "Inspired by nebucatnetzer, (Nebucatnetzer)."
+  (with-current-buffer "*Org Agenda*"
+    (org-agenda-maybe-redo)))
+
 (use-package org
   :ensure t
   :bind (("C-c a" . org-agenda))
   :config
-  (setq org-agenda-files '("~/Documents/org/agenda.org"))
+  (setq org-default-notes-file
+	(expand-file-name "~/Documents/org/agenda.org"))
+  (setq org-agenda-files '("~/Documents/org"))
   (setq org-pretty-entities t)
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "NEXT(n)" "PROG(p)" "INTR(i)" "DONE(d)")))
@@ -18,7 +25,8 @@
 	    (todo "NEXT" nil))
 	   nil)))
 
-  (add-hook 'org-mode-hook 'org-indent-mode))
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (add-hook 'org-capture-after-finalize-hook 'jtt-org-agenda-redo))
 
 (use-package evil-org
   :ensure t
