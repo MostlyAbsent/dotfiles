@@ -2,18 +2,29 @@
   "Configure evil leader mode."
   (evil-leader/set-leader "SPC")
   (evil-leader/set-key
+   "'" 'toggle-comment-on-line
    "," 'other-window
    ":" 'eval-expression
-   "'" 'toggle-comment-on-line
+   "C" 'jtt-capitalize-word-at-point
+   "a" 'org-agenda
+   "d" 'jtt-downcase-word-at-point
+   "e k" 'cider-load-buffer
+   "e s" 'cider-eval-sexp-at-point
+   "i" 'org-clock-in
+   "j c" 'cider-jack-in-clj
+   "j s" 'jtt-cider-jack-in-shadow
    "l" 'evil-execute-macro
+   "o" 'org-clock-out
+   "p f" 'projectile-find-file
+   "p t" 'projectile-toggle-between-implementation-and-test
+   "q q" 'cider-quit
+   "s" 'sort-lines
+   "t n" 'cider-test-run-ns-tests
+   "t t" 'cider-test-run-test
+   "u" 'jtt-upcase-word-at-point
    "w" 'save-buffer
    "y" 'yank-to-x-clipboard
-   "i" 'org-clock-in
-   "o" 'org-clock-out
-   "a" 'org-agenda
-   "u" 'jtt-upcase-word-at-point
-   "d" 'jtt-downcase-word-at-point
-   "c" 'jtt-capitalize-word-at-point))
+   ))
 
 (defun jdc--config-evil ()
   "Configure evil mode."
@@ -58,6 +69,7 @@ is not used."
 (use-package evil
   :ensure t
   :commands (evil-mode evil-define-key)
+  :bind ("C-D" . evil-scroll-up)
   :config
   (add-hook 'evil-mode-hook 'jdc--config-evil)
 
