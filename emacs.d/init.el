@@ -138,11 +138,31 @@
 (use-package rainbow-delimiters
   :ensure t)
 
+(use-package flycheck
+  :ensure t)
+
+(use-package lsp-mode
+  :ensure t
+  :hook ((clojure-mode . lsp)
+         (clojurec-mode . lsp)
+         (clojurescript-mode . lsp))
+  :config
+  ;; add paths to your local installation of project mgmt tools, like lein
+  (setenv "PATH" (concat
+                   "/usr/local/bin" path-separator
+                   (getenv "PATH")))
+  (dolist (m '(clojure-mode
+               clojurec-mode
+               clojurescript-mode
+               clojurex-mode))
+    (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
+
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode
   :config
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.node_modules\\'"))
+  (setq lsp-ui-sideline-show-diagnostics t
+	lsp-ui-sideline-delay 0))
 
 (use-package clojure-mode
   :ensure t
