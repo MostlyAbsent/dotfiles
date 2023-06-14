@@ -6,6 +6,11 @@
     `(eval-after-load ,feature
        '(progn ,@body))))
 
+(defun jtt-cider-jack-in-shadow ()
+  (interactive)
+  (start-process "shadow-cljs" "shadow-cljs" "npm" "run" "dev")
+  (cider-connect-cljs))
+
 (defun add-auto-mode (mode &rest patterns)
   "Add entries to `auto-mode-alist' to use `MODE' for all given file `PATTERNS'."
   (dolist (pattern patterns)
