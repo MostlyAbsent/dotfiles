@@ -122,16 +122,6 @@
   :ensure t
   :defer t)
 
-(use-package visual-fill-column
-  :ensure t
-  :config
-  (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
-  (setq-default visual-fill-column-width 95)
-  (add-hook 'text-mode-hook 'visual-line-mode)
-  (add-hook 'prog-mode-hook 'visual-line-mode)
-  (setq-default visual-fill-column-center-text t)
-  (setq-default fill-column 90))
-
 (use-package company
   :ensure t
   :defer 2
