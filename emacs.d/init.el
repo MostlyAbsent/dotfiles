@@ -63,7 +63,7 @@
 
 ;; Allow using a space in the minibuffer without triggering completion
 (define-key minibuffer-local-completion-map "\M- "
-    (lambda () (interactive) (insert " ")))
+  (lambda () (interactive) (insert " ")))
 
 (setq completion-ignore-case t)
 
@@ -87,7 +87,7 @@
 (defadvice keyboard-escape-quit
     (around keyboard-escape-quit-dont-delete-other-windows activate)
   (cl-letf (((symbol-function 'delete-other-windows)
-             (lambda () nil)))
+	     (lambda () nil)))
     ad-do-it))
 
 ;; Language Specific Configurations
@@ -297,7 +297,7 @@ and turns on `impatient-mode' for the current buffer."
   (global-ligature-mode 't))
 
 (use-package spacemacs-theme
-  :defer t
+  :ensure t
   :init (load-theme 'spacemacs-dark t))
 
 (use-package auto-package-update
