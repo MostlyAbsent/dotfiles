@@ -191,6 +191,8 @@
 (use-package projectile
   :ensure t
   :pin melpa-stable
+  :config
+  (setq projectile-create-missing-test-files t)
   :init
   (projectile-mode +1)
   :bind (:map projectile-mode-map
