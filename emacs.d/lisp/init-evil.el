@@ -38,6 +38,7 @@
 			 (kbd "N") 'evil-search-previous)
 
   (evil-define-key 'normal global-map (kbd "<down>") 'evil-next-visual-line)
+  (evil-define-key '(normal insert) global-map (kbd "C-M-d") 'evil-scroll-up)
   (evil-define-key 'normal global-map (kbd "<up>") 'evil-previous-visual-line)
   (evil-define-key '(normal insert) global-map (kbd "C-e") 'end-of-line)
   (define-key evil-normal-state-map "u" nil)
@@ -69,7 +70,6 @@ is not used."
 (use-package evil
   :ensure t
   :commands (evil-mode evil-define-key)
-  :bind ("C-D" . evil-scroll-up)
   :config
   (add-hook 'evil-mode-hook 'jdc--config-evil)
 
