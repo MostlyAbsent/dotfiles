@@ -17,6 +17,7 @@
 
 (require 'init-utils)
 (require 'init-elpa)
+(require 'init-split-windows)
 
 ;; Emacs Configurations
 
