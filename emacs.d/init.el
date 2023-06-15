@@ -49,7 +49,9 @@
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
-(add-hook 'write-file-hooks 'delete-trailing-whitespace)
+(add-hook 'before-save-hook (lambda ()
+			      (unless (eq major-mode 'markdown-mode)
+				(delete-trailing-whitespace))))
 
 (set-face-attribute 'default nil
 		    :font "Fira Code"
