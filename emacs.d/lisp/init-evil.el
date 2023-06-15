@@ -4,6 +4,7 @@
   (evil-leader/set-key
    "'" 'toggle-comment-on-line
    "," 'other-window
+   "m" 'magit
    ":" 'eval-expression
    "C" 'jtt-capitalize-word-at-point
    "a" 'org-agenda
