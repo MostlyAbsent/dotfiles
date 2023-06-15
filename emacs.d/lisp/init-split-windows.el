@@ -40,6 +40,9 @@ i.e. windows tiled side-by-side."
         (with-selected-window window (split-window-sensibly-prefer-horizontal window))
       (with-selected-window window (split-window-sensibly window)))))
 
-(setq split-window-preferred-function 'split-window-really-sensibly)
+(setq
+ split-height-threshold 4
+ split-width-threshold 40
+ split-window-preferred-function 'split-window-really-sensibly)
 
 (provide 'init-split-windows)
