@@ -420,4 +420,19 @@ and turns on `impatient-mode' for the current buffer."
    ("C-c C-g v" . web-mode-element-vanish)
    ("C-c C-g w" . web-mode-element-wrap)))
 
+(use-package visual-fill-column
+  :ensure t
+  :config
+  (set-fill-column 105)
+  (setq-default visual-fill-column-center-text t)
+  (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  (global-visual-line-mode))
+
+(use-package column-marker
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook (lambda ()
+			      (interactive)
+			      (column-marker-1 80))))
+
 (provide 'init)
