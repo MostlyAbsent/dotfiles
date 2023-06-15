@@ -423,7 +423,6 @@ and turns on `impatient-mode' for the current buffer."
 (use-package visual-fill-column
   :ensure t
   :config
-  (set-fill-column 105)
   (setq-default visual-fill-column-center-text t)
   (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   (global-visual-line-mode))
