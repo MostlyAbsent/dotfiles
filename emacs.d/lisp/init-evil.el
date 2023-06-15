@@ -33,9 +33,9 @@
     (add-to-list 'evil-emacs-state-modes mode))
 
   (evil-add-hjkl-bindings occur-mode-map 'emacs
-			 (kbd "/") 'evil-search-forward
-			 (kbd "n") 'evil-search-next
-			 (kbd "N") 'evil-search-previous)
+    (kbd "/") 'evil-search-forward
+    (kbd "n") 'evil-search-next
+    (kbd "N") 'evil-search-previous)
 
   (evil-define-key 'normal global-map (kbd "<down>") 'evil-next-visual-line)
   (evil-define-key '(normal insert) global-map (kbd "C-M-d") 'evil-scroll-up)
