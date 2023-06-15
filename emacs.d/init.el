@@ -428,11 +428,4 @@ and turns on `impatient-mode' for the current buffer."
   (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   (global-visual-line-mode))
 
-(use-package column-marker
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook (lambda ()
-			      (interactive)
-			      (column-marker-1 80))))
-
 (provide 'init)
