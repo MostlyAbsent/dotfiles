@@ -8,15 +8,14 @@
 # Matches are substitution rules: when you type the "trigger" string
 # it gets replaced by the "replace" string.
 matches:
-
   - triggers: ["\\uuid", "ohjelmoida.local.uuid"]
     replace: "{{output}}"
     label: "Generate a new UUID"
     vars:
-    - name: output
-      type: shell
-      params:
-        cmd: "/usr/bin/uuidgen"
+      - name: output
+        type: shell
+        params:
+          cmd: "/usr/bin/uuidgen"
 
   - triggers: ["\\isodate", "ohjelmoida.local.isodate", "\\date"]
     replace: "{{td}}"
@@ -77,3 +76,6 @@ matches:
 
   - trigger: "\\job"
     replace: "---\ncontact: \nsource: \nstatus: \nresponse: \ntags: \n---"
+
+  - trigger: "\\jsid"
+    replace: "6456793709"
