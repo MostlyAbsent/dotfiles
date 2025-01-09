@@ -2,6 +2,10 @@ emacs.d/projectile-bookmarks.eld
 emacs.d/elpa
 emacs.d/elpa/*
 emacs.d/elpa/**
+emacs.d/quelpa
+emacs.d/quelpa/*
+emacs.d/quelpa/**
+emacs.d/tree-sitter
 emacs.d/transient
 emacs.d/auto-save-list
 /emacs.d/eshell/
