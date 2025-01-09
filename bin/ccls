@@ -1,0 +1,3 @@
+#!/bin/sh
+exec "/opt/homebrew/bin/ccls" --init='{"clang":{"extraArgs":[
+"-std=c++2a", "/usr/local/include", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1", "/Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include", "/Library/Developer/CommandLineTools/usr/include", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"]}}' "$@"

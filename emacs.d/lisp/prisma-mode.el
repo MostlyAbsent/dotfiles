@@ -1,0 +1,1 @@
+/Users/jacobdoran/Documents/dotfiles/prisma-mode/prisma-mode.el

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: commentary-block
+# key: \com
+# --
+#+BEGIN_COMMENT
+$0
+#+END_COMMENT

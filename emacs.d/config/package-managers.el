@@ -1,5 +1,7 @@
 (require 'package)
 
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("melpa" . "http://melpa.org/packages/")
@@ -32,5 +34,9 @@ re-downloaded in order to locate PACKAGE."
 	(require-package package min-version t)))))
 
 (setq package-enable-at-startup nil)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 (provide 'init-elpa)

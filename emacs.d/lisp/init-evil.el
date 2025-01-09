@@ -4,10 +4,9 @@
   (evil-leader/set-key
    "'" 'toggle-comment-on-line
    "," 'other-window
-   "m" 'magit
    ":" 'eval-expression
-   "C" 'jtt-capitalize-word-at-point
    "a" 'org-agenda
+   "C" 'jtt-capitalize-word-at-point
    "d" 'jtt-downcase-word-at-point
    "e k" 'cider-load-buffer
    "e s" 'cider-eval-sexp-at-point
@@ -15,16 +14,20 @@
    "j c" 'cider-jack-in-clj
    "j s" 'jtt-cider-jack-in-shadow
    "l" 'evil-execute-macro
+   "m" 'magit
    "o" 'org-clock-out
    "p f" 'projectile-find-file
    "p t" 'projectile-toggle-between-implementation-and-test
+   "p w" 'projectile-switch-project
    "q q" 'cider-quit
-   "s" 'sort-lines
+   "s s" 'sort-lines
+   "s a" 'lsp-execute-code-action
    "t n" 'cider-test-run-ns-tests
    "t t" 'cider-test-run-test
    "u" 'jtt-upcase-word-at-point
    "w" 'save-buffer
    "y" 'yank-to-x-clipboard
+	 "e c" 'jtt-copy-item
    ))
 
 (defun jdc--config-evil ()
@@ -39,11 +42,14 @@
     (kbd "N") 'evil-search-previous)
 
   (evil-define-key 'normal global-map (kbd "<down>") 'evil-next-visual-line)
+	(evil-define-key 'normal global-map (kbd "s") 'evil-goto-mark)
   (evil-define-key '(normal insert) global-map (kbd "C-M-d") 'evil-scroll-up)
   (evil-define-key 'normal global-map (kbd "<up>") 'evil-previous-visual-line)
   (evil-define-key '(normal insert) global-map (kbd "C-e") 'end-of-line)
   (define-key evil-normal-state-map "u" nil)
   (evil-define-key 'insert global-map (kbd "C-v") 'yank)
+  (evil-define-key 'insert global-map (kbd "C-t C-c") 'jtt-close-tag)
+  (evil-define-key '(normal insert) global-map (kbd "M-v") 'yank-from-kill-ring)
 
   (define-key evil-normal-state-map [escape] 'keyboard-escape-quit)
   (define-key evil-visual-state-map [escape] 'keyboard-quit))
