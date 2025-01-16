@@ -1,6 +1,7 @@
 alias g='git'
 alias ga='git add'
 alias gaa='git add --all'
+alias gai='git add --interactive'
 alias gb='git branch'
 alias gco='git checkout'
 alias gc='git commit --verbose'
