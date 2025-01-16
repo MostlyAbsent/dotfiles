@@ -9,3 +9,8 @@ EDITOR=nvim
 
 autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# Load supplementary config files
+for file in $XDG_CONFIG_HOME/zsh/zshrc.d/*; do
+  source "$file"
+done
