@@ -1,1 +1,8 @@
+# History setup
+HISTFILE=$ZSH_CACHE/history
+HISTDUP=erase
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt EXTENDED_HISTORY
+
 EDITOR=nvim
