@@ -3,6 +3,8 @@ XDG_CONFIG_HOME=$HOME/.config
 XDG_BIN_HOME=$HOME/.local/bin
 XDG_DATA_HOME=$HOME/.local/share
 
-PATH=$XDG_BIN_HOME
+ZSH_CACHE=$XDG_CACHE_HOME/zsh
 
-export PATH=$PATH:$($PATH/path_helper -p)
+PATH=$XDG_BIN_HOME:$PATH
+
+PATH=$PATH:$(path_helper -p --no-lib --config)
