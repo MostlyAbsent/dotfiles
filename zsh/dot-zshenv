@@ -1,10 +1,17 @@
+# XDG basics
 XDG_CACHE_HOME=$HOME/.cache
 XDG_CONFIG_HOME=$HOME/.config
 XDG_BIN_HOME=$HOME/.local/bin
 XDG_DATA_HOME=$HOME/.local/share
 
+# ZSH top level env vars
 ZSH_CACHE=$XDG_CACHE_HOME/zsh
 
+# Path constructor
 PATH=$XDG_BIN_HOME:$PATH
-
 PATH=$PATH:$(path_helper -p --no-lib --config)
+
+# Load supplementary config files
+for file in $XDG_CONFIG_HOME/zsh/zshenv.d/*; do
+  source "$file"
+done
