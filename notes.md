@@ -1,0 +1,3 @@
+# TODO
+
+- [ ] setup script for x in, stow -t $HOME x...
