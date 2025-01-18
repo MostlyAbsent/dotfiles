@@ -7,5 +7,13 @@ return {
     -- Only one of these is needed.
     'nvim-telescope/telescope.nvim', -- optional
   },
+  keys = {
+    {
+      '<leader>g',
+      ':Neogit<CR>',
+      mode = 'n',
+      desc = 'Git [S]tatus',
+    },
+  },
   config = true,
 }
