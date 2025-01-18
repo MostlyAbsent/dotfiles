@@ -25,8 +25,13 @@ return {
 
     local obsidian_note_matcher = function()
       return function(path, bufnr)
-        if string.find(vim.api.nvim_buf_get_lines(bufnr, 1, 2, true)[1], 'id: ') ~= nil then
-          return 'markdown.obsidian'
+        local lines = vim.api.nvim_buf_get_lines(bufnr, 1, 2, false)
+        if lines[1] then
+          if string.find(lines[1], 'id: ') ~= nil then
+            return 'markdown.obsidian'
+          else
+            return 'markdown'
+          end
         else
           return 'markdown'
         end
