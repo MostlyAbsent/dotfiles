@@ -109,6 +109,15 @@ vim.filetype.add {
   },
 }
 
+-- zshrc
+vim.filetype.add {
+  filename = {
+    ['dot-zshrc'] = 'sh',
+    ['dot-zshenv'] = 'sh',
+    ['dot-zprofile'] = 'sh',
+  },
+}
+
 -- # Basic Keymaps
 --  See `:help vim.keymap.set()`
 
