@@ -212,8 +212,88 @@ return {
       },
     }
 
-    local obsidian = {
+    local obsidian_modes = {}
+
+    local obsidian_utils = {}
+
+    local function get_buf_name(modify, _)
+      return function(bufnr)
+        return string.sub(vim.api.nvim_buf_get_lines(bufnr, 3, 4, false)[1], 5)
+      end
+    end
+
+    obsidian_utils.file_name = function(default, _)
+      default = default or '[No Name]'
+      local fnc_name = get_buf_name ':t'
+
+      return function(bufnr)
+        local name = fnc_name(bufnr)
+        if name == '' then
+          name = default
+        end
+        return name .. ' '
+      end
+    end
+
+    local cache_utils = require 'windline.cache_utils'
+
+    obsidian_utils.cache_file_name = function(default, _)
+      return cache_utils.cache_on_buffer('BufEnter', 'WL_filename', obsidian_utils.file_name(default, _))
+    end
+
+    obsidian_modes.file = {
+      name = 'file',
+      hl_colors = {
+        default = hl_list.Black,
+        white = { 'white', 'black' },
+        magenta = { 'magenta', 'black' },
+      },
+      text = function(_, _, width)
+        if width > breakpoint_width then
+          return {
+            { b_components.cache_file_size(), 'default' },
+            { ' ', '' },
+            { obsidian_utils.cache_file_name('[No Name]', 'unique'), 'magenta' },
+            { b_components.line_col_lua, 'white' },
+            { b_components.progress_lua, '' },
+            { ' ', '' },
+            { b_components.file_modified ' ', 'magenta' },
+          }
+        else
+          return {
+            { b_components.cache_file_size(), 'default' },
+            { ' ', '' },
+            { b_components.cache_file_name('[No Name]', 'unique'), 'magenta' },
+            { ' ', '' },
+            { b_components.file_modified ' ', 'magenta' },
+          }
+        end
+      end,
+    }
+
+    local obsidian_statusline = {
       filetypes = { 'markdown.obsidian' },
+      active = {
+        basic.square_mode,
+        basic.vi_mode,
+        obsidian_modes.file,
+        basic.lsp_diagnos,
+        basic.divider,
+        basic.file_right,
+        basic.lsp_name,
+        basic.git,
+        { git_comps.git_branch(), { 'magenta', 'black' }, breakpoint_width },
+        { ' ', hl_list.Black },
+        basic.square_mode,
+      },
+      inactive = {
+        { b_components.full_file_name, hl_list.Inactive },
+        basic.file_name_inactive,
+        basic.divider,
+        basic.divider,
+        { b_components.line_col, hl_list.Inactive },
+        { b_components.progress, hl_list.Inactive },
+      },
     }
 
     windline.setup {
@@ -226,6 +306,7 @@ return {
         default,
         quickfix,
         explorer,
+        obsidian_statusline,
       },
     }
   end,
