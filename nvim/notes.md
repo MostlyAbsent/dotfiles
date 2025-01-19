@@ -5,3 +5,5 @@
 - [X] filetype for zshrc etc.
 - [ ] harpoon notes hard code
 - [X] marksman? troubleshooting
+- [ ] obsidian file name thingy
+- [ ] markdown checkbox
