@@ -41,15 +41,18 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        '',
       },
     }
 
     -- Basic debugging keymaps, feel free to change to your liking!
-    vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-    vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
-    vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
-    vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
+    local wk = require 'which-key'
+    wk.add { '<leader>cr', group = '[R]epl' }
+    vim.keymap.set('n', '<leader>crs', dap.continue, { desc = 'Debug: Start/Continue' })
+    vim.keymap.set('n', '<leader>cri', dap.step_into, { desc = 'Debug: Step Into' })
+    vim.keymap.set('n', '<leader>crn', dap.step_over, { desc = 'Debug: Step Over' })
+    vim.keymap.set('n', '<leader>cro', dap.step_out, { desc = 'Debug: Step Out' })
+    vim.keymap.set('n', '<leader>crt', dapui.toggle, { desc = 'Debug: Toggle UI' })
     vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
     vim.keymap.set('n', '<leader>B', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
@@ -61,8 +64,9 @@ return {
       -- Set icons to characters that are more likely to work in every terminal.
       --    Feel free to remove or use ones that you like more! :)
       --    Don't feel like these are good choices.
-      icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
       controls = {
+        element = 'repl',
+        enabled = true,
         icons = {
           pause = '⏸',
           play = '▶',
@@ -75,6 +79,45 @@ return {
           disconnect = '⏏',
         },
       },
+      element_mappings = {},
+      expand_lines = true,
+      floating = {
+        border = 'single',
+        mappings = {
+          close = { 'q', '<Esc>' },
+        },
+      },
+      force_buffers = true,
+      icons = {
+        collapsed = '',
+        current_frame = '',
+        expanded = '',
+      },
+      layouts = {
+        {
+          elements = { {
+            id = 'repl',
+            size = 0.5,
+          }, {
+            id = 'console',
+            size = 0.5,
+          } },
+          position = 'bottom',
+          size = 10,
+        },
+      },
+      mappings = {
+        edit = 'e',
+        expand = { '<CR>', '<2-LeftMouse>' },
+        open = 'o',
+        remove = 'd',
+        repl = 'r',
+        toggle = 't',
+      },
+      render = {
+        indent = 1,
+        max_value_lines = 100,
+      },
     }
 
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
@@ -85,12 +128,12 @@ return {
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
-      },
-    }
+    -- require('dap-go').setup {
+    --   delve = {
+    --     -- On Windows delve must be run attached or it crashes.
+    --     -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
+    --     detached = vim.fn.has 'win32' == 0,
+    --   },
+    -- }
   end,
 }
