@@ -6,6 +6,10 @@
 -- COMMENTARY: This has filetype detection, so I should be able to modify the
 -- obsidian file name display
 
+-- BUG: the obsidian detection is weird, if nvim loads an obsidian file
+-- directly it works, but not if it starts somewhere else then opens a new
+-- buffer to an obsidian file. Currently not big enough to worry about.
+
 return {
   'windwp/windline.nvim',
   config = function()
