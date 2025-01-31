@@ -8,8 +8,17 @@ return {
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()
     local harpoon = require 'harpoon'
-    ---@diagnostic disable-next-line: missing-parameter
-    harpoon:setup()
+
+    local custom_config = require('harpoon.config').merge_config {
+      default = {
+        display = function(list_item)
+          return list_item.value
+        end,
+      },
+    }
+
+    ---@diagnostic disable-next-line:param-type-mismatch
+    harpoon:setup(custom_config)
     local function map(lhs, rhs, opts)
       vim.keymap.set('n', lhs, rhs, opts or {})
     end
