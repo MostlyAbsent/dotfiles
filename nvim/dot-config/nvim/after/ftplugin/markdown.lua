@@ -68,7 +68,7 @@ M.toggle = function()
 end
 
 vim.api.nvim_create_user_command('ToggleCheckbox', M.toggle, {})
-vim.keymap.set('n', '<CR>', ':ToggleCheckbox<CR>', { desc = 'ToggleCheckbox' })
+vim.keymap.set('n', '<CR>', ':ToggleCheckbox<CR>', { desc = 'ToggleCheckbox', buffer = true })
 
 return M
 -- end source (MIT licenced)
