@@ -1,6 +1,6 @@
 if [[ -z "$TMUX" ]] && [[ -z "$TMUX_INIT" ]]; then
   export TMUX_INIT=TRUE
-  tmux
+  tmux new-session -A -s base
 fi
 
 if [[ -n "$TMUX" ]] && [[ $(tmux list-panes | wc -l ) -lt 3 ]]; then
