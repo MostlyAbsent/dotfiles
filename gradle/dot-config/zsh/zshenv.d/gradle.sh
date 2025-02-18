@@ -1,0 +1,1 @@
+export GRADLE_USER_HOME=$XDG_CONFIG_HOME/gradle
