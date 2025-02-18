@@ -1,5 +1,5 @@
-vim.opt_local.formatoptions = 'jtcqln'
-vim.opt_local.textwidth = 110
+vim.opt_local.formatoptions = 'jtcqn'
+vim.opt_local.textwidth = 79
 
 -- source https://github.com/opdavies/toggle-checkbox.nvim/blob/main/lua/toggle-checkbox.lua
 local checked_character = 'X'
