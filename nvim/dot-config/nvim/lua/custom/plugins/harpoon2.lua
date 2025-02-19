@@ -12,6 +12,44 @@ return {
     local custom_config = require('harpoon.config').merge_config {
       default = {
         display = function(list_item)
+          local ft = vim.filetype.match { filename = list_item.value }
+          if ft == 'markdown' then
+            local function file_exists(file)
+              local f = io.open(file, 'r')
+              if f then
+                f:close()
+              end
+              return f ~= nil
+            end
+
+            local function lines_from(file, count)
+              if not file_exists(file) then
+                return {}
+              end
+
+              local lines = {}
+
+              for line in io.lines(file) do
+                lines[#lines + 1] = line
+                if #lines == count then
+                  break
+                end
+              end
+
+              return lines
+            end
+
+            local header = lines_from(list_item.value, 5)
+
+            if header[2] then
+              if string.find(header[2], 'id: ') then
+                return string.sub(header[4], 5)
+              end
+            else
+              return list_item.value
+            end
+          end
+
           return list_item.value
         end,
       },
