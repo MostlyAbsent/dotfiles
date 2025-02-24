@@ -69,6 +69,8 @@ end
 
 vim.api.nvim_create_user_command('ToggleCheckbox', M.toggle, {})
 vim.keymap.set('n', '<CR>', ':ToggleCheckbox<CR>', { desc = 'ToggleCheckbox', buffer = true })
+vim.keymap.set('n', '<Tab>', 'V>', { desc = 'Indent Line', buffer = true })
+vim.keymap.set('n', '<S-Tab>', 'V<', { desc = 'Outdent Line', buffer = true })
 
 return M
 -- end source (MIT licenced)
