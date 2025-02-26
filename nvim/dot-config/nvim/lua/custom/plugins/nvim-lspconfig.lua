@@ -96,6 +96,7 @@ return {
         -- clangd = {},
         -- lemminx = { filetypes = { 'xml', 'ant' } },
         jdtls = {},
+        bashls = { filetypes = { 'bash', 'sh', 'zsh' } },
         -- jsonls = {},
         -- pyright = {},
         marksman = {
