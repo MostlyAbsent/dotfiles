@@ -8,10 +8,10 @@ if [[ -n "$TMUX" ]] && [[ $(tmux list-panes | wc -l ) -lt 3 ]]; then
 fi 
 
 cd () {
-  if [ -z = $1 ] && [ -n "${ROOTDIR}" ]
+  if [ "$#" -eq 0 ] && [ -n "${ROOTDIR}" ]
   then
-    command cd $ROOTDIR
+    builtin cd $ROOTDIR
   else
-    command cd $@
+    builtin cd "$@"
   fi
 }
