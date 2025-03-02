@@ -21,4 +21,49 @@ return {
     statuscolumn = { enabled = true },
     words = { enabled = true },
   },
+  keys = {
+    -- Top Pickers & Explorer
+    {
+      '<leader><space>',
+      function()
+        Snacks.picker.smart()
+      end,
+      desc = 'Smart Find Files',
+    },
+    {
+      '<leader>sc',
+      function()
+        Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
+      end,
+      desc = 'Find Config File',
+    },
+    {
+      '<leader>sg',
+      function()
+        Snacks.picker.git_files()
+      end,
+      desc = 'Find Git Files',
+    },
+    {
+      '<leader>sf',
+      function()
+        Snacks.picker.files()
+      end,
+      desc = 'Find Files',
+    },
+    {
+      '<leader>s/',
+      function()
+        Snacks.picker.grep_buffers()
+      end,
+      desc = 'Grep Open Buffers',
+    },
+    {
+      '<leader>sp',
+      function()
+        Snacks.picker()
+      end,
+      desc = 'All pickers',
+    },
+  },
 }
