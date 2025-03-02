@@ -47,12 +47,12 @@ return {
 
     -- Basic debugging keymaps, feel free to change to your liking!
     local wk = require 'which-key'
-    wk.add { '<leader>cr', group = '[R]epl' }
-    vim.keymap.set('n', '<leader>crs', dap.continue, { desc = 'Debug: Start/Continue' })
-    vim.keymap.set('n', '<leader>cri', dap.step_into, { desc = 'Debug: Step Into' })
-    vim.keymap.set('n', '<leader>crn', dap.step_over, { desc = 'Debug: Step Over' })
-    vim.keymap.set('n', '<leader>cro', dap.step_out, { desc = 'Debug: Step Out' })
-    vim.keymap.set('n', '<leader>crt', dapui.toggle, { desc = 'Debug: Toggle UI' })
+    wk.add { '<leader>cp', group = 're[P]l' }
+    vim.keymap.set('n', '<leader>cps', dap.continue, { desc = 'Debug: Start/Continue' })
+    vim.keymap.set('n', '<leader>cpi', dap.step_into, { desc = 'Debug: Step Into' })
+    vim.keymap.set('n', '<leader>cpn', dap.step_over, { desc = 'Debug: Step Over' })
+    vim.keymap.set('n', '<leader>cpo', dap.step_out, { desc = 'Debug: Step Out' })
+    vim.keymap.set('n', '<leader>cpt', dapui.toggle, { desc = 'Debug: Toggle UI' })
     vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
     vim.keymap.set('n', '<leader>B', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')

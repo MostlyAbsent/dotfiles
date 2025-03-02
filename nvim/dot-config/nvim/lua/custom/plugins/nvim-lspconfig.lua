@@ -37,9 +37,11 @@ return {
 
         map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-        map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+        -- map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+
+        map('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
 
         -- Use Neogen to create a doctstring, see neogen.lua
         map('<leader>cg', ':Neogen<cr>', 'neo[g]en doctstring')
