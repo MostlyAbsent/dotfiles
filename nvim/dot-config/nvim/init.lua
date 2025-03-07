@@ -118,6 +118,13 @@ vim.filetype.add {
   },
 }
 
+-- gitignore
+vim.filetype.add {
+  pattern = {
+    ['.*/git/ignore'] = 'gitignore',
+  },
+}
+
 -- # Basic Keymaps
 --  See `:help vim.keymap.set()`
 
