@@ -38,6 +38,13 @@ return {
       desc = 'Find Config File',
     },
     {
+      '<leader>st',
+      function()
+        Snacks.picker.todo_comments()
+      end,
+      desc = 'Todo',
+    },
+    {
       '<leader>sg',
       function()
         Snacks.picker.git_files()
@@ -50,6 +57,13 @@ return {
         Snacks.picker.files()
       end,
       desc = 'Find Files',
+    },
+    {
+      '<leader>/',
+      function()
+        Snacks.picker.grep()
+      end,
+      desc = 'Grep',
     },
     {
       '<leader>s/',
