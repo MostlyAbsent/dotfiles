@@ -3,3 +3,6 @@
 	email = j.doran.admin@gmail.com
 [core]
 	editor = nvim
+## FIXME: This needs to be hard coded so it needs to be done in an install script
+## git config --global core.excludesfile $XDG_CONFIG_HOME/git/ignore
+	excludesfile = /Users/j/.config/git/ignore
