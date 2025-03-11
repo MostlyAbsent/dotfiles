@@ -59,6 +59,13 @@ return {
       desc = 'Find Files',
     },
     {
+      '<leader>sb',
+      function()
+        Snacks.picker.buffers()
+      end,
+      desc = 'Buffers',
+    },
+    {
       '<leader>/',
       function()
         Snacks.picker.grep()
