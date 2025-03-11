@@ -7,6 +7,9 @@ setopt EXTENDED_HISTORY
 
 EDITOR=nvim
 
+# Disable Suspend and unfortunately backgrounding jobs
+set +m
+
 # Colorize prompt
 PROMPT=%F{cyan}$PROMPT%f
 
