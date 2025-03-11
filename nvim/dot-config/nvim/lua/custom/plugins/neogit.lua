@@ -9,10 +9,10 @@ return {
   },
   keys = {
     {
-      '<leader>g',
+      '<leader>gg',
       ':Neogit<CR>',
       mode = 'n',
-      desc = 'Git [S]tatus',
+      desc = '[G]it Status',
     },
   },
   config = true,
