@@ -7,6 +7,11 @@ return {
   'folke/todo-comments.nvim',
   event = 'VimEnter',
   dependencies = { 'nvim-lua/plenary.nvim' },
-  opts = { signs = false },
+  opts = {
+    signs = false,
+    keywords = {
+      DEBUG = { icon = ' ', color = 'info' },
+    },
+  },
   keys = { { '<leader>n', ':TodoQuickFix<CR>', mode = 'n', desc = '[n]OTES QuickFix List' } },
 }
