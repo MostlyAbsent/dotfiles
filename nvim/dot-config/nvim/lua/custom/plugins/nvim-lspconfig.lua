@@ -97,7 +97,7 @@ return {
       local default = {
         -- clangd = {},
         -- lemminx = { filetypes = { 'xml', 'ant' } },
-        jdtls = {},
+        -- jdtls = {},
         bashls = { filetypes = { 'bash', 'sh', 'zsh' } },
         -- jsonls = {},
         -- pyright = {},
