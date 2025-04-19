@@ -60,6 +60,17 @@ return {
       settings = {
         java = {
           signatureHelp = { enabled = true },
+          inlayhints = { parameterNames = 'all' },
+          completion = {
+            favoriteStaticMembers = {},
+            filteredTypes = {
+              'com.sun.*',
+              'io.micrometer.shaded.*',
+              'java.awt.*',
+              'jdk.*',
+              'sun.*',
+            },
+          },
         },
       },
 
