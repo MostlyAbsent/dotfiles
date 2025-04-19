@@ -31,6 +31,13 @@ return {
       desc = 'Smart Find Files',
     },
     {
+      '<leader>sr',
+      function()
+        Snacks.explorer.reveal()
+      end,
+      desc = 'Find Config File',
+    },
+    {
       '<leader>sc',
       function()
         Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
