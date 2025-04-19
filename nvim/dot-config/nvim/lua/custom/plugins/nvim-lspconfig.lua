@@ -37,6 +37,8 @@ return {
 
         map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
+        map('<leader>e', vim.diagnostic.open_float, 'Show diagnostic messag')
+
         -- map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -95,11 +97,11 @@ return {
     end
     local servers = (function()
       local default = {
-        -- clangd = {},
+        clangd = {},
         -- lemminx = { filetypes = { 'xml', 'ant' } },
         -- jdtls = {},
         bashls = { filetypes = { 'bash', 'sh', 'zsh' } },
-        -- jsonls = {},
+        jsonls = {},
         -- pyright = {},
         marksman = {
           filetypes = { 'markdown', 'markdown.mdx', 'markdown.obsidian' },
