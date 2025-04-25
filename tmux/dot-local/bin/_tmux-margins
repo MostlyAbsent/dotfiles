@@ -15,7 +15,7 @@ tmux has-session -t "$pane" 2>/dev/null || exit 0
 # should if the previous slice worked. Belts and suspenders I guess.
 
 tool="$0"
-width="${TMUX_M_COLUMNS:-120}" # originally 80
+width="${TMUX_M_COLUMNS:-100}" # originally 80
 step=10
 todo="${TMUX_M_COMMAND:-true}"
 action="$1"
