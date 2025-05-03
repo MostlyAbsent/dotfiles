@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
 
+# NOTE: The find command is getting a bit complicated, I think it's starting to
+# take too long to run. Needs some attention.
+
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/.local/bin/ ~/Documents/vaults/ ~/Documents/ ~/Documents/playground/ -mindepth 1 -maxdepth 1 -type d -o -type l| fzf)
+    selected=$(find \
+                ~/Documents/vaults/ \
+                ~/Documents/ \
+                ~/Documents/playground/ \
+                ! -path "*/Documents/bake" \
+                ! -path "*/Documents/backup" \
+                ! -path "*/Documents/data.sparsebundle" \
+                ! -path "*/Documents/Cisco Packet Tracer 8.2.2" \
+                -mindepth 1 -maxdepth 1 \
+               \( -type d -o -type l \) | fzf)
 fi
 
 if [[ -z $selected ]]; then
