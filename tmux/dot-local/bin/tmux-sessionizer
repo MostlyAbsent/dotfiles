@@ -11,6 +11,7 @@ else
                 ~/Documents/ \
                 ~/Documents/playground/ \
                 ! -path "*/Documents/bake" \
+                ! -path "*/Documents/org" \
                 ! -path "*/Documents/backup" \
                 ! -path "*/Documents/data.sparsebundle" \
                 ! -path "*/Documents/Cisco Packet Tracer 8.2.2" \
