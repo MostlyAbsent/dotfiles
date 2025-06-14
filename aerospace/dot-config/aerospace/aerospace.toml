@@ -205,3 +205,6 @@ run = 'layout floating'
 if.app-id = 'org.openemu.OpenEmu'
 run = 'layout floating'
 
+[[on-window-detected]]
+if.app-id = 'com.netacad.PacketTracer8.2.2'
+run = 'move-node-to-workspace O'
