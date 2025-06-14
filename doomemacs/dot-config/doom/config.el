@@ -75,3 +75,38 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+(setq scroll-margin 8)
+(setq which-key-idle-delay 0)
+(setq confirm-kill-emacs nil)
+(setq display-line-numbers-type 'relative)
+
+(after! org
+  :defer t
+  :config
+  (setq olivetti-body-width 100)
+  (setq org-latex-src-block-backend 'minted))
+
+(add-hook! 'prog-mode-hook
+           (olivetti-mode))
+
+(add-hook! 'org-mode-hook
+           (olivetti-mode)
+           (auto-fill-mode t)
+           (org-indent-mode -1))
+
+(add-hook! 'org-agenda-mode-hook
+           (olivetti-mode))
+
+(after! corfu
+  (map! :map corfu-mode-map
+        "C-y"     #'corfu-complete))
+
+  (setq! bibtex-completion-bibliography '("~/Documents/Zotero/My Library.bib"))
+
+(after! biblio
+  (setq! bibtex-completion-bibliography '("~/Documents/Zotero/My Library.bib"))
+  (setq! citar-bibliography '("~/Documents/Zotero/My Library.bib"))
+  (setq! org-cite-csl-styles-dir "~/Documents/Zotero/styles"))
+  ;; (setq! citar-library-paths '("~/references/library/files"))
+  ;; (setq! citar-notes-paths '("~/references/notes")))
