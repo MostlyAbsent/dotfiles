@@ -1,0 +1,22 @@
+#! /usr/bin/env sh
+
+# Do nothing if not inside a tmux session.
+if [[ -z "$TMUX" ]]; then
+    echo "This command is designed to be run inside a tmux session."
+    return 1
+fi
+
+# Get the name of the current tmux session.
+session_name=$(tmux display-message -p '#S')
+
+# "Ping" the daemon to see if it's running for this session.
+if ! emacsclient -s "$session_name" -e "(+ 1 1)" >/dev/null 2>&1; then
+    # If the ping fails, the daemon is not running. Start it.
+    echo "Starting Emacs daemon for session: $session_name"
+    command emacs --daemon="$session_name"
+fi
+
+# Now that the daemon is guaranteed to be running, connect a client.
+# The -t flag connects in the terminal.
+# "$@" passes along any arguments (like filenames) to the client.
+emacsclient -t -s "$session_name" "$@"

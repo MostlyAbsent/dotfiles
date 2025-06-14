@@ -1,0 +1,36 @@
+#!/usr/bin/env bb
+
+;; A Babashka script to gracefully shut down all Emacs daemons and the tmux server.
+
+(require '[babashka.process :as p]
+         '[clojure.java.io :as io])
+
+(println "Starting graceful shutdown...")
+
+;; This path MUST match the `server-socket-dir` in your init.el!
+(let [socket-dir (io/file (System/getenv "TMPDIR") "emacs501")
+      daemons    (->> (when (.exists socket-dir)
+                        (.listFiles socket-dir))
+                      (map #(.getName %)))]
+
+  (if (seq daemons)
+    (do
+      (println "Found running Emacs daemons:" (pr-str daemons))
+      (doseq [daemon daemons]
+        (println "--> Sending interactive shutdown command to daemon:" daemon)
+        (let [cmd ["emacsclient"
+                   "-c" ;; Create a new frame to show prompts
+                   "-s" daemon
+                   "-e" "(jtt/interactive-kill-emacs-server)"]
+              ;; We use `p/process` and deref to WAIT for the command to finish.
+              ;; This ensures we handle daemons one by one.
+              proc (p/process cmd {:out :inherit, :err :inherit})]
+          (p/check proc)
+          (println "--> Daemon" daemon "handled."))))
+    (println "No running Emacs daemons found.")))
+
+(println "\nAll Emacs daemons handled. Killing tmux server.")
+(-> (p/shell "tmux" "kill-server")
+    (p/check))
+
+(println "Shutdown complete.")
