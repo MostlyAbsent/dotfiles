@@ -104,7 +104,7 @@ main() {
             trap 'verify; kill "$!" 2>/dev/null; $todo &' WINCH
             while true; do
                 $todo &
-                while sleep 1; do verify; done
+                while sleep 10; do verify; done
             done
         ;;
         ""|c* )
