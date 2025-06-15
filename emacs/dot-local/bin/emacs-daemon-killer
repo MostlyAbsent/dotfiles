@@ -1,0 +1,33 @@
+#!/usr/bin/env bb
+
+;; A Babashka script to gracefully shut down the emacs daemon paired with the
+;; tmux session this is invoked in
+
+(require '[babashka.process :as p]
+         '[clojure.java.io :as io])
+
+(println "Starting graceful shutdown...")
+
+(println (System/getenv "TMUX_SESSION_NAME"))
+
+(let [socket-dir (io/file (System/getenv "TMPDIR") "emacs501")
+      session (System/getenv "TMUX_SESSION_NAME")
+      daemon (->> (when (.exists socket-dir)
+                    (.listFiles socket-dir))
+                  (map #(.getName %))
+                  (filter #(= % session))
+                  first)]
+  (if daemon
+    (let [cmd ["emacsclient"
+               "-c"
+               "-s" daemon
+               "-e" "(jtt/interactive-kill-emacs-server)"]
+          proc (p/process cmd {:out :inherit :err :inherit})
+          result @proc
+          exit-code (:exit result)]
+      (when-not (or (zero? exit-code) (= 141 exit-code))
+        (throw (ex-info (str "emacsclient failed with unexpected exit code: " exit-code)
+                        result)))
+      (println "--> Daemon " daemon " handled."))
+    (println "No running Emacs daemon found.")))
+

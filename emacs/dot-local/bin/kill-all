@@ -7,7 +7,6 @@
 
 (println "Starting graceful shutdown...")
 
-;; This path MUST match the `server-socket-dir` in your init.el!
 (let [socket-dir (io/file (System/getenv "TMPDIR") "emacs501")
       daemons    (->> (when (.exists socket-dir)
                         (.listFiles socket-dir))
@@ -19,7 +18,7 @@
       (doseq [daemon daemons]
         (println "--> Sending interactive shutdown command to daemon:" daemon)
         (let [cmd ["emacsclient"
-                   "-c" ;; Create a new frame to show prompts
+                   "-t" ;; Create a new frame to show prompts
                    "-s" daemon
                    "-e" "(jtt/interactive-kill-emacs-server)"]
               ;; We use `p/process` and deref to WAIT for the command to finish.
