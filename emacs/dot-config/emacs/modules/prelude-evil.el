@@ -121,7 +121,7 @@
 (setq evil-shift-width 2)
 
 ;;; enable avy with evil-mode
-(define-key evil-normal-state-map (kbd "SPC") 'avy-goto-word-1)
+; (define-key evil-normal-state-map (kbd "SPC") 'avy-goto-word-1)
 
 ;;; snagged from Eric S. Fraga
 ;;; http://lists.gnu.org/archive/html/emacs-orgmode/2012-05/msg00153.html
