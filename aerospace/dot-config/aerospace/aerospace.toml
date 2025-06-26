@@ -109,8 +109,8 @@ alt-comma = 'layout accordion horizontal vertical'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-left = 'focus left'
-alt-down = 'focus down'
-alt-up = 'focus up'
+# alt-down = 'focus down'
+# alt-up = 'focus up'
 alt-right = 'focus right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
