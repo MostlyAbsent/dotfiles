@@ -370,7 +370,7 @@ If not on a recognized element, do nothing."
    :states '(normal visual motion)
    :prefix "SPC"
 
-   "o" '(:ignore t :which-key "org snippets")
+   "o" '(:ignore t :which-key "org mode")
    "oq" '((lambda () (interactive) (jtt/yas-insert-by-key "quote"))
           :which-key "quote block")
    "os" '((lambda () (interactive) (jtt/yas-insert-by-key "src"))
@@ -382,7 +382,8 @@ If not on a recognized element, do nothing."
    "op" '((lambda () (interactive) (jtt/yas-insert-by-key "property"))
           :which-key "properties")
    "oh" '((lambda () (interactive) (jtt/yas-insert-by-key "todo"))
-          :which-key "headline (todo)"))
+          :which-key "headline (todo)")
+   "of" '(org-footnote-action :which-key "footnote"))
 
   (general-define-key
    :keymaps 'company-active-map
