@@ -66,7 +66,7 @@ or desktop environments that make heavy use of them."
   :type 'boolean
   :group 'prelude)
 
-(defcustom prelude-undo-tree t
+(defcustom prelude-undo-tree nil
   "Non-nil values enable Prelude's undo-tree integration."
   :type 'boolean
   :group 'prelude)

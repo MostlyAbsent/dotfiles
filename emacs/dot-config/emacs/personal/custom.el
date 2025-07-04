@@ -36,7 +36,7 @@
   :init
   (load-theme 'weyland-yutani t))
 
-(add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font Propo-18"))
+(add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font Propo-20"))
 
 (use-package olivetti
   :ensure t
@@ -365,6 +365,14 @@ If not on a recognized element, do nothing."
 
   (add-hook 'org-mode-hook #'jtt/org-mode-evil-collection-overrides)
 
+  (defun jtt/org-link-abbreviator ()
+    "Transforms an Org-mode ID link alias like
+  '[[id:ID-STRING][Long Alias]]' to '[[id:ID-STRING][Short Alias]]'."
+    (interactive)
+    (let (position (point))
+      ;;try anzu
+      ))
+
   (general-define-key
    :keymaps 'org-mode-map
    :states '(normal visual motion)
@@ -383,7 +391,8 @@ If not on a recognized element, do nothing."
           :which-key "properties")
    "oh" '((lambda () (interactive) (jtt/yas-insert-by-key "todo"))
           :which-key "headline (todo)")
-   "of" '(org-footnote-action :which-key "footnote"))
+   "of" '(org-footnote-action :which-key "footnote")
+   "oa" '(jtt/org-link-abbreviator :which-key "abbreviate"))
 
   (general-define-key
    :keymaps 'company-active-map
