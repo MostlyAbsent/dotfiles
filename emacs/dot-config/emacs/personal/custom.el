@@ -209,7 +209,7 @@ If not on a recognized element, do nothing."
 (defun jtt/org-roam-buffer-one-third ()
   (interactive)
   (org-roam-buffer-toggle)
-  (other-window))
+  (enlarge-window (/ (frame-height) 3)))
 
 (defun jtt/org-link-abbreviator ()
   "Transforms an Org-mode ID link alias like
@@ -342,7 +342,7 @@ If not on a recognized element, do nothing."
     "n" '(:ignore t :which-key "notes")
     "nf" '(org-roam-node-find :which-key "find")
     "ni" '(org-roam-node-insert :which-key "insert")
-    "nb" '(org-roam-buffer-toggle :which-key "backlinks")
+    "nb" '(jtt/org-roam-buffer-one-third :which-key "backlinks")
     "<return>" '((lambda ()
                    (interactive)
                    (let ((org-link-frame-setup '((file . find-file))))
