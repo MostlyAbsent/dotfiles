@@ -49,7 +49,7 @@
          (gitignore-mode . olivetti-mode)
          (harpoon-mode . olivetti-mode))
   :init
-  (setq olivetti-body-width 100))
+  (setq olivetti-body-width 90))
 
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
