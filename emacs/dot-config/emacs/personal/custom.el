@@ -206,6 +206,19 @@ If not on a recognized element, do nothing."
   :config
   (org-roam-db-autosync-mode))
 
+(defun jtt/org-roam-buffer-one-third ()
+  (interactive)
+  (org-roam-buffer-toggle)
+  (other-window))
+
+(defun jtt/org-link-abbreviator ()
+  "Transforms an Org-mode ID link alias like
+  '[[id:ID-STRING][Long Alias]]' to '[[id:ID-STRING][Short Alias]]'."
+  (interactive)
+  (let (position (point))
+    ;;try anzu
+    ))
+
 (defun jtt/set-fill-column ()
   (setq fill-column 78))
 
@@ -358,14 +371,6 @@ If not on a recognized element, do nothing."
    "M-<down>" 'jtt/org-move-element-down)
 
   (add-hook 'org-mode-hook #'jtt/org-mode-evil-collection-overrides)
-
-  (defun jtt/org-link-abbreviator ()
-    "Transforms an Org-mode ID link alias like
-  '[[id:ID-STRING][Long Alias]]' to '[[id:ID-STRING][Short Alias]]'."
-    (interactive)
-    (let (position (point))
-      ;;try anzu
-      ))
 
   (general-define-key
    :keymaps 'org-mode-map
