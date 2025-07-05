@@ -210,6 +210,13 @@ If not on a recognized element, do nothing."
 
 (add-hook 'org-mode-hook #'jtt/set-fill-column)
 
+(defun jtt/org-mode-evil-collection-overrides ()
+  "Override evil-collection keybindings in org-mode for harpoon."
+  (general-define-key
+   :keymaps 'org-mode-map
+   :states '(normal visual motion)
+   "M-h" 'harpoon-go-to-1))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybinds
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -348,13 +355,6 @@ If not on a recognized element, do nothing."
    :keymaps 'org-mode-map
    "M-<up>" 'jtt/org-move-element-up
    "M-<down>" 'jtt/org-move-element-down)
-
-  (defun jtt/org-mode-evil-collection-overrides ()
-    "Override evil-collection keybindings in org-mode for harpoon."
-    (general-define-key
-     :keymaps 'org-mode-map
-     :states '(normal visual motion)
-     "M-h" 'harpoon-go-to-1))
 
   (add-hook 'org-mode-hook #'jtt/org-mode-evil-collection-overrides)
 
