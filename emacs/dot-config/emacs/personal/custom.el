@@ -87,14 +87,9 @@
   :config
   (setq cider-preferred-build-tool 'clojure-cli))
 
+;; Force splitting to bottom half
 (setq split-width-threshold nil)
 (setq split-height-threshold 0)
-
-(defun jtt/advise-org-capture-at-bottom (orig-fun &rest args)
-  "Advise `org-capture' to always open its buffer at the bottom of the frame."
-  (let ((split-width-threshold nil)
-        (split-height-threshold 0))
-    (apply orig-fun args)))
 
 (setq fill-column 78)
 
@@ -180,8 +175,6 @@
          "* TODO %?\n  - Created on %U")))
 
 (setq org-agenda-window-setup 'current-window)
-
-(advice-add 'org-capture :around #'jtt/advise-org-capture-at-bottom)
 
 (defun jtt/org-move-element-up ()
   "Move the current Org element (subtree or list item) up.
