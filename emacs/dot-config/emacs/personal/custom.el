@@ -47,7 +47,8 @@
          (org-roam-mode . olivetti-mode)
          (magit-mode . olivetti-mode)
          (gitignore-mode . olivetti-mode)
-         (harpoon-mode . olivetti-mode))
+         (harpoon-mode . olivetti-mode)
+         (conf-mode . olivetti-mode))
   :init
   (setq olivetti-body-width 90))
 
