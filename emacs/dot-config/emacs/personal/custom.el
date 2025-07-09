@@ -163,6 +163,16 @@
   :config
   (evil-collection-init))
 
+(defun jtt/template-insert-gitignore()
+  "Initial Source: https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
+  (interactive)
+  ;; FIXME: I want this to open .gitignore on invokation, maybe before
+  ;; templating, maybe after?
+  (let* ((dir (concat user-emacs-directory "/templates/gitignore/"))
+         (files (directory-files dir nil ".*\\.gitignore"))
+         (pick (yas-choose-value (mapcar #'file-name-sans-extension files))))
+    (insert-file-contents (concat dir (concat pick ".gitignore")))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Notes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -310,6 +320,7 @@ If not on a recognized element, do nothing."
     "p" '(:ignore t :which-key "project")
     "pp" '(projectile-switch-project :which-key "switch project")
     "pf" '(projectile-find-file-dwim :which-key "find file")
+    "pi" '(jtt/template-insert-gitignore :which-key "git ignore init")
     "/" '(projectile-grep :which-key "grep")
 
     ;; harpoon
