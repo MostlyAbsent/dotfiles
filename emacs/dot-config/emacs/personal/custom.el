@@ -164,7 +164,8 @@
   (evil-collection-init))
 
 (defun jtt/template-insert-gitignore()
-  "Initial Source: https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
+  "Initial Source:
+https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
   (interactive)
   ;; FIXME: I want this to open .gitignore on invokation, maybe before
   ;; templating, maybe after?
