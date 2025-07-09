@@ -320,6 +320,7 @@ If not on a recognized element, do nothing."
     "p" '(:ignore t :which-key "project")
     "pp" '(projectile-switch-project :which-key "switch project")
     "pf" '(projectile-find-file-dwim :which-key "find file")
+    "pc" '(projectile-invalidate-cache :which-key "kill cache")
     "pi" '(jtt/template-insert-gitignore :which-key "git ignore init")
     "/" '(projectile-grep :which-key "grep")
 
