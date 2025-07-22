@@ -261,6 +261,17 @@ If not on a recognized element, do nothing."
    :states '(normal visual motion)
    "M-h" 'harpoon-go-to-1))
 
+(defun jtt/org-roam-extract-and-link ()
+  "Extract current subtree to a new Org-roam note and replace with a link.
+Automatically accepts default filename."
+  (interactive)
+  (if (string-equal mode-name "Org")
+      (cl-destructuring-bind
+          (level rl todo priority text tags)
+          (org-heading-components)
+        (org-roam-extract-subtree)
+        (insert (make-string level ?*) " " text "\n\n"))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybinds
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -376,6 +387,7 @@ If not on a recognized element, do nothing."
     "nf" '(org-roam-node-find :which-key "find")
     "ni" '(org-roam-node-insert :which-key "insert")
     "nb" '(jtt/org-roam-buffer-one-third :which-key "backlinks")
+    "ne" '(jtt/org-roam-extract-and-link :which-key "extract")
     "<return>" '((lambda ()
                    (interactive)
                    (let ((org-link-frame-setup '((file . find-file))))
