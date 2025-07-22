@@ -400,6 +400,7 @@ If not on a recognized element, do nothing."
    :prefix "SPC"
 
    "o" '(:ignore t :which-key "org mode")
+   "SPC" '(org-toggle-checkbox :which-key "toggle checkbox")
    "oq" '((lambda () (interactive) (jtt/yas-insert-by-key "quote"))
           :which-key "quote block")
    "os" '((lambda () (interactive) (jtt/yas-insert-by-key "src"))
