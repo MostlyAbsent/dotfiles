@@ -70,11 +70,15 @@
 
 (recentf-mode 1)
 
+(use-package kotlin-mode
+  :ensure t)
+
 (use-package lsp-mode
   :ensure t
   :commands lsp
   :hook ((clojure-mode . lsp)
          (python-mode . lsp)
+         (kotlin-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration)))
 
 (use-package lsp-ui
