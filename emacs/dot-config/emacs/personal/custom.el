@@ -177,6 +177,11 @@ https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
 (setq visible-bell 1)
 (setq make-backup-files nil)
 
+(use-package topspace
+  :ensure t
+  :config
+  (global-topspace-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Notes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
