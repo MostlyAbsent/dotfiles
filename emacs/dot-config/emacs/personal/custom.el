@@ -235,9 +235,15 @@ If not on a recognized element, do nothing."
   "Transforms an Org-mode ID link alias like
   '[[id:ID-STRING][Long Alias]]' to '[[id:ID-STRING][Short Alias]]'."
   (interactive)
-  (let (position (point))
-    ;;try anzu
-    ))
+  (save-excursion
+    (let ((line-start (line-beginning-position))
+          (line-end (line-end-position)))
+      (goto-char line-start)
+      (while (re-search-forward
+              "\\(\\[\\[.*\\]\\[\\)\\(.*(\\)\\(.*\\))\\(\\]\\]\\)"
+              line-end
+              t)
+        (replace-match "\\1\\3\\4" nil nil)))))
 
 (defun jtt/set-fill-column ()
   (setq fill-column 78))
