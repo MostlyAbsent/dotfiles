@@ -353,6 +353,7 @@ If not on a recognized element, do nothing."
     "c" '(:ignore t :which-key "code")
     "cc" '(comment-dwim :which-key "comment")
     "cr" '(lsp-rename :which-key "rename")
+    "cf" '(lsp-format-buffer :which-key "format buffer")
     "cR" '(cider-restart :which-key "repl restart")
     "ce" '(cider-eval-last-sexp :which-key "eval")
     "cE" '(cider-eval-defun-at-point :which-key "eval at point")
@@ -389,7 +390,10 @@ If not on a recognized element, do nothing."
              (interactive)
              (org-capture nil "t"))
            :which-key "new")
-    "ta" '(org-todo-list :which-key "agenda"))
+    "ta" '(org-todo-list :which-key "agenda")
+
+    ;;system
+    ":" '(eval-expression :which-key "eval"))
 
   (general-define-key
    :keymaps 'vertico-map
@@ -429,7 +433,8 @@ If not on a recognized element, do nothing."
   (general-define-key
    :keymaps 'company-active-map
    "C-y" 'company-complete-selection
-   "<return>" nil))
+   "<return>" nil
+   "C-w" 'evil-delete-backward-word))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hack to center minibuffers
