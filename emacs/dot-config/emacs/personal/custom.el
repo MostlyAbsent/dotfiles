@@ -174,6 +174,9 @@ https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
          (pick (yas-choose-value (mapcar #'file-name-sans-extension files))))
     (insert-file-contents (concat dir (concat pick ".gitignore")))))
 
+(setq visible-bell 1)
+(setq make-backup-files nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Notes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
