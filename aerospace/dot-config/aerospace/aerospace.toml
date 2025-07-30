@@ -198,3 +198,6 @@ run = 'move-node-to-workspace 4'
 if.app-id = 'com.microsoft.rdc.macos'
 run = 'move-node-to-workspace 4'
 
+[[on-window-detected]]
+if.app-id = 'com.omnissa.horizon.client.mac'
+run = 'move-node-to-workspace 4'
