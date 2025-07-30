@@ -79,6 +79,7 @@
   :hook ((clojure-mode . lsp)
          (python-mode . lsp)
          (kotlin-mode . lsp)
+         (csharp-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration)))
 
 (use-package lsp-ui
