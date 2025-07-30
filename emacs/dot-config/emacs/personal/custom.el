@@ -261,16 +261,31 @@ If not on a recognized element, do nothing."
    :states '(normal visual motion)
    "M-h" 'harpoon-go-to-1))
 
+(defun jtt/insert-specific-roam-link (title)
+  (interactive)
+  ;; (cl-destructuring-bind
+  ;;     (level rl todo priority title tags)
+  ;;     (org-heading-components)
+    (let* ((query-vector `[:select ID :from nodes :where (like TITLE ,title)])
+           (id (car (car (org-roam-db-query query-vector)))))
+      (if id
+          (insert (org-link-make-string (concat "id:" id) title))
+        (message "Node '%s' not found." title))))
+
 (defun jtt/org-roam-extract-and-link ()
   "Extract current subtree to a new Org-roam note and replace with a link.
 Automatically accepts default filename."
   (interactive)
   (if (string-equal mode-name "Org")
       (cl-destructuring-bind
-          (level rl todo priority text tags)
+          (level rl todo priority title tags)
           (org-heading-components)
         (org-roam-extract-subtree)
-        (insert (make-string level ?*) " " text "\n\n"))))
+        (insert (make-string level ?*) " ")
+        (jtt/insert-specific-roam-link title)
+        (insert "\n\n")
+        (previous-line)
+        (previous-line))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keybinds
@@ -352,6 +367,7 @@ Automatically accepts default filename."
     "pf" '(projectile-find-file-dwim :which-key "find file")
     "pc" '(projectile-invalidate-cache :which-key "kill cache")
     "pi" '(jtt/template-insert-gitignore :which-key "git ignore init")
+    "pa" '(projectile-add-known-project :which-key "add project")
     "/" '(projectile-grep :which-key "grep")
 
     ;; harpoon
