@@ -162,6 +162,8 @@
 
 (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
 
+(add-hook 'git-commit-mode-hook 'evil-insert-state)
+
 (use-package evil-collection
   :after evil
   :ensure t
