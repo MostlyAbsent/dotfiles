@@ -189,6 +189,17 @@ https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
   :config
   (global-topspace-mode))
 
+(use-package sqlformat
+  :ensure t
+  :config
+  (setq sqlformat-command 'sql-formatter)
+  (setq sqlformat-args '("-lmysql" "-c{
+\"keywordCase\": \"upper\",
+\"dataTypeCase\": \"upper\",
+\"functionCase\": \"upper\"
+}"))
+  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Notes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
