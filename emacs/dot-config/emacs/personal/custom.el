@@ -73,11 +73,15 @@
 (use-package kotlin-mode
   :ensure t)
 
+(use-package zig-mode
+  :ensure t)
+
 (use-package lsp-mode
   :ensure t
   :commands lsp
   :hook ((clojure-mode . lsp)
          (python-mode . lsp)
+         (zig-mode . lsp)
          (kotlin-mode . lsp)
          (csharp-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration)))
