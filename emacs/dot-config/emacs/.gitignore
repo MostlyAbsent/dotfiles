@@ -1,11 +1,8 @@
 *~
-*.elc
-auto-save-list
 recentf
 savehist
 saveplace
 eshell
-elpa
 el-get
 semanticdb
 url
@@ -17,11 +14,7 @@ savefile/
 projectile-bookmarks.eld
 session*
 .cask
-tramp
 /var/pcache
-.emacs.desktop
-.emacs.desktop.lock
-network-security.data
 prelude-cheatsheet.el
 prelude-cheatsheet.aux
 prelude-cheatsheet.log
@@ -36,3 +29,59 @@ eln-cache/
 /org-roam.db
 /.org-id-locations
 /.local/
+/projects
+
+#--------------------------------------------------#
+# The following was generated with gitignore.nvim: #
+#--------------------------------------------------#
+# Gitignore for the following technologies: Emacs
+
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# network security
+/network-security.data
+

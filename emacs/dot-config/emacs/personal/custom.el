@@ -81,6 +81,7 @@
   :commands lsp
   :hook ((clojure-mode . lsp)
          (python-mode . lsp)
+         (c-mode . lsp)
          (zig-mode . lsp)
          (kotlin-mode . lsp)
          (csharp-mode . lsp)
@@ -210,6 +211,52 @@ https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
 
 (add-to-list 'org-agenda-files (expand-file-name "~/Documents/org/todo.org"))
 
+(setq org-agenda-window-setup 'current-window)
+
+(defun jtt/skip-based-on-tags (tags)
+  "Skip entries based on the list of TAGS.
+   Each element in TAGS should be a cons cell where the car is a sign
+   and the cdr is tag. Sign '+' means to skip entries not tagged,
+   sign '-' means to skip entries tagged.
+   Source: https://emacs.stackexchange.com/questions/18179/org-agenda-command-with-org-agenda-filter-by-tag-not-working"
+  (let* ((entry-tags (org-get-tags-at (point)))
+        (should-skip
+         (seq-some ; filter that implements logical AND. Use `seq-every-p` for logical OR.
+          (lambda (tag-sign)
+            (let* ((sign (car tag-sign))    ; "+" or "-"
+                   (tag  (cdr tag-sign))    ; name of the tag
+                   (tag-found (member tag entry-tags))) ; is the tag at current point?
+              (or (and (string= sign "+") (not tag-found)) ; skip if tag not found
+                  (and (string= sign "-") tag-found))))   ; skip if tag found
+          tags)))
+    (when should-skip
+      (outline-next-heading)
+      (point))))
+
+(setq org-agenda-custom-commands
+      '(("s" "School"
+         ((agenda ""
+                  ((org-agenda-overriding-header "--- Scheduled ---")
+                   (org-agenda-span 'year)
+                  (org-agenda-start-day "2025-01-01")
+                  (org-agenda-show-all-dates nil)
+                  (org-agenda-skip-function
+                   '(jtt/skip-based-on-tags '(("+" . "school"))))
+                  (org-agenda-entry-types '(:scheduled :deadline))
+                  (org-agenda-prefix-format "  %-12:c%s")
+                  (org-agenda-remove-tags t)))
+         (todo ""
+                 ((org-agenda-overriding-header "--- Unscheduled ---")
+                  (org-agenda-entry-types '(:todo))
+                  (org-agenda-skip-function
+                   '(org-agenda-skip-entry-if 'scheduled 'deadline))
+                  (org-agenda-remove-tags t)))))
+        ("a" agenda ""
+         ((org-agenda-skip-function
+           '(jtt/skip-based-on-tags '(("-" . "school"))))))))
+
+(setq org-tags-column 0)
+
 (setq org-capture-templates
       '(("t"
          "Global Todo"
@@ -217,7 +264,13 @@ https://www.hoowl.se/auto_inserting_gitignore_templates_in_emacs.html"
          (file "~/Documents/org/todo.org")
          "* TODO %?\n  - Created on %U")))
 
-(setq org-agenda-window-setup 'current-window)
+(add-to-list
+ 'org-capture-templates
+ '("s" "School Task" entry
+    (file "~/Documents/org/todo.org")
+    "* TODO %? :school:\n  :PROPERTIES:\n  :CREATED: %U\n  :END:\n"
+    :empty-lines 1
+    :immediate-finish nil))
 
 (defun jtt/org-move-element-up ()
   "Move the current Org element (subtree or list item) up.
@@ -432,11 +485,23 @@ Automatically accepts default filename."
     "t" '(:ignore t :which-key "todos")
     "tg" '(org-set-tags-command :which-key "tags")
     "tt" '(jtt/find-global-todo-file :which-key "todos")
-    "tn" '((lambda ()
+    "ts" '((lambda ()
              (interactive)
-             (org-capture nil "t"))
-           :which-key "new")
-    "ta" '(org-todo-list :which-key "agenda")
+             (org-agenda nil "s"))
+           :which-key "school")
+    "tn" '(:ignore t :which-key "new")
+    "tns" '((lambda ()
+              (interactive)
+              (org-capture nil "s"))
+            :which-key "school")
+    "tnn" '((lambda ()
+              (interactive)
+              (org-capture nil "t"))
+            :which-key "new")
+    "ta" '((lambda ()
+             (interactive)
+             (org-agenda nil "a"))
+           :which-key "agenda")
 
     ;;system
     ":" '(eval-expression :which-key "eval"))
