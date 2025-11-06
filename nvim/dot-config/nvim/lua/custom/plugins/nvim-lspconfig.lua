@@ -98,6 +98,7 @@ return {
     local servers = (function()
       local default = {
         clangd = {},
+        ts_ls = {},
         -- lemminx = { filetypes = { 'xml', 'ant' } },
         -- jdtls = {},
         bashls = { filetypes = { 'bash', 'sh', 'zsh' } },
