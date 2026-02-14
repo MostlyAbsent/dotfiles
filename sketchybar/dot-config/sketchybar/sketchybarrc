@@ -32,7 +32,7 @@ sketchybar --add item      workspace left                             \
            --subscribe     workspace aerospace_workspace_change       \
            --set workspace label=""                                   \
                            label.padding_right=16                     \
-                           script="$CONFIG_DIR/plugins/aerospace.sh" 
+                           script="$PLUGIN_DIR/aerospace.sh"
 
 sketchybar --add item chevron left \
            --set chevron icon= label.drawing=off \
