@@ -31,14 +31,14 @@
                          (format "(defun org-git-version (&rest _) \"%s-??-%s\")\n"
                                  version (cdr (doom-call-process "git" "rev-parse" "--short" "HEAD")))
                          "(provide 'org-version)\n")))))
-  :pin "74dde3abae74c97ba336a11a1d0efcb79585e32f")  ; release_9.7.27
+  :pin "b7bc0ede67f3e2a477f4d6ad0c46a6d80bca5aea")  ; release_9.7.39
 (package! org-contrib
   :recipe (:host github
            :repo "emacsmirror/org-contrib")
-  :pin "8d14a600a2069ffc494edfc9a12b8e5fc8840bf1")
+  :pin "90e1d6bd6288615233dae273f0525a43a9d8779d")
 
 (package! avy)
-(package! htmlize :pin "8e3841c837b4b78bd72ad7f0436e919f39315a46")
+(package! htmlize :pin "fa644880699adea3770504f913e6dddbec90c076")
 (package! ox-clip :pin "a549cc8e1747beb6b7e567ffac27e31ba45cb8e8")
 (package! toc-org :pin "6d3ae0fc47ce79b1ea06cabe21a3c596395409cd")
 (package! org-cliplink :pin "13e0940b65d22bec34e2de4bc8cba1412a7abfbc")
@@ -64,53 +64,40 @@
     :recipe (:host github :repo "doomelpa/evil-org-mode")
     :pin "06518c65ff4f7aea2ea51149d701549dcbccce5d"))
 (when (modulep! :tools pdf)
-  (package! org-pdftools :pin "5613b7ae561e0af199f25aacc0a9c34c16638408"))
+  (package! org-pdftools :pin "2b3357828a4c2dfba8f87c906d64035d8bf221f2"))
 (when (modulep! :tools magit)
-  (package! orgit :pin "efd98e5caaac1d08677dae95be40fab65dcda2c8")
+  (package! orgit :pin "24c8fe48c477d561c2ce1720223f8c5aec664f4e") ; v2.1.1
   (when (modulep! :tools magit +forge)
-    (package! orgit-forge :pin "764820769e321a76622aaafe7617b4231985b5f0")))
-(when (modulep! +brain)
-  (package! org-brain :pin "2bad7732aae1a3051e2a14de2e30f970bbe43c25"))
+    (package! orgit-forge :pin "c2116b8701498bd11d8674065a5429d844985e46"))) ; v1.1.1
 (when (modulep! +dragndrop)
   (package! org-download :pin "c8be2611786d1d8d666b7b4f73582de1093f25ac"))
 (when (modulep! +gnuplot)
   (package! gnuplot :pin "4c6b18f71ff7604e2640033207f5a882ddce78af")
   (package! gnuplot-mode :pin "601f6392986f0cba332c87678d31ae0d0a496ce7"))
 (when (modulep! +jupyter)
-  (package! jupyter :pin "3615c2de16988c4dd9d1978bfa10ee3092e85b33"))
+  (package! jupyter :pin "de89cbeca890db51ba84aee956658f89aaa0b642"))
 (when (modulep! +journal)
-  (package! org-journal :pin "cf721732332d707de5d5af71e6d9a87599cc84a2"))
+  (package! org-journal :pin "831ecfd50a29057c239b9fa55ebc02d402a6d4a7"))
 (when (modulep! +noter)
-  (package! org-noter :pin "a28f61238a572dd9f0073c2ee15a951ffe6aaebc"))
+  (package! org-noter :pin "81765d267e51efd8b4f5b7276000332ba3eabbf5"))
 (when (modulep! +pomodoro)
   (package! org-pomodoro :pin "3f5bcfb80d61556d35fc29e5ddb09750df962cc6"))
 (when (modulep! +pretty)
-  (package! org-modern :pin "3cc432dc99f262579d1cc464e7d6d5b9fe77083a")
+  (package! org-modern :pin "9bbc44cc7e085dea24e96f0cc0332ed7fcf349ca")
   (package! org-appear :pin "32ee50f8fdfa449bbc235617549c1bccb503cb09"))
 (when (modulep! +present)
   (package! centered-window
-    :recipe (:host github :repo "anler/centered-window-mode")
-    :pin "80965f6c6afe8d918481433984b493de72af5399")
+    :recipe (:host github :repo "nullvec/centered-window-mode")
+    :pin "701f56cd1d2b68352d29914f05ca1b0037bb2595")
   (package! org-tree-slide :pin "e2599a106a26ce5511095e23df4ea04be6687a8a")
-  (package! org-re-reveal :pin "53e9be7d89a4ffd96690271bef0d7d5c58b8eae6")
+  (package! org-re-reveal :pin "8245facfdca168a728f3761d863af28ee05af171")
   (package! revealjs
     :recipe (:host github :repo "hakimel/reveal.js"
              :files ("css" "dist" "js" "plugin"))
-    :pin "dfc5690c6d6075e0f8a773ec0897d3b0f6001850"))
-(cond
- ((modulep! +roam)
-  (package! org-roam
-    :recipe (:host github :repo "org-roam/org-roam-v1")
-    :pin "946a879a4a18756a0508afba1e0b0fe070c6a8b4"))
- ((modulep! +roam2)
-  (package! org-roam
-    ;; FIXME A :recipe isn't strictly necessary, but without it, our package
-    ;;       bumper fails to distinguish between org-roam v1 and v2.
-    :recipe (:host github :repo "org-roam/org-roam")
-    :pin "046822b512ffecdee7d110f73dd3a511802ca590")
-  (when (< emacs-major-version 29)
-    ;; HACK: Needed until org-roam/org-roam#2485 is resolved.
-    (package! emacsql :pin "491105a01f58bf0b346cbc0254766c6800b229a2"))))
+    :pin "33bfe3b233f1a840cd70e834b609ec6f04494a40"))
+(when (or (modulep! +roam)
+          (modulep! +roam2))
+  (package! org-roam :pin "c72702cf27891899ea6321fe6505ff04befaf43e"))
 
 ;;; Babel
 (package! ob-async :pin "9aac486073f5c356ada20e716571be33a350a982")
@@ -120,13 +107,13 @@
 (when (modulep! :lang crystal)
   (package! ob-crystal :pin "d84c1adee4b269cdba06a97caedb8071561a09af"))
 (when (modulep! :lang elixir)
-  (package! ob-elixir :pin "8990a8178b2f7bd93504a9ab136622aab6e82e32"))
+  (package! ob-elixir :pin "8e5d2f3c7adb0d5acde390264fec94627aa7af31"))
 (when (modulep! :lang fsharp)
   (package! ob-fsharp
     :recipe (:host github :repo "elken/ob-fsharp")
     :pin "a5bb40915a8b78fb3c5fc4b44ad00393e07e46a4"))
 (when (modulep! :lang go)
-  (package! ob-go :pin "2067ed55f4c1d33a43cb3f6948609d240a8915f5"))
+  (package! ob-go :pin "c6c7c811fba278924888010ac1fa555297fe760a"))
 (when (modulep! :lang graphql)
   (package! ob-graphql :pin "7c35419f9eec5dc44967cbcfa13c7135b9a96bfc"))
 (when (modulep! :lang hy)
@@ -142,16 +129,16 @@
     :recipe (:host github :repo "DEADB17/ob-racket")
     :pin "d8fd51bddb019b0eb68755255f88fc800cfe03cb"))
 (when (modulep! :lang rest)
-  (package! ob-restclient :pin "8183f8af08838854cf145ca4855b373f3e7c44b0"))
+  (package! ob-restclient :pin "94dd9cd98ff50717135ed5089afb378616faf11a"))
 (when (modulep! :lang scala)
   (package! ob-ammonite :pin "39937dff395e70aff76a4224fa49cf2ec6c57cca"))
 
 ;;; Export
 (when (modulep! +pandoc)
-  (package! ox-pandoc :pin "34e6ea97b586e20529d07158a73af3cf33cdd1d5"))
+  (package! ox-pandoc :pin "1caeb56a4be26597319e7288edbc2cabada151b4"))
 (when (modulep! +hugo)
   (package! ox-hugo
     :recipe (:host github :repo "kaushalmodi/ox-hugo" :nonrecursive t)
-    :pin "e3365cb4e65c1853d8838b863a21546bbd9e0990"))
+    :pin "b7dc44dc28911b9d8e3055a18deac16c3b560b03"))
 (when (modulep! :lang rst)
-  (package! ox-rst :pin "b4ba5c7e95bd8e0063157107960fed64e04c00c2"))
+  (package! ox-rst :pin "b73eff187eebac24b457688bfd27f09eff434860"))

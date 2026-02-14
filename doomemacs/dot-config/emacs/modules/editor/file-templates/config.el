@@ -19,9 +19,17 @@ don't have a :trigger property in `+file-templates-alist'.")
     ("/Makefile$"             :mode makefile-gmake-mode)
     ;; elisp
     ("/\\.dir-locals\\.el$")
-    ("/\\.doomrc$"
+    ("/\\.doom$"
      :trigger "__doomrc"
      :mode emacs-lisp-mode)
+    ("/\\.doom\\(?:module\\)?$"
+     :trigger "__doommodulerc"
+     :mode emacs-lisp-mode)
+    ("/\\.doom\\.el$"
+     :trigger "__doomrc_el"
+     :mode emacs-lisp-mode)
+    ;; TODO: .doomprofile
+    ;; TODO: profiles.el/doom-profiles.el
     ("/packages\\.el$" :when +file-templates-in-emacs-dirs-p
      :trigger "__doom-packages"
      :mode emacs-lisp-mode)
@@ -124,7 +132,8 @@ information.")
   (let ((pred (car rule))
         (plist (cdr rule)))
     (and (or (and (symbolp pred)
-                  (eq major-mode pred))
+                  (or (eq major-mode pred)
+                      (memq pred (get major-mode 'derived-mode-extra-parents))))
              (and (stringp pred)
                   (stringp buffer-file-name)
                   (string-match-p pred buffer-file-name)))

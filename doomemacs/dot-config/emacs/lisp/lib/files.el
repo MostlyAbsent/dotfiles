@@ -144,8 +144,7 @@ MATCH is a string regexp. Only entries that match it will be included."
 
 ;;;###autoload
 (defun doom-file-cookie (file &optional cookie null-value)
-  "Returns the evaluated result of FORM in a ;;;###COOKIE FORM at the top of
-FILE.
+  "Returns the quoted FORM in a ;;;###COOKIE FORM at the top of FILE.
 
 If COOKIE doesn't exist, or cookie isn't within the first 256 bytes of FILE,
 return NULL-VALUE."
@@ -155,10 +154,12 @@ return NULL-VALUE."
     (error "%S is unreadable" file))
   (with-temp-buffer
     (insert-file-contents file nil 0 256)
-    (if (re-search-forward (format "^;;;###%s " (regexp-quote (or cookie "if")))
-                           nil t)
-        (sexp-at-point)
-      null-value)))
+    (if (not (re-search-forward (format "^;;;###%s" (regexp-quote (or cookie "if")))
+                                nil t))
+        null-value
+      (skip-chars-forward " \t" (pos-eol))
+      (or (eolp)
+          (read (current-buffer))))))
 
 ;;;###autoload
 (defun doom-file-cookie-p (file &optional cookie null-value)
@@ -287,7 +288,7 @@ If BEG and/or END are integers, only that region will be read from FILE."
            (buffer-substring-no-properties (point-min) (point-max)))
           ('read
            (condition-case _ (read (current-buffer)) (end-of-file)))
-          ('(read . ,i)
+          (`(read . ,i)
            (let (forms)
              (condition-case _
                  (dotimes (_ i) (push (read (current-buffer)) forms))

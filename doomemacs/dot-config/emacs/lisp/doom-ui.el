@@ -348,8 +348,63 @@ windows, switch to `doom-fallback-buffer'. Otherwise, delegate to original
 
 
 (after! comint
-  (setq comint-prompt-read-only t
-        comint-buffer-maximum-size 2048)) ; double the default
+  (setq-default comint-buffer-maximum-size 2048)  ; double the default
+
+  ;; UX: Temporarily disable undo history between command executions. Otherwise,
+  ;;   undo could destroy output while it's being printed or delete buffer
+  ;;   contents past the boundaries of the current prompt.
+  (add-hook 'comint-exec-hook #'buffer-disable-undo)
+  (defadvice! doom--comint-enable-undo-a (process _string)
+    :after #'comint-output-filter
+    (with-current-buffer (process-buffer process)
+      (when-let* ((start-marker comint-last-output-start))
+        (when (and (< start-marker
+                      (or (if process (process-mark process))
+                          (point-max-marker)))
+                   (eq (char-before start-marker) ?\n)) ;; Account for some of the IELM’s wilderness.
+          (buffer-enable-undo)
+          (setq buffer-undo-list nil)))))
+
+  ;; Protect prompts from accidental modifications.
+  (setq-default comint-prompt-read-only t)
+
+  ;; UX: Prior output in shell and comint shells (like ielm) should be
+  ;;   read-only. Otherwise, it's trivial to make edits in visual modes (like
+  ;;   evil's or term's term-line-mode) and leave the buffer in a half-broken
+  ;;   state (which you have to flush out with a couple RETs, which may execute
+  ;;   the broken text in the buffer),
+  (defadvice! doom--comint-protect-output-in-visual-modes-a (process _string)
+    :after #'comint-output-filter
+    ;; Adapted from https://github.com/michalrus/dotfiles/blob/c4421e361400c4184ea90a021254766372a1f301/.emacs.d/init.d/040-terminal.el.symlink#L33-L49
+    (with-current-buffer (process-buffer process)
+      (let ((start-marker comint-last-output-start)
+            (end-marker (process-mark process)))
+        (when (and start-marker (< start-marker end-marker)) ;; Account for some of the IELM’s wilderness.
+          (let ((inhibit-read-only t))
+            ;; Make all past output read-only (disallow buffer modifications)
+            (add-text-properties comint-last-input-start (1- end-marker) '(read-only t))
+            ;; Disallow interleaving.
+            (remove-text-properties start-marker (1- end-marker) '(rear-nonsticky))
+            ;; Make sure that at `max-point' you can always append. Important for
+            ;; bad REPLs that keep writing after giving us prompt (e.g. sbt).
+            (add-text-properties (1- end-marker) end-marker '(rear-nonsticky t))
+            ;; Protect fence (newline of input, just before output).
+            (when (eq (char-before start-marker) ?\n)
+              (remove-text-properties (1- start-marker) start-marker '(rear-nonsticky))
+              (add-text-properties (1- start-marker) start-marker '(read-only t))))))))
+
+  ;; UX: If the user is anywhere but the last prompt, typing should move them
+  ;;   there instead of unhelpfully spew read-only errors at them.
+  (defun doom--comint-move-cursor-to-prompt-h ()
+    (and (eq this-command 'self-insert-command)
+         comint-last-prompt
+         (> (cdr comint-last-prompt) (point))
+         (goto-char (cdr comint-last-prompt))))
+
+  (add-hook! 'comint-mode-hook
+    (defun doom--comint-init-move-cursor-to-prompt-h ()
+      (add-hook 'pre-command-hook #'doom--comint-move-cursor-to-prompt-h
+                nil t))))
 
 
 (after! compile
@@ -391,39 +446,54 @@ windows, switch to `doom-fallback-buffer'. Otherwise, delegate to original
       org-agenda-mode dired-mode)
     "What modes to enable `hl-line-mode' in.")
   :config
-  ;; HACK I reimplement `global-hl-line-mode' so we can white/blacklist modes in
-  ;;      `global-hl-line-modes' _and_ so we can use `global-hl-line-mode',
-  ;;      which users expect to control hl-line in Emacs.
-  (define-globalized-minor-mode global-hl-line-mode hl-line-mode
-    (lambda ()
-      (and (cond (hl-line-mode nil)
-                 ((null global-hl-line-modes) nil)
-                 ((eq global-hl-line-modes t))
-                 ((eq (car global-hl-line-modes) 'not)
-                  (not (derived-mode-p global-hl-line-modes)))
-                 ((apply #'derived-mode-p global-hl-line-modes)))
-           (hl-line-mode +1))))
+  (if (boundp 'global-hl-line-buffers)
+      (setq global-hl-line-buffers
+            `(not (or (lambda (b)
+                        (when global-hl-line-modes
+                          (let ((mode (buffer-local-value 'major-mode b)))
+                            (if (eq (car global-hl-line-modes) 'not)
+                                (provided-mode-derived-p mode global-hl-line-modes)
+                              (not (provided-mode-derived-p mode global-hl-line-modes))))))
+                      (lambda (b) (with-current-buffer b (doom-region-active-p)))
+                      (lambda (b) (buffer-local-value 'cursor-face-highlight-mode b))
+                      (lambda (b) (string-match-p "\\` " (buffer-name b)))
+                      minibufferp))
+            ;; Don't display line highlights in non-focused windows, for
+            ;; performance sake and to reduce UI clutter.
+            global-hl-line-sticky-flag 'window)
+    ;; HACK: `global-hl-line-buffers' wasn't introduced until 31.1, so I
+    ;;   reimplement to `global-hl-line-modes' give us a major mode
+    ;;   white/blacklist via `global-hl-line-modes'.
+    (define-globalized-minor-mode global-hl-line-mode hl-line-mode
+      (lambda ()
+        (and (cond (hl-line-mode nil)
+                   ((null global-hl-line-modes) nil)
+                   ((eq global-hl-line-modes t))
+                   ((eq (car global-hl-line-modes) 'not)
+                    (not (derived-mode-p global-hl-line-modes)))
+                   ((apply #'derived-mode-p global-hl-line-modes)))
+             (hl-line-mode +1))))
 
-  ;; Temporarily disable `hl-line' when selection is active, since it doesn't
-  ;; serve much purpose when the selection is so much more visible.
-  (defvar doom--hl-line-mode nil)
+    ;; Temporarily disable `hl-line-mode' when selection is active, since it
+    ;; doesn't serve much purpose when the selection is so much more visible.
+    (defvar doom--hl-line-mode nil)
 
-  (add-hook! 'hl-line-mode-hook
-    (defun doom-truly-disable-hl-line-h ()
-      (unless hl-line-mode
-        (setq-local doom--hl-line-mode nil))))
+    (add-hook! 'hl-line-mode-hook
+      (defun doom-truly-disable-hl-line-h ()
+        (unless hl-line-mode
+          (setq-local doom--hl-line-mode nil))))
 
-  ;; TODO: Use (de)activate-mark-hook in the absence of evil
-  (add-hook! 'evil-visual-state-entry-hook
-    (defun doom-disable-hl-line-h ()
-      (when hl-line-mode
-        (hl-line-mode -1)
-        (setq-local doom--hl-line-mode t))))
+    ;; TODO: Use (de)activate-mark-hook in the absence of evil
+    (add-hook! 'evil-visual-state-entry-hook
+      (defun doom-disable-hl-line-h ()
+        (when hl-line-mode
+          (hl-line-mode -1)
+          (setq-local doom--hl-line-mode t))))
 
-  (add-hook! 'evil-visual-state-exit-hook
-    (defun doom-enable-hl-line-maybe-h ()
-      (when doom--hl-line-mode
-        (hl-line-mode +1)))))
+    (add-hook! 'evil-visual-state-exit-hook
+      (defun doom-enable-hl-line-maybe-h ()
+        (when doom--hl-line-mode
+          (hl-line-mode +1))))))
 
 
 (use-package! winner
@@ -447,17 +517,6 @@ windows, switch to `doom-fallback-buffer'. Otherwise, delegate to original
         show-paren-when-point-in-periphery t))
 
 
-;;;###package whitespace
-(setq whitespace-line-column nil
-      whitespace-style
-      '(face indentation tabs tab-mark spaces space-mark newline newline-mark
-        trailing lines-tail)
-      whitespace-display-mappings
-      '((tab-mark ?\t [?› ?\t])
-        (newline-mark ?\n [?¬ ?\n])
-        (space-mark ?\  [?·] [?.])))
-
-
 ;;
 ;;; Third party packages
 
@@ -479,20 +538,8 @@ windows, switch to `doom-fallback-buffer'. Otherwise, delegate to original
 (add-hook! '(completion-list-mode-hook Man-mode-hook)
            #'hide-mode-line-mode)
 
-;; Many major modes do no highlighting of number literals, so we do it for them
-(use-package! highlight-numbers
-  :hook ((prog-mode conf-mode) . highlight-numbers-mode)
-  :config (setq highlight-numbers-generic-regexp "\\_<[[:digit:]]+\\(?:\\.[0-9]*\\)?\\_>"))
-
 ;;;###package image
 (setq image-animate-loop t)
-
-;;;###package rainbow-delimiters
-;; Helps us distinguish stacked delimiter pairs, especially in parentheses-drunk
-;; languages like Lisp. I reduce it from it's default of 9 to reduce the
-;; complexity of the font-lock keyword and hopefully buy us a few ms of
-;; performance.
-(setq rainbow-delimiters-max-face-count 4)
 
 
 ;;
@@ -522,7 +569,7 @@ windows, switch to `doom-fallback-buffer'. Otherwise, delegate to original
 ;;; Theme & font
 
 ;; User themes should live in $DOOMDIR/themes, not ~/.emacs.d
-(setq custom-theme-directory (concat doom-user-dir "themes/"))
+(setq custom-theme-directory (file-name-concat doom-user-dir "themes/"))
 
 ;; Third party themes add themselves to `custom-theme-load-path', but the themes
 ;; living in $DOOMDIR/themes should always have priority.
@@ -694,7 +741,7 @@ triggering hooks during startup."
   (add-hook 'window-selection-change-functions #'doom-run-switch-window-hooks-h)
   (add-hook 'window-buffer-change-functions #'doom-run-switch-buffer-hooks-h)
   ;; `window-buffer-change-functions' doesn't trigger for files visited via the server.
-  (add-hook 'server-visit-hook #'doom-run-switch-buffer-hooks-h))
+  (add-hook 'server-switch-hook #'doom-run-switch-buffer-hooks-h))
 
 ;; Apply fonts and theme
 (let ((hook (if (daemonp)
@@ -724,21 +771,6 @@ triggering hooks during startup."
                customize-changed-options customize-save-customized))
   (put sym 'disabled "Doom doesn't support `customize', configure Emacs from $DOOMDIR/config.el instead"))
 (put 'customize-themes 'disabled "Set `doom-theme' or use `load-theme' in $DOOMDIR/config.el instead")
-
-;; These two functions don't exist in terminal Emacs, but some Emacs packages
-;; (internal and external) use it anyway, leading to void-function errors. I
-;; define a no-op substitute to suppress them.
-(unless (fboundp 'define-fringe-bitmap)
-  (fset 'define-fringe-bitmap #'ignore))
-(unless (fboundp 'set-fontset-font)
-  (fset 'set-fontset-font #'ignore))
-
-(after! whitespace
-  (defun doom--in-parent-frame-p ()
-    "`whitespace-mode' inundates child frames with whitespace markers, so
-disable it to fix all that visual noise."
-    (null (frame-parameter nil 'parent-frame)))
-  (add-function :before-while whitespace-enable-predicate #'doom--in-parent-frame-p))
 
 (provide 'doom-ui)
 ;;; doom-ui.el ends here

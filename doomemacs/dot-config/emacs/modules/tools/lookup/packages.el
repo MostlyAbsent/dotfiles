@@ -8,7 +8,7 @@
   (package! helm))
 
 ;;
-(package! dumb-jump :pin "737267a6139a988369cb95ecd365b2db95e05db0")
+(package! dumb-jump :pin "b1ec972ed36d0a14246aeda63c8d65ee912ccc8f")
 (when (modulep! :completion ivy)
   (package! ivy-xref :pin "a82e8e117d2dd62c28b6a3e3d6e4cfb11c0bda38"))
 (when (modulep! :completion helm)
@@ -19,6 +19,8 @@
 
 (when (modulep! +docsets)
   (package! dash-docs :pin "29848b6b347ac520f7646c200ed2ec36cea3feda")
+  (when (modulep! :completion vertico)
+    (package! consult-dash :pin "edb57bf8cdbef422b88667fadc83e1bb046957a6"))
   (when (modulep! :completion helm)
     (package! helm-dash :pin "7f853bd34da666f0e9a883011c80f451b06f6c59"))
   (when (modulep! :completion ivy)

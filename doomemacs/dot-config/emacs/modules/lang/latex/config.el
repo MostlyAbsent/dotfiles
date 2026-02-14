@@ -59,8 +59,6 @@ okular and pdf-tools.")
       TeX-source-correlate-method 'synctex
       ;; Don't start the Emacs server when correlating sources.
       TeX-source-correlate-start-server nil
-      ;; Automatically insert braces after sub/superscript in `LaTeX-math-mode'.
-      TeX-electric-sub-and-superscript t
       ;; Just save, don't ask before each compilation.
       TeX-save-query nil)
 
@@ -81,8 +79,6 @@ okular and pdf-tools.")
     fill-nobreak-predicate (cons #'texmathp fill-nobreak-predicate))
   ;; Enable word wrapping.
   (add-hook 'TeX-mode-hook #'visual-line-mode)
-  ;; Enable `rainbow-mode' after applying styles to the buffer.
-  (add-hook 'TeX-update-style-hook #'rainbow-delimiters-mode)
   ;; Display output of LaTeX commands in a popup.
   (set-popup-rules! '((" output\\*$" :size 15)
                       ("^\\*TeX \\(?:Help\\|errors\\)"
@@ -91,18 +87,25 @@ okular and pdf-tools.")
     ;; We have to use lower case modes here, because `smartparens-mode' uses
     ;; the same during configuration.
     (let ((modes '(tex-mode plain-tex-mode latex-mode LaTeX-mode)))
-      ;; All these excess pairs dramatically slow down typing in LaTeX buffers,
-      ;; so we remove them. Let snippets do their job.
-      (dolist (open '("\\left(" "\\left[" "\\left\\{" "\\left|"
-                      "\\bigl(" "\\biggl(" "\\Bigl(" "\\Biggl(" "\\bigl["
-                      "\\biggl[" "\\Bigl[" "\\Biggl[" "\\bigl\\{" "\\biggl\\{"
-                      "\\Bigl\\{" "\\Biggl\\{"
+      (dolist (open '(
+                      ;; All these pairs dramatically slow down typing in LaTeX
+                      ;; buffers, so remove them. Let snippets do their job.
+                      "\\left(" "\\left[" "\\left\\{" "\\left|"
+                      "\\bigl("   "\\biggl("   "\\Bigl("   "\\Biggl("
+                      "\\bigl["   "\\biggl["   "\\Bigl["   "\\Biggl["
+                      "\\bigl\\{" "\\biggl\\{" "\\Bigl\\{" "\\Biggl\\{"
                       "\\lfloor" "\\lceil" "\\langle"
-                      "\\lVert" "\\lvert" "`"))
-        (sp-local-pair modes open nil :actions :rem))
-      ;; And tweak these so that users can decide whether they want use LaTeX
-      ;; quotes or not, via `+latex-enable-plain-double-quotes'.
-      (sp-local-pair modes "``" nil :unless '(:add sp-in-math-p))))
+                      "\\lVert" "\\lvert"
+                      ;; Disable pairs that interfere with AucTeX,
+                      ;; see https://github.com/Fuco1/smartparens/pull/1151.
+                      "`" "``" "\""))
+        ;; Some of the above pairs are in smartparens' global list, which
+        ;; applies to all modes, so we need a local ":actions nil" override
+        ;; (instead of ":actions :rem", which removes from the local list).
+        ;; While this keeps the pairs in `sp-pairs', it has negligible
+        ;; performance impact because smartparens will omit the pairs when
+        ;; building the buffer-local `sp-local-pairs' used during operation.
+        (sp-local-pair modes open nil :actions nil))))
   ;; Hook LSP, if enabled.
   (when (modulep! +lsp)
     (add-hook! '(tex-mode-local-vars-hook

@@ -32,17 +32,17 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tokyo-night
-       doom-font (font-spec :family "Mononoki Nerd Font" :size 20 :weight 'medium))
+(setq doom-theme 'weyland-yutani)
+
+(setq doom-font (font-spec :family "Mononoki Nerd Font Propo" :size 20))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Documents/org/")
-
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -76,37 +76,64 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq scroll-margin 8)
-(setq which-key-idle-delay 0)
+(use-package! olivetti
+  :hook ((prog-mode . olivetti-mode)
+         (text-mode . olivetti-mode)
+         ;; (bibtex-mode . olivetti-mode)
+         ;; (lsp-ui-flycheck-list-mode . olivetti-mode)
+         (org-agenda-mode . olivetti-mode)
+         ;; (org-roam-mode . olivetti-mode)
+         ;; (magit-mode . olivetti-mode)
+         ;; (gitignore-mode . olivetti-mode)
+         ;; (harpoon-mode . olivetti-mode)
+         ;; (typescript-ts-base-mode . olivetti-mode)
+         ;; (conf-mode . olivetti-mode)
+         )
+  :init
+  (setq olivetti-body-width 90))
+
 (setq confirm-kill-emacs nil)
-(setq display-line-numbers-type 'relative)
+
+(setq ns-right-alternate-modifier 'meta)
+
+(setq scroll-margin 8)
+
+(add-hook 'org-mode-hook (lambda () (org-indent-mode -1)) 100)
+(add-hook 'org-mode-hook (lambda () (auto-fill-mode)))
+
+(after! recentf
+  (add-to-list 'recentf-exclude
+               (recentf-expand-file-name
+                "~/Documents/dotfiles/doomemacs/dot-config/emacs/.local")))
+
+(defun jtt/org-link-abbreviator ()
+  "Transforms an Org-mode ID link alias like
+  '[[id:ID-STRING][Long Alias]]' to '[[id:ID-STRING][Short Alias]]'."
+  (interactive)
+  (save-excursion
+    (let ((line-start (line-beginning-position))
+          (line-end (line-end-position)))
+      (goto-char line-start)
+      (while (re-search-forward
+              "\\(\\[\\[.*\\]\\[\\)\\(.*(\\)\\(.*\\))\\(\\]\\]\\)"
+              line-end
+              t)
+        (replace-match "\\1\\3\\4" nil nil)))))
 
 (after! org
-  :defer t
-  :config
-  (setq olivetti-body-width 100)
-  (setq org-latex-src-block-backend 'minted))
+  (setq org-log-done t)
+  (setq org-agenda-custom-commands
+        '(("u" "Semester 1" agenda ""
+           ((org-agenda-start-day "-3d")
+            (org-agenda-span
+             (- 169                     ; June 15 + 3d behind buffer
+                (string-to-number (format-time-string "%j" (current-time))))))))))
 
-(add-hook! 'prog-mode-hook
-           (olivetti-mode))
+(map! :leader "j c" #'harpoon-clear)
+(map! :leader "j e" #'harpoon-quick-menu-hydra)
+(map! :leader "j a" #'harpoon-add-file)
+(map! :leader "M-h" #'harpoon-go-to-1)
+(map! :leader "M-t" #'harpoon-go-to-2)
+(map! :leader "M-n" #'harpoon-go-to-3)
+(map! :leader "M-s" #'harpoon-go-to-4)
 
-(add-hook! 'org-mode-hook
-           (olivetti-mode)
-           (auto-fill-mode t)
-           (org-indent-mode -1))
-
-(add-hook! 'org-agenda-mode-hook
-           (olivetti-mode))
-
-(after! corfu
-  (map! :map corfu-mode-map
-        "C-y"     #'corfu-complete))
-
-  (setq! bibtex-completion-bibliography '("~/Documents/Zotero/My Library.bib"))
-
-(after! biblio
-  (setq! bibtex-completion-bibliography '("~/Documents/Zotero/My Library.bib"))
-  (setq! citar-bibliography '("~/Documents/Zotero/My Library.bib"))
-  (setq! org-cite-csl-styles-dir "~/Documents/Zotero/styles"))
-  ;; (setq! citar-library-paths '("~/references/library/files"))
-  ;; (setq! citar-notes-paths '("~/references/notes")))

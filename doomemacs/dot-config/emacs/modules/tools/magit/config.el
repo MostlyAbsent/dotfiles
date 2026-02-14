@@ -44,9 +44,9 @@ FUNCTION
   :init
   (setq magit-auto-revert-mode nil)  ; we do this ourselves further down
   ;; Must be set early to prevent ~/.config/emacs/transient from being created
-  (setq transient-levels-file  (concat doom-data-dir "transient/levels")
-        transient-values-file  (concat doom-data-dir "transient/values")
-        transient-history-file (concat doom-data-dir "transient/history"))
+  (setq transient-levels-file  (file-name-concat doom-profile-data-dir "transient" "levels")
+        transient-values-file  (file-name-concat doom-profile-data-dir "transient" "values")
+        transient-history-file (file-name-concat doom-profile-data-dir "transient" "history"))
   :config
   (set-debug-variable! 'magit-refresh-verbose)
 
@@ -97,8 +97,9 @@ FUNCTION
   (defvar +magit--refreshed-buffer nil)
   (add-hook! 'magit-pre-refresh-hook
     (defun +magit--set-window-state-h ()
-      (setq-local +magit--refreshed-buffer
-                  (list (current-buffer) (point) (window-start)))))
+      (when (doom-region-active-p)
+        (setq-local +magit--refreshed-buffer
+                    (list (current-buffer) (doom-region-beginning) (window-start))))))
   (add-hook! 'magit-post-refresh-hook
     (defun +magit--restore-window-state-h ()
       (cl-destructuring-bind (&optional buf pt beg) +magit--refreshed-buffer
@@ -164,16 +165,6 @@ FUNCTION
                    (right (or (cdr-safe +magit-fringe-size) +magit-fringe-size)))
                (set-window-fringes nil left right))))))
 
-  ;; An optimization that particularly affects macOS and Windows users: by
-  ;; resolving `magit-git-executable' Emacs does less work to find the
-  ;; executable in your PATH, which is great because it is called so frequently.
-  ;; However, absolute paths will break magit in TRAMP/remote projects if the
-  ;; git executable isn't in the exact same location.
-  (add-hook! 'magit-status-mode-hook
-    (defun +magit-optimize-process-calls-h ()
-      (when-let (path (executable-find magit-git-executable t))
-        (setq-local magit-git-executable path))))
-
   (add-hook! 'magit-diff-visit-file-hook
     (defun +magit-reveal-point-if-invisible-h ()
       "Reveal the point if in an invisible region."
@@ -190,7 +181,7 @@ FUNCTION
   :after-call magit-status
   :commands forge-create-pullreq forge-create-issue
   :preface
-  (setq forge-database-file (concat doom-data-dir "forge/forge-database.sqlite"))
+  (setq forge-database-file (file-name-concat doom-profile-data-dir "forge" "forge-database.sqlite"))
   (setq forge-add-default-bindings (not (modulep! :editor evil +everywhere)))
   :init
   (after! ghub-graphql
@@ -220,9 +211,9 @@ FUNCTION
         (dolist (state states)
           (evil-collection-define-key state 'code-review-mode-map evil-binding fn))))
     (evil-set-initial-state 'code-review-mode evil-default-state))
-  (setq code-review-db-database-file (concat doom-data-dir "code-review/code-review-db-file.sqlite")
-        code-review-log-file (concat doom-data-dir "code-review/code-review-error.log")
-        code-review-download-dir (concat doom-data-dir "code-review/"))
+  (setq code-review-db-database-file (file-name-concat doom-profile-data-dir "code-review" "code-review-db-file.sqlite")
+        code-review-log-file (file-name-concat doom-profile-data-dir "code-review" "code-review-error.log")
+        code-review-download-dir (file-name-concat doom-profile-data-dir "code-review/"))
   :config
   (transient-append-suffix 'magit-merge "d"
     '("y" "Review pull request" +magit/start-code-review))

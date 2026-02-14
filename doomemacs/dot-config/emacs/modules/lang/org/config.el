@@ -217,6 +217,13 @@ Is relative to `org-directory', unless it is absolute. Is used in Doom's default
   (after! ob
     (add-to-list 'org-babel-default-lob-header-args '(:sync)))
 
+  (defadvice! +org--exclude-expand-noweb-references-a (fn &rest args)
+    :around #'ob-async-org-babel-execute-src-block
+    (let ((async-inject-variables-exclude-regexps
+           (cons "\\`org-babel-expand-noweb-references--cache-buffer\\'"
+                 async-inject-variables-exclude-regexps)))
+      (apply fn args)))
+
   (defadvice! +org-babel-disable-async-maybe-a (fn &optional orig-fn arg info params)
     "Use ob-comint where supported, disable async altogether where it isn't.
 
@@ -253,28 +260,6 @@ Also adds support for a `:sync' parameter to override `:async'."
             (funcall orig-fn arg info params)
           (funcall fn orig-fn arg info params)))))
 
-  ;; HACK Fix #6061. Seems `org-babel-do-in-edit-buffer' has the side effect of
-  ;;   deleting side windows. Should be reported upstream! This advice
-  ;;   suppresses this behavior wherever it is known to be used.
-  (defadvice! +org-fix-window-excursions-a (fn &rest args)
-    "Suppress changes to the window config anywhere
-`org-babel-do-in-edit-buffer' is used."
-    :around #'evil-org-open-below
-    :around #'evil-org-open-above
-    :around #'org-indent-region
-    :around #'org-indent-line
-    (save-window-excursion (apply fn args)))
-
-  (defadvice! +org-fix-newline-and-indent-in-src-blocks-a (&optional indent _arg _interactive)
-    "Mimic `newline-and-indent' in src blocks w/ lang-appropriate indentation."
-    :after #'org-return
-    (when (and indent
-               org-src-tab-acts-natively
-               (org-in-src-block-p t))
-      (save-window-excursion
-        (org-babel-do-in-edit-buffer
-         (call-interactively #'indent-for-tab-command)))))
-
   (defadvice! +org-inhibit-mode-hooks-a (fn datum name &optional initialize &rest args)
     "Prevent potentially expensive mode hooks in `org-babel-do-in-edit-buffer' ops."
     :around #'org-src--edit-element
@@ -306,34 +291,18 @@ Also adds support for a `:sync' parameter to override `:async'."
         (save-excursion
           (when-let ((beg (org-babel-where-is-src-block-result))
                      (end (progn (goto-char beg) (forward-line) (org-babel-result-end))))
-            (org-display-inline-images nil nil (min beg end) (max beg end)))))))
-
-  (after! python
-    (unless org-babel-python-command
-      (setq org-babel-python-command
-            (string-trim
-             (concat python-shell-interpreter " "
-                     (if (string-match-p "\\<i?python[23]?$" python-shell-interpreter)
-                         (replace-regexp-in-string
-                          "\\(^\\| \\)-i\\( \\|$\\)" " " python-shell-interpreter-args)
-                       python-shell-interpreter-args))))))
-
-  (after! ob-ditaa
-    ;; TODO Should be fixed upstream
-    (let ((default-directory (org-find-library-dir "org-contribdir")))
-      (setq org-ditaa-jar-path     (expand-file-name "scripts/ditaa.jar")
-            org-ditaa-eps-jar-path (expand-file-name "scripts/DitaaEps.jar")))))
+            (org-display-inline-images nil nil (min beg end) (max beg end))))))))
 
 
 (defun +org-init-babel-lazy-loader-h ()
   "Load babel libraries lazily when babel blocks are executed."
   (defun +org--babel-lazy-load (lang &optional async)
     (cl-check-type lang (or symbol null))
+    ;; ob-async has its own agenda for lazy loading packages (in the child
+    ;; process), so we only need to make sure it's loaded.
+    (when async
+      (require 'ob-async nil t))
     (unless (cdr (assq lang org-babel-load-languages))
-      (when async
-        ;; ob-async has its own agenda for lazy loading packages (in the child
-        ;; process), so we only need to make sure it's loaded.
-        (require 'ob-async nil t))
       (prog1 (or (run-hook-with-args-until-success '+org-babel-load-functions lang)
                  (require (intern (format "ob-%s" lang)) nil t)
                  (require lang nil t))
@@ -631,29 +600,6 @@ relative to `org-directory', unless it is an absolute path."
                (find-file (doom-path doom-docs-dir "changelog.org"))
                (org-match-sparse-tree nil link))))
 
-  ;; TODO PR this upstream
-  (defadvice! +org--follow-search-string-a (fn link &optional arg)
-    "Support ::SEARCH syntax for id: links."
-    :around #'org-id-open
-    :around #'org-roam-id-open
-    (save-match-data
-      (cl-destructuring-bind (id &optional search)
-          (split-string link "::")
-        (prog1 (funcall fn id arg)
-          (cond ((null search))
-                ((string-match-p "\\`[0-9]+\\'" search)
-                 ;; Move N lines after the ID (in case it's a heading), instead
-                 ;; of the start of the buffer.
-                 (forward-line (string-to-number option)))
-                ((string-match "^/\\([^/]+\\)/$" search)
-                 (let ((match (match-string 1 search)))
-                   (save-excursion (org-link-search search))
-                   ;; `org-link-search' only reveals matches. Moving the point
-                   ;; to the first match after point is a sensible change.
-                   (when (re-search-forward match)
-                     (goto-char (match-beginning 0)))))
-                ((org-link-search search)))))))
-
   ;; Add "lookup" links for packages and keystrings; useful for Emacs
   ;; documentation -- especially Doom's!
 
@@ -741,14 +687,6 @@ mutating hooks on exported output, like formatters."
   ;; Open directory links in dired
   (add-to-list 'org-file-apps '(directory . emacs))
   (add-to-list 'org-file-apps '(remote . emacs))
-
-  ;; Some uses of `org-fix-tags-on-the-fly' occur without a check on
-  ;; `org-auto-align-tags', such as in `org-self-insert-command' and
-  ;; `org-delete-backward-char'.
-  ;; TODO Should be reported/PR'ed upstream
-  (defadvice! +org--respect-org-auto-align-tags-a (&rest _)
-    :before-while #'org-fix-tags-on-the-fly
-    org-auto-align-tags)
 
   (defadvice! +org--strip-properties-from-outline-a (fn &rest args)
     "Fix variable height faces in eldoc breadcrumbs."
@@ -864,7 +802,7 @@ between the two."
         "#" #'org-update-statistics-cookies
         "'" #'org-edit-special
         "*" #'org-ctrl-c-star
-        "+" #'org-ctrl-c-minus
+        "-" #'org-ctrl-c-minus
         "," #'org-switchb
         "." #'org-goto
         "@" #'org-cite-insert
@@ -1093,7 +1031,7 @@ between the two."
 (use-package! org-clock ; built-in
   :commands org-clock-save
   :init
-  (setq org-clock-persist-file (concat doom-data-dir "org-clock-save.el"))
+  (setq org-clock-persist-file (file-name-concat doom-profile-data-dir "org-clock-save.el"))
   (defadvice! +org--clock-load-a (&rest _)
     "Lazy load org-clock until its commands are used."
     :before '(org-clock-in
@@ -1213,9 +1151,7 @@ between the two."
             :n CSup       #'org-shiftup
             :n CSdown     #'org-shiftdown
             ;; more intuitive RET keybinds
-            :m [return]   #'+org/dwim-at-point
             :m "RET"      #'+org/dwim-at-point
-            :i [return]   #'+org/return
             :i "RET"      #'+org/return
             :i [S-return] #'+org/shift-return
             :i "S-RET"    #'+org/shift-return
@@ -1277,9 +1213,9 @@ between the two."
   (defvar org-attach-id-dir nil)
   (defvar org-babel-python-command nil)
 
-  (setq org-persist-directory (concat doom-cache-dir "org/persist/")
-        org-publish-timestamp-directory (concat doom-cache-dir "org/timestamps/")
-        org-preview-latex-image-directory (concat doom-cache-dir "org/latex/")
+  (setq org-persist-directory (file-name-concat doom-profile-cache-dir "org" "persist/")
+        org-publish-timestamp-directory (file-name-concat doom-profile-cache-dir "org" "timestamps/")
+        org-preview-latex-image-directory (file-name-concat doom-profile-cache-dir "org" "latex/")
         ;; Recognize a), A), a., A., etc -- must be set before org is loaded.
         org-list-allow-alphabetical t)
 
@@ -1300,6 +1236,8 @@ between the two."
 
   ;;; Custom org modules
   (dolist (flag (doom-module :lang 'org :flags))
+    (when (eq flag '+roam2)  ; REVIEW: remove in v3
+      (setq flag '+roam))
     (load! (concat "contrib/" (substring (symbol-name flag) 1)) nil t))
 
   ;; Add our general hooks after the submodules, so that any hooks the
@@ -1392,15 +1330,13 @@ between the two."
   ;; Other org properties are all-caps. Be consistent.
   (setq org-effort-property "EFFORT")
 
-  ;; Global ID state means we can have ID links anywhere. This is required for
-  ;; `org-brain', however.
-  (setq org-id-locations-file-relative t)
-
   ;; HACK `org-id' doesn't check if `org-id-locations-file' exists or is
-  ;;      writeable before trying to read/write to it.
-  (defadvice! +org--fail-gracefully-a (&rest _)
-    :before-while '(org-id-locations-save org-id-locations-load)
-    (file-writable-p org-id-locations-file))
+  ;;      writeable before trying to read/write to it, potentially throwing a
+  ;;      file-error if it doesn't, which can leave Org in a broken state.
+  (defadvice! +org--fail-gracefully-a (fn &rest args)
+    :around '(org-id-locations-save org-id-locations-load)
+    (with-demoted-errors "org-id-locations: %s"
+      (apply fn args)))
 
   (add-hook 'org-open-at-point-functions #'doom-set-jump-h)
   ;; HACK For functions that dodge `org-open-at-point-functions', like

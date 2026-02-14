@@ -37,9 +37,6 @@
   (when (modulep! +lsp)
     (add-hook 'sh-mode-local-vars-hook #'lsp! 'append))
 
-  (when (modulep! +tree-sitter)
-    (add-hook 'sh-mode-local-vars-hook #'tree-sitter! 'append))
-
   (setq sh-indent-after-continuation 'always)
 
   ;; [pedantry intensifies]
@@ -66,8 +63,6 @@
               (1 'sh-quoted-exec prepend))
              (,(regexp-opt +sh-builtin-keywords 'symbols)
               (0 'font-lock-type-face append))))))
-  ;; 4. Fontify delimiters by depth
-  (add-hook 'sh-mode-hook #'rainbow-delimiters-mode)
 
   ;; autoclose backticks
   (sp-local-pair 'sh-mode "`" "`" :unless '(sp-point-before-word-p sp-point-before-same-p)))

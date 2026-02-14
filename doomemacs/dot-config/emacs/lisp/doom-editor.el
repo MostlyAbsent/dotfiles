@@ -2,19 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(defvar doom-detect-indentation-excluded-modes
-  '(pascal-mode
-    so-long-mode
-    ;; Automatic indent detection in org files is meaningless. Not to mention, a
-    ;; non-standard `tab-width' causes an error in org-mode.
-    org-mode)
-  "A list of major modes where indentation shouldn't be auto-detected.")
-
-(defvar-local doom-inhibit-indent-detection nil
-  "A buffer-local flag that indicates whether `dtrt-indent' should try to detect
-indentation settings or not. This should be set by editorconfig if it
-successfully sets indent_style/indent_size.")
-
 (defvar doom-inhibit-large-file-detection nil
   "If non-nil, inhibit large/long file detection when opening files.")
 
@@ -104,7 +91,7 @@ possible."
       delete-old-versions t ; clean up after itself
       kept-old-versions 5
       kept-new-versions 5
-      backup-directory-alist (list (cons "." (concat doom-cache-dir "backup/")))
+      backup-directory-alist `(("." . ,(file-name-concat doom-profile-cache-dir "backup/")))
       tramp-backup-directory-alist backup-directory-alist)
 
 ;; But turn on auto-save, so we have a fallback in case of crashes or lost data.
@@ -115,13 +102,28 @@ possible."
       ;; just deleted, but I believe that's VCS's jurisdiction, not ours.
       auto-save-include-big-deletions t
       ;; Keep it out of `doom-emacs-dir' or the local directory.
-      auto-save-list-file-prefix (concat doom-cache-dir "autosave/")
-      tramp-auto-save-directory  (concat doom-cache-dir "tramp-autosave/")
+      auto-save-list-file-prefix (file-name-concat doom-profile-cache-dir "autosave/")
+      ;; This resolves two issue while ensuring auto-save files are still
+      ;; reasonably recognizable at a glance:
+      ;;
+      ;; 1. Emacs generates long file paths for its auto-save files; long =
+      ;;    `auto-save-list-file-prefix' + `buffer-file-name'. If too long, some
+      ;;    filesystems (*cough*Windows) will murder your family. `sha1'
+      ;;    compresses the path into a ~40 character hash (Emacs 28+ only)!
+      ;; 2. The default transform rule writes TRAMP auto-save files to
+      ;;    `temporary-file-directory', which TRAMP doesn't like! It'll prompt
+      ;;    you about it every time an auto-save file is written, unless
+      ;;    `tramp-allow-unsafe-temporary-files' is set. A more sensible default
+      ;;    transform is better:
       auto-save-file-name-transforms
-      (list (list "\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
-                  ;; Prefix tramp autosaves to prevent conflicts with local ones
-                  (concat auto-save-list-file-prefix "tramp-\\2") t)
-            (list ".*" auto-save-list-file-prefix t)))
+      `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'"
+         ,(file-name-concat auto-save-list-file-prefix "tramp-\\2-") sha1)
+        ("\\`/\\([^/]+/\\)*\\([^/]+\\)\\'" ,(file-name-concat auto-save-list-file-prefix "\\2-") sha1)))
+
+(add-hook! 'auto-save-hook
+  (defun doom-ensure-auto-save-prefix-exists-h ()
+    (with-file-modes #o700
+      (make-directory auto-save-list-file-prefix t))))
 
 (add-hook! 'after-save-hook
   (defun doom-guess-mode-h ()
@@ -143,30 +145,10 @@ tell you about it. Very annoying. This prevents that."
   (letf! ((#'sit-for #'ignore))
     (apply fn args)))
 
-;; HACK: Emacs generates long file paths for its auto-save files; long =
-;;   `auto-save-list-file-prefix' + `buffer-file-name'. If too long, the
-;;   filesystem will murder your family. To appease it, I compress
-;;   `buffer-file-name' to a stable 40 characters.
-;; TODO: PR this upstream; should be a universal issue!
-(defadvice! doom-make-hashed-auto-save-file-name-a (fn)
-  "Compress the auto-save file name so paths don't get too long."
-  :around #'make-auto-save-file-name
-  (let ((buffer-file-name
-         (if (or
-              ;; Don't do anything for non-file-visiting buffers. Names
-              ;; generated for those are short enough already.
-              (null buffer-file-name)
-              ;; If an alternate handler exists for this path, bow out. Most of
-              ;; them end up calling `make-auto-save-file-name' again anyway, so
-              ;; we still achieve this advice's ultimate goal.
-              (find-file-name-handler buffer-file-name
-                                      'make-auto-save-file-name))
-             buffer-file-name
-           (sha1 buffer-file-name))))
-    (funcall fn)))
-
-;; HACK: ...does the same for Emacs backup files, but also packages that use
-;;   `make-backup-file-name-1' directly (like undo-tree).
+;; HACK: Make sure backup files (like undo-tree's) don't have ridiculously long
+;;   file names that some filesystems will refuse.
+;; REVIEW: PR this upstream, like they have with the UNIQUIFY argument in
+;;   `auto-save-file-name-transforms' entries.
 (defadvice! doom-make-hashed-backup-file-name-a (fn file)
   "A few places use the backup file name so paths don't get too long."
   :around #'make-backup-file-name-1
@@ -298,7 +280,7 @@ tell you about it. Very annoying. This prevents that."
 
 
 ;;;###package bookmark
-(setq bookmark-default-file (concat doom-data-dir "bookmarks"))
+(setq bookmark-default-file (file-name-concat doom-profile-data-dir "bookmarks"))
 
 
 (use-package! recentf
@@ -306,7 +288,7 @@ tell you about it. Very annoying. This prevents that."
   :defer-incrementally easymenu tree-widget timer
   :hook (doom-first-file . recentf-mode)
   :commands recentf-open-files
-  :custom (recentf-save-file (concat doom-cache-dir "recentf"))
+  :custom (recentf-save-file (file-name-concat doom-profile-cache-dir "recentf"))
   :config
   (setq recentf-auto-cleanup nil     ; Don't. We'll auto-cleanup on shutdown
         recentf-max-saved-items 200) ; default is 20
@@ -347,7 +329,7 @@ tell you about it. Very annoying. This prevents that."
   ;; persist variables across sessions
   :defer-incrementally custom
   :hook (doom-first-input . savehist-mode)
-  :custom (savehist-file (concat doom-cache-dir "savehist"))
+  :custom (savehist-file (file-name-concat doom-profile-cache-dir "savehist"))
   :config
   (setq savehist-save-minibuffer-history t
         savehist-autosave-interval nil     ; save on kill only
@@ -381,7 +363,7 @@ the unwritable tidbits."
 (use-package! saveplace
   ;; persistent point location in buffers
   :hook (doom-first-file . save-place-mode)
-  :custom (save-place-file (concat doom-cache-dir "saveplace"))
+  :custom (save-place-file (file-name-concat doom-profile-cache-dir "saveplace"))
   :config
   (defadvice! doom--recenter-on-load-saveplace-a (&rest _)
     "Recenter on cursor when loading a saved place."
@@ -417,28 +399,12 @@ files, so this replace calls to `pp' with the much faster `prin1'."
     (server-start)))
 
 
-(after! tramp
-  (setq remote-file-name-inhibit-cache 60
-        tramp-completion-reread-directory-timeout 60
-        tramp-verbose 1
-        vc-ignore-dir-regexp (format "%s\\|%s\\|%s"
-                                     vc-ignore-dir-regexp
-                                     tramp-file-name-regexp
-                                     "[/\\\\]node_modules")))
-
-
 ;;
 ;;; Packages
 
 (use-package! better-jumper
   :hook (doom-first-input . better-jumper-mode)
   :commands doom-set-jump-a doom-set-jump-maybe-a doom-set-jump-h
-  :preface
-  ;; REVIEW Suppress byte-compiler warning spawning a *Compile-Log* buffer at
-  ;; startup. This can be removed once gilbertw1/better-jumper#2 is merged.
-  (defvar better-jumper-local-mode nil)
-  ;; REVIEW: Remove if/when gilbertw1/better-jumper#26 is addressed.
-  (defvaralias 'evil--jumps-jump-command 'evil--jumps-jumping-backward)
   :init
   (global-set-key [remap evil-jump-forward]  #'better-jumper-jump-forward)
   (global-set-key [remap evil-jump-backward] #'better-jumper-jump-backward)
@@ -485,52 +451,9 @@ files, so this replace calls to `pp' with the much faster `prin1'."
   ;; interactively killed buffers.
   (add-hook 'kill-buffer-hook #'doom-set-jump-h)
 
-  ;; Create a jump point before jumping with imenu.
+  ;; Manual support for specific commands:
+  (advice-add #'outline-up-heading :around #'doom-set-jump-a)
   (advice-add #'imenu :around #'doom-set-jump-a))
-
-
-(use-package! dtrt-indent
-  ;; Automatic detection of indent settings
-  :unless noninteractive
-  ;; I'm not using `global-dtrt-indent-mode' because it has hard-coded and rigid
-  ;; major mode checks, so I implement it in `doom-detect-indentation-h'.
-  :hook ((change-major-mode-after-body read-only-mode) . doom-detect-indentation-h)
-  :config
-  (defun doom-detect-indentation-h ()
-    (unless (or (not after-init-time)
-                doom-inhibit-indent-detection
-                doom-large-file-p
-                (eq major-mode 'fundamental-mode)
-                (member (substring (buffer-name) 0 1) '(" " "*"))
-                (apply #'derived-mode-p doom-detect-indentation-excluded-modes))
-      ;; Don't display messages in the echo area, but still log them
-      (let ((inhibit-message (not init-file-debug)))
-        (dtrt-indent-mode +1))))
-
-  ;; Enable dtrt-indent even in smie modes so that it can update `tab-width',
-  ;; `standard-indent' and `evil-shift-width' there as well.
-  (setq dtrt-indent-run-after-smie t)
-  ;; Reduced from the default of 5000 for slightly faster analysis
-  (setq dtrt-indent-max-lines 2000)
-
-  ;; always keep tab-width up-to-date
-  (push '(t tab-width) dtrt-indent-hook-generic-mapping-list)
-
-  (defvar dtrt-indent-run-after-smie)
-  (defadvice! doom--fix-broken-smie-modes-a (fn &optional arg)
-    "Some smie modes throw errors when trying to guess their indentation, like
-`nim-mode'. This prevents them from leaving Emacs in a broken state."
-    :around #'dtrt-indent-mode
-    (let ((dtrt-indent-run-after-smie dtrt-indent-run-after-smie))
-      (letf! ((defun symbol-config--guess (beg end)
-                (funcall symbol-config--guess beg (min end 10000)))
-              (defun smie-config-guess ()
-                (condition-case e (funcall smie-config-guess)
-                  (error (setq dtrt-indent-run-after-smie t)
-                         (message "[WARNING] Indent detection: %s"
-                                  (error-message-string e))
-                         (message ""))))) ; warn silently
-        (funcall fn arg)))))
 
 
 (use-package! smartparens
@@ -630,6 +553,15 @@ on."
                (bound-and-true-p comment-use-syntax)))
           (so-long-detected-long-line-p))))
     (setq so-long-predicate #'doom-buffer-has-long-lines-p))
+
+  ;; HACK: so-long triggers in places where we don't want it, like special
+  ;;   buffers (e.g. magit status) or temp buffers.
+  (defadvice! doom--exclude-special-modes-a (&rest _)
+    :before-while #'so-long-statistics-excessive-p
+    :before-while #'so-long-detected-long-line-p
+    (not (or (doom-temp-buffer-p (current-buffer))
+             (doom-special-buffer-p (current-buffer)))))
+
   ;; Don't disable syntax highlighting and line numbers, or make the buffer
   ;; read-only, in `so-long-minor-mode', so we can have a basic editing
   ;; experience in them, at least. It will remain off in `so-long-mode',
@@ -646,7 +578,6 @@ on."
   (cl-callf append so-long-minor-modes
     '(spell-fu-mode
       eldoc-mode
-      highlight-numbers-mode
       better-jumper-local-mode
       ws-butler-mode
       auto-composition-mode
@@ -657,18 +588,6 @@ on."
       flycheck-mode
       smartparens-mode
       smartparens-strict-mode)))
-
-
-(use-package! ws-butler
-  ;; a less intrusive `delete-trailing-whitespaces' on save
-  :hook (doom-first-buffer . ws-butler-global-mode)
-  :config
-  (pushnew! ws-butler-global-exempt-modes
-            'special-mode
-            'comint-mode
-            'term-mode
-            'eshell-mode
-            'diff-mode))
 
 (provide 'doom-editor)
 ;;; doom-editor.el ends here

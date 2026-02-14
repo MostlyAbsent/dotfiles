@@ -6,17 +6,17 @@
 ;;      branches which straight cannot detect without our help.
 (package! apel
   :recipe (:host github :repo "wanderlust/apel" :branch "apel-wl")
-  :pin "1a6fd3bab2cc6b0a450c2d801f77a1c9da0f72fb")
+  :pin "2383abfd3a27c094ae9095b05103167cf810379b")
 (package! flim
   :recipe (:host github :repo "wanderlust/flim" :branch "flim-1_14-wl")
-  :pin "774e40da2b7de769e79c782dc82f09026a69163f")
+  :pin "392c29de0acdd5d309023c9f15df49eeb063a2fa")
 (package! semi
   :recipe (:host github :repo "wanderlust/semi" :branch "semi-1_14-wl")
-  :pin "85a52b899ac89be504d9e38d8d406bba98f4b0b3")
+  :pin "5edbb0d925845a5c59abc03003569178a13d862f")
 
 (package! wanderlust
   :recipe (:host github :repo "wanderlust/wanderlust")
-  :pin "6a0605415d6661703e69fa2f860e179342b31e6f")
+  :pin "06ec9fa3979d6ff3f691bed0989e2a79fef71116")
 
 (when (modulep! +xface)
   (package! x-face-e21

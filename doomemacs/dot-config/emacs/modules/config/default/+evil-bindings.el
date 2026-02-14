@@ -297,20 +297,7 @@
        :g "M-7"   #'+workspace/switch-to-6
        :g "M-8"   #'+workspace/switch-to-7
        :g "M-9"   #'+workspace/switch-to-8
-       :g "M-0"   #'+workspace/switch-to-final
-       (:when (featurep :system 'macos)
-        :g "s-t"   #'+workspace/new
-        :g "s-T"   #'+workspace/display
-        :n "s-1"   #'+workspace/switch-to-0
-        :n "s-2"   #'+workspace/switch-to-1
-        :n "s-3"   #'+workspace/switch-to-2
-        :n "s-4"   #'+workspace/switch-to-3
-        :n "s-5"   #'+workspace/switch-to-4
-        :n "s-6"   #'+workspace/switch-to-5
-        :n "s-7"   #'+workspace/switch-to-6
-        :n "s-8"   #'+workspace/switch-to-7
-        :n "s-9"   #'+workspace/switch-to-8
-        :n "s-0"   #'+workspace/switch-to-final)))
+       :g "M-0"   #'+workspace/switch-to-final))
 
 ;;; :editor
 (map! (:when (modulep! :editor format)
@@ -350,7 +337,7 @@
 (map! :leader
       :desc "Eval expression"       ";"    #'pp-eval-expression
       :desc "M-x"                   ":"    #'execute-extended-command
-      :desc "Pop up scratch buffer" "x"    #'doom/open-scratch-buffer
+      :desc "Toggle scratch buffer" "x"    #'doom/toggle-scratch-buffer
       :desc "Org Capture"           "X"    #'org-capture
       ;; C-u is used by evil
       :desc "Universal argument"    "u"    #'universal-argument
@@ -527,7 +514,7 @@
        :desc "Browse private config"       "P"   #'doom/open-private-config
        :desc "Recent files"                "r"   #'recentf-open-files
        :desc "Rename/move file"            "R"   #'doom/move-this-file
-       :desc "Save file"                   "s"   #'save-buffer
+       :desc "Save file"                   "s"   #'basic-save-buffer
        :desc "Save file as..."             "S"   #'write-file
        :desc "Sudo find file"              "u"   #'doom/sudo-find-file
        :desc "Sudo this file"              "U"   #'doom/sudo-this-file
@@ -660,22 +647,8 @@
        :desc "Org export to clipboard"        "y" #'+org/export-to-clipboard
        :desc "Org export to clipboard as RTF" "Y" #'+org/export-to-clipboard-as-rich-text
 
-       (:when (modulep! :lang org +roam)
-        (:prefix ("r" . "roam")
-         :desc "Switch to buffer"              "b" #'org-roam-switch-to-buffer
-         :desc "Org Roam Capture"              "c" #'org-roam-capture
-         :desc "Find file"                     "f" #'org-roam-find-file
-         :desc "Show graph"                    "g" #'org-roam-graph
-         :desc "Insert"                        "i" #'org-roam-insert
-         :desc "Insert (skipping org-capture)" "I" #'org-roam-insert-immediate
-         :desc "Org Roam"                      "r" #'org-roam
-         (:prefix ("d" . "by date")
-          :desc "Arbitrary date" "d" #'org-roam-dailies-find-date
-          :desc "Today"          "t" #'org-roam-dailies-find-today
-          :desc "Tomorrow"       "m" #'org-roam-dailies-find-tomorrow
-          :desc "Yesterday"      "y" #'org-roam-dailies-find-yesterday)))
-
-       (:when (modulep! :lang org +roam2)
+       (:when (or (modulep! :lang org +roam)
+                  (modulep! :lang org +roam2))
         (:prefix ("r" . "roam")
          :desc "Open random node"           "a" #'org-roam-node-random
          :desc "Find node"                  "f" #'org-roam-node-find
@@ -746,14 +719,26 @@
        (:when (modulep! :os macos)
         :desc "Reveal in Finder"           "o" #'+macos/reveal-in-finder
         :desc "Reveal project in Finder"   "O" #'+macos/reveal-project-in-finder
-        :desc "Send to Transmit"           "u" #'+macos/send-to-transmit
-        :desc "Send project to Transmit"   "U" #'+macos/send-project-to-transmit
-        :desc "Send to Launchbar"          "l" #'+macos/send-to-launchbar
-        :desc "Send project to Launchbar"  "L" #'+macos/send-project-to-launchbar
-        :desc "Open in iTerm"              "i" #'+macos/open-in-iterm
-        :desc "Open in new iTerm window"   "I" #'+macos/open-in-iterm-new-window)
+        (:prefix ("s" . "send to application")
+         :desc "Send to Transmit"           "t" #'+macos/send-to-transmit
+         :desc "Send project to Transmit"   "T" #'+macos/send-project-to-transmit
+         :desc "Send to Launchbar"          "l" #'+macos/send-to-launchbar
+         :desc "Send project to Launchbar"  "L" #'+macos/send-project-to-launchbar
+         :desc "Open in iTerm"              "i" #'+macos/open-in-iterm
+         :desc "Open in new iTerm window"   "I" #'+macos/open-in-iterm-new-window))
        (:when (modulep! :tools docker)
         :desc "Docker" "D" #'docker)
+       (:when (modulep! :tools llm)
+        (:prefix ("l" . "llm")
+         :desc "Add text to context"        "a" #'gptel-add
+         :desc "Explain"                    "e" #'gptel-quick
+         :desc "Add file to context"        "f" #'gptel-add-file
+         :desc "Open gptel"                 "l" #'gptel
+         :desc "Send to gptel"              "s" #'gptel-send
+         :desc "Open gptel menu"            "m" #'gptel-menu
+         :desc "Rewrite"                    "r" #'gptel-rewrite
+         :desc "Org: set topic"             "o" #'gptel-org-set-topic
+         :desc "Org: set properties"        "O" #'gptel-org-set-properties))
        (:when (modulep! :email mu4e)
         :desc "mu4e" "m" #'=mu4e)
        (:when (modulep! :email notmuch)
@@ -785,12 +770,8 @@
        :desc "Run project"                  "R" #'projectile-run-project
        :desc "Save project files"           "s" #'projectile-save-project-buffers
        :desc "Test project"                 "T" #'projectile-test-project
-       :desc "Pop up scratch buffer"        "x" #'doom/open-project-scratch-buffer
-       :desc "Switch to scratch buffer"     "X" #'doom/switch-to-project-scratch-buffer
-       (:when (and (modulep! :tools taskrunner)
-                   (or (modulep! :completion ivy)
-                       (modulep! :completion helm)))
-        :desc "List project tasks"          "z" #'+taskrunner/project-tasks))
+       :desc "Toggle scratch buffer"        "x" #'doom/toggle-project-scratch-buffer
+       :desc "Switch to scratch buffer"     "X" #'doom/switch-to-project-scratch-buffer)
 
       ;;; <leader> q --- quit/session
       (:prefix-map ("q" . "quit/session")
@@ -880,7 +861,7 @@
        :desc "Indent style"                 "I" #'doom/toggle-indent-style
        :desc "Line numbers"                 "l" #'doom/toggle-line-numbers
        (:when (modulep! :ui minimap)
-        :desc "Minimap"                      "m" #'minimap-mode)
+        :desc "Minimap"                      "m" #'demap-toggle)
        (:when (modulep! :lang org +present)
         :desc "org-tree-slide mode"        "p" #'org-tree-slide-mode)
        :desc "Read-only mode"               "r" #'read-only-mode

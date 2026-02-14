@@ -79,15 +79,9 @@ See `+emacs-lisp-non-package-mode' for details.")
   ;; Introduces logic to improve plist indentation in emacs-lisp-mode.
   (advice-add #'calculate-lisp-indent :override #'+emacs-lisp--calculate-lisp-indent-a)
 
-  ;; Variable-width indentation is superior in elisp. Otherwise, `dtrt-indent'
-  ;; and `editorconfig' would force fixed indentation on elisp.
-  (add-to-list 'doom-detect-indentation-excluded-modes 'emacs-lisp-mode)
-
   (add-hook! '(emacs-lisp-mode-hook lisp-data-mode-local-vars-hook)
              ;; Allow folding of outlines in comments
              #'outline-minor-mode
-             ;; Make parenthesis depth easier to distinguish at a glance
-             #'rainbow-delimiters-mode
              ;; Make quoted symbols easier to distinguish from free variables
              #'highlight-quoted-mode
              ;; Extend imenu support to Doom constructs
@@ -166,8 +160,6 @@ See `+emacs-lisp-non-package-mode' for details.")
         (append '(("\\(^\\*\\*\\*[^*]+\\*\\*\\*\\)\\(.*$\\)"
                    (1 font-lock-comment-face)
                    (2 font-lock-constant-face)))
-                (when (require 'highlight-numbers nil t)
-                  (highlight-numbers--get-regexp-for-mode 'emacs-lisp-mode))
                 (cl-loop for (matcher . match-highlights)
                          in (append lisp-el-font-lock-keywords-2
                                     lisp-cl-font-lock-keywords-2)
@@ -306,6 +298,12 @@ current buffer."
               (with-current-buffer buf (goto-char pos))))))))
   :config
   (setq helpful-set-variable-function #'setq!)
+
+  (setq-hook! 'helpful-mode-hook
+    ;; Elisp code using tab indentation always use a tab-width of 8. C source
+    ;; code from Emacs also use a tab-width of 8. Therefore Helpful needs a
+    ;; tab-width of 8 to display tab indentation correctly.
+    tab-width 8)
 
   (cond ((modulep! :completion ivy)
          (setq counsel-describe-function-function #'helpful-callable

@@ -12,7 +12,7 @@
   "Where to store eshell configuration files, as opposed to
 `eshell-directory-name', which is where Doom will store temporary/data files.")
 
-(defvar eshell-directory-name (concat doom-data-dir "eshell")
+(defvar eshell-directory-name (file-name-concat doom-profile-data-dir "eshell")
   "Where to store temporary/data files, as opposed to `eshell-config-dir',
 which is where Doom will store eshell configuration files.")
 
@@ -85,8 +85,37 @@ You should use `set-eshell-alias!' to change this.")
   (add-hook 'eshell-mode-hook #'+eshell-init-h)
   (add-hook 'eshell-exit-hook #'+eshell-cleanup-h)
 
+  ;; UX: Temporarily disable undo history between command executions. Otherwise,
+  ;;   undo could destroy output while it's being printed or delete buffer
+  ;;   contents past the boundaries of the current prompt.
+  (add-hook 'eshell-pre-command-hook #'buffer-disable-undo)
+  (add-hook! 'eshell-post-command-hook
+    (defun +eshell--enable-undo-h ()
+      (buffer-enable-undo (current-buffer))
+      (setq buffer-undo-list nil)))
+
+  ;; UX: Prior output in eshell buffers should be read-only. Otherwise, it's
+  ;;   trivial to make edits in visual modes (like evil's or term's
+  ;;   term-line-mode) and leave the buffer in a half-broken state (which you
+  ;;   must flush out with a couple RETs, which may execute the broken text in
+  ;;   the buffer),
+  (add-hook! 'eshell-pre-command-hook
+    (defun +eshell-protect-input-in-visual-modes-h ()
+      (when (and eshell-last-input-start
+                 eshell-last-input-end)
+        (add-text-properties eshell-last-input-start
+                             (1- eshell-last-input-end)
+                             '(read-only t)))))
+  (add-hook! 'eshell-post-command-hook
+    (defun +eshell-protect-output-in-visual-modes-h ()
+      (when (and eshell-last-input-end
+                 eshell-last-output-start)
+        (add-text-properties eshell-last-input-end
+                             eshell-last-output-start
+                             '(read-only t)))))
+
   ;; Enable autopairing in eshell
-  (add-hook 'eshell-mode-hook #'smartparens-mode)
+  (add-hook 'eshell-mode-hook #'electric-pair-local-mode)
 
   ;; Persp-mode/workspaces integration
   (when (modulep! :ui workspaces)
@@ -256,7 +285,7 @@ Return nil if there is none."
             (all-completions "" (pcomplete-completions))))))
 
 
-(use-package eshell-syntax-highlighting
+(use-package! eshell-syntax-highlighting
   :hook (eshell-mode . eshell-syntax-highlighting-mode)
   :config
   (defadvice! +eshell-filter-history-from-highlighting-a (&rest _)

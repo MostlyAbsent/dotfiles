@@ -2,4 +2,4 @@
 ;;; emacs/ibuffer/packages.el
 
 (package! ibuffer-projectile :pin "d012ccf7f1e3abe33e67953a5ce2774ae1437467")
-(package! ibuffer-vc :pin "da9872e5f2d4a39137621cfdd66737d0a361298f")
+(package! ibuffer-vc :pin "11f2d44a280728e963d81b28455f1c6091718120")

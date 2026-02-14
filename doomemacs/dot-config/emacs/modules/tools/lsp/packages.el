@@ -3,16 +3,27 @@
 
 (if (modulep! +eglot)
     (progn
-      (package! eglot :pin "6a9e0c76b9a7a4bf03a7fc91a02b826df507e3ce")
+      (package! eglot :pin "78bd85f1b50a7256e9c6171094544fd68f0a0b0c")
       (when (modulep! :completion vertico)
-        (package! consult-eglot :pin "b71499f4b93bfea4e2005564c25c5bb0f9e73199"))
+        (package! consult-eglot :pin "d8b444aac39edfc6473ffbd228df3e9119451b51"))
       (when (modulep! :checkers syntax -flymake)
-        (package! flycheck-eglot :pin "18d0c9869585e6a9ea5c40678f266cf7f5bb2d2e")))
-  (package! lsp-mode :pin "7c0df125c19536646634dca9e27ecb3705db7521")
-  (package! lsp-ui :pin "09d40806429fadc01a12d9a1841b49430f58adb5")
+        (package! flycheck-eglot :pin "39dd981cc56c7cb8df510510bb8f3a17380980ee"))
+      (when (modulep! +booster)
+        (package! eglot-booster
+          :recipe (:host github :repo "jdtsmith/eglot-booster")
+          :pin "cab7803c4f0adc7fff9da6680f90110674bb7a22")))
+
+  ;; lsp-mode must be rebuilt if this variable is changed, so expose it here so
+  ;; users can change it from $DOOMDIR/packages.el.
+  (eval-and-compile (defvar lsp-use-plists t))
+
+  (package! lsp-mode
+    :pin "7642778d595f0158d17740e40a47646cfecbe96a"
+    :env `(("LSP_USE_PLISTS" . ,(and lsp-use-plists "1"))))
+  (package! lsp-ui :pin "ff349658ed69086bd18c336c8a071ba15f7fd574")
   (when (modulep! :completion ivy)
-    (package! lsp-ivy :pin "bdc730a20961da4a1996298a95a7edf9ae00f2ae"))
+    (package! lsp-ivy :pin "8e0b8fdec086375fd7560857a84cd78f5047ad9d"))
   (when (modulep! :completion helm)
-    (package! helm-lsp :pin "cf4ea6fb421e7cd0ea6e3d76e5fa2cee4cdb8bb7"))
+    (package! helm-lsp :pin "027897a957032e8752780600b21d2c0ea0cf3201"))
   (when (modulep! :completion vertico)
-    (package! consult-lsp :pin "aef321d03907ca6926b0cf20ca85f672c4744000")))
+    (package! consult-lsp :pin "d11102c9db33c4ca7817296a2edafc3e26a61117")))

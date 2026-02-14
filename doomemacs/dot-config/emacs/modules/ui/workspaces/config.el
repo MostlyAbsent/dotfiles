@@ -45,7 +45,7 @@ stored in `persp-save-dir'.")
         persp-reset-windows-on-nil-window-conf nil
         persp-nil-hidden t
         persp-auto-save-fname "autosave"
-        persp-save-dir (concat doom-data-dir "workspaces/")
+        persp-save-dir (file-name-concat doom-profile-data-dir "workspaces/")
         persp-set-last-persp-for-new-frames t
         persp-switch-to-added-buffer nil
         persp-kill-foreign-buffer-behaviour 'kill
@@ -107,7 +107,7 @@ stored in `persp-save-dir'.")
   (add-to-list 'window-persistent-parameters '(winner-ring . t))
 
   (add-hook! 'persp-before-deactivate-functions
-    (defun +workspaces-save-winner-data-h (_)
+    (defun +workspaces-save-winner-data-h (&rest _)
       (when (and (bound-and-true-p winner-mode)
                  (get-current-persp))
         (set-persp-parameter
@@ -116,7 +116,7 @@ stored in `persp-save-dir'.")
                             winner-pending-undo-ring)))))
 
   (add-hook! 'persp-activated-functions
-    (defun +workspaces-load-winner-data-h (_)
+    (defun +workspaces-load-winner-data-h (&rest _)
       (when (bound-and-true-p winner-mode)
         (cl-destructuring-bind
             (currents alist pending-undo-ring)
