@@ -121,7 +121,7 @@
 
 (add-hook 'org-mode-hook (lambda () (org-indent-mode -1)) 100)
 (add-hook 'org-mode-hook (lambda () (auto-fill-mode)))
-(add-hook 'org-agenda-mode-hook (lambda () (display-line-numbers--turn-on)))
+(add-hook 'org-agenda-mode-hook (lambda () (display-line-numbers-mode)))
 
 (after! org
   (setq org-log-done t)
