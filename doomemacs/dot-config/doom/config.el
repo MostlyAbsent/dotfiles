@@ -81,13 +81,14 @@
          (text-mode . olivetti-mode)
          ;; (bibtex-mode . olivetti-mode)
          ;; (lsp-ui-flycheck-list-mode . olivetti-mode)
-         (org-agenda-mode . olivetti-mode)
+         (org-agenda-mode
+          . (lambda() (setq-local olivetti-body-width 120) (olivetti-mode)))
          ;; (org-roam-mode . olivetti-mode)
-         ;; (magit-mode . olivetti-mode)
+         (magit-mode . olivetti-mode)
          ;; (gitignore-mode . olivetti-mode)
          ;; (harpoon-mode . olivetti-mode)
          ;; (typescript-ts-base-mode . olivetti-mode)
-         ;; (conf-mode . olivetti-mode)
+         (conf-mode . olivetti-mode)
          )
   :init
   (setq olivetti-body-width 90))
@@ -98,8 +99,6 @@
 
 (setq scroll-margin 8)
 
-(add-hook 'org-mode-hook (lambda () (org-indent-mode -1)) 100)
-(add-hook 'org-mode-hook (lambda () (auto-fill-mode)))
 
 (after! recentf
   (add-to-list 'recentf-exclude
@@ -120,6 +119,10 @@
               t)
         (replace-match "\\1\\3\\4" nil nil)))))
 
+(add-hook 'org-mode-hook (lambda () (org-indent-mode -1)) 100)
+(add-hook 'org-mode-hook (lambda () (auto-fill-mode)))
+(add-hook 'org-agenda-mode-hook (lambda () (display-line-numbers--turn-on)))
+
 (after! org
   (setq org-log-done t)
   (setq org-agenda-custom-commands
@@ -136,6 +139,17 @@
 (map! :leader "M-t" #'harpoon-go-to-2)
 (map! :leader "M-n" #'harpoon-go-to-3)
 (map! :leader "M-s" #'harpoon-go-to-4)
+
+(defun jtt/org-roam-extract-and-link ()
+  "Extract current subtree to a new Org-roam note and replace with a link.
+Automatically accepts default filename."
+  (interactive)
+  (if (string-equal mode-name "Org")
+      (cl-destructuring-bind
+          (level rl todo priority text tags)
+          (org-heading-components)
+        (org-roam-extract-subtree)
+        (insert (make-string level ?*) " " text "\n\n"))))
 
 (use-package! org-ql)
 
