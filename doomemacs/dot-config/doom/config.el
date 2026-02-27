@@ -137,5 +137,26 @@
 (map! :leader "M-n" #'harpoon-go-to-3)
 (map! :leader "M-s" #'harpoon-go-to-4)
 
+(use-package! org-ql)
+
+(defun jtt-org-clock-export-with-prefix ()
+  "Call `org-clock-export` with a universal prefix argument (C-u)."
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+    (org-clock-export)))
+
+(use-package! org-clock-export
+  :config
+  (setq org-clock-export-export-file-name
+        (concat (getenv "HOME") "/Documents/toggl/output.csv"))
+  (setq org-clock-export-data-format
+        '("start"
+          (concat start-year "-" start-month "-" start-day "T"
+                  start-hour ":" start-minute ":00")
+          "duration-hours" total-hours
+          "duration-min" total-minutes
+          "description" (concat "\"" (org-entry-get (point) "ITEM") "\"")
+          "tags" (or (org-entry-get (point) "CATEGORY") ""))))
+
 (after! citar
   (setq! citar-bibliography '("~/Documents/Zotero/My Library.bib")))

@@ -58,3 +58,8 @@
 (package! weyland-yutani-theme)
 
 (package! harpoon)
+
+(package! org-ql)
+
+(package! org-clock-export
+  :recipe (:host github :repo "legalnonsense/org-clock-export"))
