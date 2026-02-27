@@ -137,3 +137,5 @@
 (map! :leader "M-n" #'harpoon-go-to-3)
 (map! :leader "M-s" #'harpoon-go-to-4)
 
+(after! citar
+  (setq! citar-bibliography '("~/Documents/Zotero/My Library.bib")))
