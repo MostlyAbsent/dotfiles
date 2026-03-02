@@ -138,6 +138,7 @@ alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-a = 'workspace A'
 alt-e = 'workspace E'
+alt-d = 'workspace D'
 alt-m = 'workspace M'
 alt-o = 'workspace O'
 alt-z = 'workspace Z'
@@ -201,3 +202,7 @@ run = 'move-node-to-workspace 4'
 [[on-window-detected]]
 if.app-id = 'com.omnissa.horizon.client.mac'
 run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace D'
