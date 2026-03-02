@@ -176,7 +176,8 @@ Automatically accepts default filename."
           "duration-hours" total-hours
           "duration-min" total-minutes
           "description" (concat "\"" (org-entry-get (point) "ITEM") "\"")
-          "tags" (or (org-entry-get (point) "CATEGORY") ""))))
+          "tags" (or (org-entry-get (point) "CATEGORY") "")
+          "project" (or (org-entry-get (point) "PROJECT") ""))))
 
 (after! citar
   (setq! citar-bibliography '("~/Documents/Zotero/My Library.bib")))
