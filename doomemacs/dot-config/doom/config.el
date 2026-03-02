@@ -128,11 +128,15 @@
   (plist-put org-format-latex-options :scale 2.0)
   (setq org-startup-with-latex-preview t)
   (setq org-agenda-custom-commands
-        '(("u" "Semester 1" agenda ""
-           ((org-agenda-start-day "-3d")
-            (org-agenda-span
-             (- 169                     ; June 15 + 3d behind buffer
-                (string-to-number (format-time-string "%j" (current-time))))))))))
+        '(("u" "Semester 1"
+           ((alltodo "" ; This adds all unfinished TODOs below the agenda
+                     ((org-agenda-overriding-header "All Unfinished Tasks")))
+            (agenda ""
+                    ((org-agenda-start-day "-3d")
+                     (org-agenda-span
+                      (- 169                     ; June 15 + 3d behind buffer
+                         (string-to-number
+                          (format-time-string "%j" (current-time))))))))))))
 
 (map! :leader "j c" #'harpoon-clear)
 (map! :leader "j e" #'harpoon-quick-menu-hydra)
