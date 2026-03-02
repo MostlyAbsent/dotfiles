@@ -125,6 +125,8 @@
 
 (after! org
   (setq org-log-done t)
+  (plist-put org-format-latex-options :scale 2.0)
+  (setq org-startup-with-latex-preview t)
   (setq org-agenda-custom-commands
         '(("u" "Semester 1" agenda ""
            ((org-agenda-start-day "-3d")
@@ -174,3 +176,7 @@ Automatically accepts default filename."
 
 (after! citar
   (setq! citar-bibliography '("~/Documents/Zotero/My Library.bib")))
+
+(use-package! org-fragtog
+  :after org
+  :hook (org-mode . org-fragtog-mode))

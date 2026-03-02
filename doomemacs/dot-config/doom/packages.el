@@ -63,3 +63,5 @@
 
 (package! org-clock-export
   :recipe (:host github :repo "legalnonsense/org-clock-export"))
+
+(package! org-fragtog)
