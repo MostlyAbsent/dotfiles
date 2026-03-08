@@ -187,3 +187,5 @@ Automatically accepts default filename."
 (use-package! org-fragtog
   :after org
   :hook (org-mode . org-fragtog-mode))
+
+(setq evil-want-fine-undo t)
