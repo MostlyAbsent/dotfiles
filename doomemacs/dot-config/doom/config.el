@@ -126,6 +126,8 @@
 (after! org
   (setq org-log-done t)
   (plist-put org-format-latex-options :scale 2.0)
+  (setq org-cite-csl-styles-dir "~/Documents/Zotero/styles")
+  (setq org-cite-global-bibliography '( "~/Documents/Zotero/My Library.bib"))
   (setq org-startup-with-latex-preview t)
   (setq org-agenda-custom-commands
         '(("u" "Semester 1"
