@@ -1,0 +1,77 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+# You can use this file to define the base matches (aka snippets)
+# that will be available in every application when using espanso.
+
+# Matches are substitution rules: when you type the "trigger" string
+# it gets replaced by the "replace" string.
+matches:
+  - triggers: ["\\uuid", "wintermute.local.uuid"]
+    replace: "{{output}}"
+    label: "Generate a new UUID"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "/usr/bin/uuidgen"
+
+  - triggers: ["\\isodate", "wintermute.local.isodate", "\\date"]
+    replace: "{{td}}"
+    label: "Current Date in ISO format"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - triggers: ["\\isodatetime", "wintermute.local.isodatetime", "\\time"]
+    replace: "{{td}}"
+    label: "Current Date in ISO format"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%Y-%m-%dT%H%M%S%z"
+
+  - trigger: "\\awstdate"
+    replace: "{{td}}"
+    label: "Current Date in AWST format"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%d/%m/%Y"
+
+  - trigger: "\\week"
+    replace: "{{td}}"
+    vars:
+      - name: td
+        type: date
+        params:
+          format: "%Y-W-%U"
+
+  - trigger: "\\ref"
+    replace: "\n# Reference\n$|$"
+
+  - trigger: "\\meta"
+    replace: "\n# Metadata\nStatus: $|$\nLinks: "
+
+  - trigger: "\\..."
+    replace: "&#8230;"
+
+  - trigger: "\\ld"
+    replace: "&#8220;"
+
+  - trigger: "\\ls"
+    replace: "&#8216;"
+
+  - trigger: "\\rd"
+    replace: "&#8221;"
+
+  - trigger: "\\rs"
+    replace: "&#8217;"
+
+  - trigger: "\\break"
+    replace: "<p class='center'>*****</p>"

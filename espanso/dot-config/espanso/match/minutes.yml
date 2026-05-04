@@ -1,0 +1,108 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+# You can use this file to define the base matches (aka snippets)
+# that will be available in every application when using espanso.
+
+# Matches are substitution rules: when you type the "trigger" string
+# it gets replaced by the "replace" string.
+global_vars:
+  - name: cap_group
+    type: echo
+    params:
+      echo: |
+        - [ ] Jacob Doran
+        - [ ] Jacob Turner Polt
+        - [ ] Jolie Bao Ling Yung
+        - [ ] Kai Edginton
+        - [ ] Tom Hartwig
+  - name: cap_client
+    type: echo
+    params:
+      echo: |
+        - [ ] Dr Emily Jackson
+        - [ ] Professor Mark Boyes
+  - name: cap_super
+    type: echo
+    params:
+      echo: |
+        - [ ] Keven Rashleigh
+  - name: hci_group
+    type: echo
+    params:
+      echo: |
+        - [ ] Matias Hall
+        - [ ] Ben Wilkosz
+        - [ ] Phuc Minh Anh Nguyen
+        - [ ] Edward Scroop
+        - [ ] Jacob Doran
+  - name: hci_super
+    type: echo
+    params:
+      echo: |
+        - [ ] Hilal Ibrahim Sulieman Alawneh
+matches:
+  - triggers: ["<min", "wintermute.local.minutes"]
+    replace: |
+      #+AUTHOR: Jacob Doran 13966522
+      #+OPTIONS: author:t title:t ':t
+      #+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+
+      * Participants
+
+      {{output}}
+
+      * Agenda
+
+      - [ ] $|$
+
+      * Summary
+
+      * Key Items
+
+      * Tasks
+
+      * To be Determined
+    label: "Basic Minutes Template"
+    vars:
+      - name: group_selection
+        type: choice
+        params:
+          values:
+            - label: "CAP"
+              id: "{{cap_group}}"
+            - label: "CAP and Super"
+              id: "{{cap_group}}{{cap_super}}"
+            - label: "CAP and Client"
+              id: "{{cap_group}}{{cap_client}}"
+            - label: "CAP, Super and Client"
+              id: "{{cap_group}}{{cap_super}}{{cap_client}}"
+            - label: "HCI"
+              id: "{{hci_group}}"
+            - label: "HCI and Super"
+              id: "{{hci_group}}{{hci_super}}"
+      - name: output
+        type: shell
+        params:
+          cmd: "echo '{{group_selection}}' | sort"
+      - name: date
+        type: match
+        params:
+          trigger: "wintermute.local.isodate"
+
+# * Participants
+
+# * Agenda
+
+# - [ ] item
+
+# * Summary
+
+# * Key Items
+
+# ** Items
+
+# * Tasks
+
+# * To Be Determined
