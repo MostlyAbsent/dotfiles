@@ -65,3 +65,6 @@
   :recipe (:host github :repo "legalnonsense/org-clock-export"))
 
 (package! org-fragtog)
+
+(unpin! org-roam)
+(package! org-roam-ui)
