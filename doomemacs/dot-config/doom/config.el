@@ -79,11 +79,10 @@
 (use-package! olivetti
   :hook ((prog-mode . olivetti-mode)
          (text-mode . olivetti-mode)
-         ;; (bibtex-mode . olivetti-mode)
+         (bibtex-mode . olivetti-mode)
          ;; (lsp-ui-flycheck-list-mode . olivetti-mode)
          (org-agenda-mode
           . (lambda() (setq-local olivetti-body-width 120) (olivetti-mode)))
-         ;; (org-roam-mode . olivetti-mode)
          (magit-mode . olivetti-mode)
          ;; (gitignore-mode . olivetti-mode)
          ;; (harpoon-mode . olivetti-mode)
