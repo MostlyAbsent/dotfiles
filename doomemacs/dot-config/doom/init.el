@@ -181,8 +181,11 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       ;;web               ; the tubes
        ;;yaml              ; JSON, but readable
+       (web
+        +html
+        +css
+        +lsp) ; the tubes
        ;;zig               ; C, but simpler
 
        :email
