@@ -124,10 +124,17 @@
 
 (after! org
   (setq org-log-done t)
-  (plist-put org-format-latex-options :scale 2.0)
   (setq org-cite-csl-styles-dir "~/Documents/Zotero/styles")
   (setq org-cite-global-bibliography '( "~/Documents/Zotero/My Library.bib"))
+  (setq org-latex-compiler "xelatex")
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
   (setq org-startup-with-latex-preview t)
+  (setq org-preview-latex-default-process 'dvisvgm)
+  (let ((dvisvgm-args (assq 'dvisvgm org-preview-latex-process-alist)))
+    (when dvisvgm-args
+      (plist-put (cdr dvisvgm-args) :latex-compiler
+                 '("xelatex -interaction nonstopmode -no-pdf -output-directory %o %f"))
+      (plist-put (cdr dvisvgm-args) :image-input-type "xdv")))
   (setq org-agenda-custom-commands
         '(("u" "Semester 1"
            ((alltodo "" ; This adds all unfinished TODOs below the agenda
