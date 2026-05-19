@@ -225,3 +225,4 @@ Automatically accepts default filename."
 (add-to-list 'auto-mode-alist
              '("\\.env\\(?:\\..*\\)?\\'" . conf-mode))
 
+(add-to-list 'org-file-apps '("\\.docx\\'" . system))
