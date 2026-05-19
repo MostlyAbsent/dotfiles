@@ -210,3 +210,8 @@ Automatically accepts default filename."
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
+
+(use-package! magit-todos
+  :after magit
+  :config (magit-todos-mode 1))
+
