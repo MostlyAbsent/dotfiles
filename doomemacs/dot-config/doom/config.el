@@ -215,3 +215,13 @@ Automatically accepts default filename."
   :after magit
   :config (magit-todos-mode 1))
 
+(add-hook 'markdown-mode-hook #'hl-todo-mode)
+(add-hook 'gfm-mode-hook #'hl-todo-mode)
+
+(after! apheleia
+  (setf (alist-get 'python-mode apheleia-formatters)
+        '("ruff" "format" "--stdin-filename" filepath "-")))
+
+(add-to-list 'auto-mode-alist
+             '("\\.env\\(?:\\..*\\)?\\'" . conf-mode))
+
