@@ -48,7 +48,7 @@ all themes. It will apply to all themes once they are loaded."
        (when (or (get 'doom-theme 'history)
                  (null doom-theme))
          (doom--run-customize-theme-hook #',fn))
-       ;; FIXME Prevent clobbering this on-the-fly
+       ;; FIXME: Prevent clobbering this on-the-fly
        (add-hook 'doom-customize-theme-hook #',fn 100))))
 
 ;;;###autoload
@@ -68,7 +68,12 @@ doom-themes' API without worry."
   (let* ((themes (copy-sequence custom-enabled-themes))
          (real-themes (cl-remove-if-not #'doom--theme-is-colorscheme-p themes)))
     (mapc #'disable-theme themes)
-    (mapc #'enable-theme (reverse themes))
+    (dolist (th (reverse themes))
+      (if (locate-file (concat (symbol-name th) "-theme.el")
+                       (custom-theme--load-path)
+                       '("" "c"))
+          (load-theme th t)
+        (enable-theme th)))
     (doom/reload-font)
     (message "%s %s"
              (propertize
@@ -80,7 +85,7 @@ doom-themes' API without worry."
 
 
 ;;
-;;; Helpers
+;;; * Helpers
 
 ;;;###autoload
 (defun doom-theme-face-attribute (theme face attribute &optional recursive)

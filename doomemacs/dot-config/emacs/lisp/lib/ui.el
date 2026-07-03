@@ -1,7 +1,7 @@
 ;;; lisp/lib/ui.el -*- lexical-binding: t; -*-
 
 ;;
-;;; Public library
+;;; * Public library
 
 ;;;###autoload
 (defun doom-resize-window (window new-size &optional horizontal force-p)
@@ -18,7 +18,7 @@ If FORCE-P is omitted when `window-size-fixed' is non-nil, resizing will fail."
 
 Returns t if it is safe to kill this session. Does not prompt if no real buffers
 are open."
-  (or (not (ignore-errors (doom-real-buffer-list)))
+  (or (not (cl-some #'doom-real-buffer-p (doom-buffer-list)))
       (if use-dialog-box
           (x-popup-dialog
            t `("Really quit Emacs?"
@@ -29,7 +29,7 @@ are open."
 
 
 ;;
-;;; Advice
+;;; * Advice
 
 ;;;###autoload
 (defun doom-recenter-a (&rest _)
@@ -58,7 +58,7 @@ In tty Emacs, messages are suppressed completely."
 
 
 ;;
-;;; Hooks
+;;; * Hooks
 
 ;;;###autoload
 (defun doom-apply-ansi-color-to-compilation-buffer-h ()
@@ -74,16 +74,33 @@ In tty Emacs, messages are suppressed completely."
 
 ;;;###autoload
 (defun doom-enable-line-numbers-h ()
-  (display-line-numbers-mode +1))
+  (unless (bound-and-true-p display-line-numbers-mode)
+    (display-line-numbers-mode +1)))
 
 ;;;###autoload
-(defun doom-disable-line-numbers-h ()
-  (display-line-numbers-mode -1))
+  (defun doom-disable-line-numbers-h ()
+    (when (bound-and-true-p display-line-numbers)
+      (display-line-numbers-mode -1)))
+
+;;;###autoload
+(defun doom-kill-childframes-h (&rest _)
+  "Delete all childframes (and `posframe' frames)."
+  (dolist (frame (frame-list))
+    (when (or (frame-parameter frame 'posframe-buffer)
+              (frame-parameter nil 'parent-frame))
+      (let (delete-frame-functions)
+        (delete-frame frame))))
+  (when (featurep 'posframe)
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (when posframe--frame
+          (posframe--kill-buffer buffer))))))
 
 
 ;;
-;;; Commands
+;;; * Commands
 
+(defvar display-line-numbers-type)
 ;;;###autoload
 (defun doom/toggle-line-numbers ()
   "Toggle line numbers.
@@ -102,7 +119,8 @@ See `display-line-numbers' for what these values mean."
                    (car order)
                  (car (cdr queue)))))
     (setq doom--line-number-style next)
-    (setq display-line-numbers next)
+    (let ((display-line-numbers-type next))
+      (display-line-numbers-mode +1))
     (message "Switched to %s line numbers"
              (pcase next
                (`t "normal")
@@ -125,21 +143,21 @@ See `display-line-numbers' for what these values mean."
   (remove-hook 'doom-switch-window-hook #'doom--enlargened-forget-last-wconf-h))
 
 ;;;###autoload
-(defun doom/window-maximize-buffer (&optional arg)
+(defun doom/window-maximize-buffer ()
   "Close other windows to focus on this one.
 Use `winner-undo' to undo this. Alternatively, use `doom/window-enlargen'."
-  (interactive "P")
+  (interactive)
   (when (and (bound-and-true-p +popup-mode)
              (+popup-window-p))
     (+popup/raise (selected-window)))
   (delete-other-windows))
 
 ;;;###autoload
-(defun doom/window-enlargen (&optional arg)
+(defun doom/window-enlargen ()
   "Enlargen the current window (i.e. shrinks others) so you can focus on it.
 Use `winner-undo' to undo this. Alternatively, use
 `doom/window-maximize-buffer'."
-  (interactive "P")
+  (interactive)
   (let* ((window (selected-window))
          (dedicated-p (window-dedicated-p window))
          (preserved-p (window-parameter window 'window-preserved-size))

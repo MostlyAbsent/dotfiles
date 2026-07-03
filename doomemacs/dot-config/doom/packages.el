@@ -71,3 +71,4 @@
 
 (package! magit-todos)
 
+;; (package! flycheck-python-ruff)

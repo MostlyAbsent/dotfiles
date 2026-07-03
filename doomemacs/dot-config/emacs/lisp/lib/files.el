@@ -1,20 +1,18 @@
 ;;; lisp/lib/files.el -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
 (defun doom-files--build-checks (spec &optional directory)
-  "Converts a simple nested series of or/and forms into a series of
-`file-exists-p' checks.
+  "Converts simple nested series of/and forms into a series of `file-exists-p'
+calls.
 
 For example
 
   (doom-files--build-checks
-    '(or A (and B C))
+    \\='(or A (and B C))
     \"~\")
 
 Returns (not precisely, but effectively):
 
-  '(let* ((_directory \"~\")
+  \\='(let* ((_directory \"~\")
           (A (expand-file-name A _directory))
           (B (expand-file-name B _directory))
           (C (expand-file-name C _directory)))
@@ -76,9 +74,6 @@ If the glob ends in a slash, only returns matching directories."
       (file-expand-wildcards path))))
 
 ;;;###autoload
-(define-obsolete-function-alias 'doom-dir 'doom-path "3.0.0")
-
-;;;###autoload
 (cl-defun doom-files-in
     (paths &rest rest
            &key
@@ -100,7 +95,7 @@ MAP is a function or symbol which will be used to transform each entry in the
 results.
 
 TYPE determines what kind of path will be included in the results. This can be t
-(files and folders), 'files or 'dirs.
+(files and folders), \\='files or \\='dirs.
 
 By default, this function returns paths relative to PATH-OR-PATHS if it is a
 single path. If it a list of paths, this function returns absolute paths.
@@ -207,7 +202,7 @@ single file or nested compound statement of `and' and `or' statements."
   (if (executable-find "du")
       (/ (string-to-number (cdr (doom-call-process "du" "-sb" dir)))
          1024.0)
-    ;; REVIEW This is slow and terribly inaccurate, but it's something
+    ;; REVIEW: This is slow and terribly inaccurate, but it's something
     (let ((w32-get-true-file-attributes t)
           (file-name-handler-alist dir)
           (max-lisp-eval-depth 5000)
@@ -221,7 +216,7 @@ single file or nested compound statement of `and' and `or' statements."
 
 
 ;;
-;;; File read/write
+;;; * File read/write
 
 (defmacro doom--with-prepared-file-buffer (file coding mode &rest body)
   "Create a temp buffer and prepare it for file IO in BODY."
@@ -256,10 +251,10 @@ called with no arguments and expected to return the contents as any arbitrary
 data. By default, BY is set to `buffer-string'. Otherwise, BY recognizes these
 special values:
 
-'insert      -- insert FILE's contents into the current buffer before point.
-'read        -- read the first form in FILE and return it as a single S-exp.
-'read*       -- read all forms in FILE and return it as a list of S-exps.
-'(read . N)  -- read the first N (an integer) S-exps in FILE.
+\\='insert      -- insert FILE's contents into the current buffer before point.
+\\='read        -- read the first form in FILE and return it as a single S-exp.
+\\='read*       -- read all forms in FILE and return it as a list of S-exps.
+\\='(read . N)  -- read the first N (an integer) S-exps in FILE.
 
 CODING dictates the encoding of the buffer. This defaults to `utf-8'. If set to
 nil, `binary' is used.
@@ -390,7 +385,7 @@ some optimizations for `binary' IO."
 
 
 ;;
-;;; Helpers
+;;; * Helpers
 
 (defun doom-files--update-refs (&rest files)
   "Ensure FILES are updated in `recentf', `magit' and `save-place'."
@@ -398,11 +393,11 @@ some optimizations for `binary' IO."
     (dolist (file files)
       (when (featurep 'vc)
         (vc-file-clearprops file)
-        (when-let (buffer (get-file-buffer file))
+        (when-let* ((buffer (get-file-buffer file)))
           (with-current-buffer buffer
             (vc-refresh-state))))
       (when (featurep 'magit)
-        (when-let (default-directory (magit-toplevel (file-name-directory file)))
+        (when-let* ((default-directory (magit-toplevel (file-name-directory file))))
           (cl-pushnew default-directory toplevels)))
       (unless (file-readable-p file)
         (when (bound-and-true-p recentf-mode)
@@ -418,7 +413,7 @@ some optimizations for `binary' IO."
 
 
 ;;
-;;; Commands
+;;; * Commands
 
 ;;;###autoload
 (defun doom/delete-this-file (&optional path force-p)
@@ -593,7 +588,7 @@ which case it will save it without prompting."
 
 
 ;;
-;;; Backports
+;;; * Backports
 
 ;; Introduced in Emacs 29.
 ;;;###autoload

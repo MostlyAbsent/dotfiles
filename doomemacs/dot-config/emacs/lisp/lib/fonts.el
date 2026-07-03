@@ -18,14 +18,14 @@ If nil, `doom-font' will be used, scaled up by `doom-big-font-increment'. See
 
 
 ;;
-;;; Library
+;;; * Library
 
 ;;;###autoload
 (defun doom-normalize-font (font)
   "Return FONT as a normalized font spec.
 
 The font will be normalized (i.e. :weight, :slant, and :width will set to
-'normal if not specified) before it is converted.
+\\='normal if not specified) before it is converted.
 
 FONT can be a `font-spec', a font object, an XFT font string, or an XLFD font
 string."
@@ -117,7 +117,7 @@ Doesn't work in terminal Emacs."
 
 
 ;;
-;;; Commands
+;;; * Commands
 
 ;;;###autoload
 (defun doom/reload-font ()
@@ -170,6 +170,7 @@ Also resizees `doom-variable-pitch-font' and `doom-serif-font'."
   :init-value nil
   :lighter " BIG"
   :global t
+  :group 'doom
   (if doom-big-font
       ;; Use `doom-big-font' in lieu of `doom-font'
       (doom-adjust-font-size

@@ -1,4 +1,4 @@
-;;; core/lib/docs.el -- a reader mode for Doom's Org docs -*- lexical-binding: t; -*-
+;;; lisp/lib/docs.el -- a reader mode for Doom's docs -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;
 ;; This file defines `doom-docs-org-mode', a major mode derived from org-mode,
@@ -157,9 +157,9 @@
       (set-buffer-modified-p nil)
       (org-link-open (org-element-context)))))
 
-;; DEPRECATED Will be renamed once docs "framework" is generalized
+;; DEPRECATED: Will be renamed once docs "framework" is generalized
 (defvar doom-docs-link-alist
-  '(("doom-tag"                . "https://github.com/hlissner/doom-emacs/releases/tag/%s")
+  '(("doom-tag"                . "https://github.com/doomemacs/core/releases/tag/%s")
     ("doom-contrib-core"       . "id:9ac0c15c-29e7-43f8-8926-5f0edb1098f0")
     ("doom-contrib-docs"       . "id:31f5a61d-d505-4ee8-9adb-97678250f4e2")
     ("doom-contrib-maintainer" . "id:e71e9595-a297-4c49-bd11-f238329372db")
@@ -170,14 +170,14 @@
     ("doom-help-modules"       . "id:1ee0b650-f09b-4454-8690-cc145aadef6e")
     ("doom-index"              . "id:3051d3b6-83e2-4afa-b8fe-1956c62ec096")
     ("doom-module-index"       . "id:12d2de30-c569-4b8e-bbc7-85dd5ccc4afa")
-    ("doom-module-issues"      . "https://github.com/doomemacs/doomemacs/labels/%s")
-    ("doom-module-history"     . "https://github.com/doomemacs/doomemacs/commits/master/modules/%s")
-    ("doom-report"             . "https://github.com/doomemacs/doomemacs/issues/new/choose")
+    ("doom-module-issues"      . "https://github.com/doomemacs/modules/labels/%s")
+    ("doom-module-history"     . "https://github.com/doomemacs/modules/commits/master/modules/%s")
+    ("doom-report"             . "https://github.com/doomemacs/core/issues/new/choose")
     ("doom-suggest-edit"       . "id:31f5a61d-d505-4ee8-9adb-97678250f4e2")
     ("doom-suggest-faq"        . "id:aa28b732-0512-49ed-a47b-f20586c0f051")
     ("github"                  . "https://github.com/%s")
 
-    ;; TODO Implement later, once docs are generalized
+    ;; TODO: Implement later, once docs are generalized
     ;; ("github-release"          . (lambda (link)
     ;;                                (format "%s/releases/tag/%s"
     ;;                                        doom-docs-this-repo
@@ -196,7 +196,7 @@
 
 
 ;;
-;;; `doom-docs-mode'
+;;; * doom-docs-mode
 
 (defun doom-docs--display-menu-h ()
   "Toggle virtual menu line at top of buffer."
@@ -236,10 +236,10 @@
      (when (looking-at-p org-drawer-regexp)
        (setq pt (org-element-property :end (org-element-at-point))))
      (while (re-search-forward org-drawer-regexp nil t)
-       (when-let ((el (org-element-at-point))
-                  (beg (max (point-min) (1- (org-element-property :begin el))))
-                  (end (org-element-property :end el))
-                  ((memq (org-element-type el) '(drawer property-drawer))))
+       (when-let* ((el (org-element-at-point))
+                   (beg (max (point-min) (1- (org-element-property :begin el))))
+                   (end (org-element-property :end el))
+                   ((memq (org-element-type el) '(drawer property-drawer))))
          (when (org-element-property-inherited :level el)
            (cl-decf end))
          (org-fold-core-region beg end doom-docs-mode 'doom-doc-hidden))))
@@ -252,7 +252,7 @@
   (org-with-wide-buffer
    (goto-char (point-min))
    (while (re-search-forward org-heading-regexp nil t)
-     (when-let (tags (org-get-tags nil t))
+     (when-let* ((tags (org-get-tags nil t)))
        (when (or (member "noorg" tags)
                  (member "unfold" tags))
          ;; prevent `org-ellipsis' around hidden regions
@@ -406,7 +406,7 @@ This primes `org-mode' for reading."
                 (unless (< state 0)
                   (setf (alist-get mode doom-docs--initial-values) nil)
                   (funcall mode +1)))
-            (when-let (old-val (assq mode doom-docs--initial-values))
+            (when-let* ((old-val (assq mode doom-docs--initial-values)))
               (funcall mode (if old-val +1 -1)))))
         doom-docs-mode-alist)
   (unless doom-docs-mode
@@ -444,7 +444,7 @@ This primes `org-mode' for reading."
           org-mode-hook)
       (if (or force (not (file-exists-p org-id-locations-file)))
           (org-id-update-id-locations
-           (doom-files-in (list doom-docs-dir doom-modules-dir)
+           (doom-files-in (cons doom-docs-dir doom-module-load-path)
                           :match "/[^.].+\\.org$"))
         (org-id-locations-load))
       (setq doom-docs--id-files org-id-files
@@ -456,7 +456,7 @@ This primes `org-mode' for reading."
 
 
 ;;
-;;; `doom-docs-org-mode'
+;;; * doom-docs-org-mode
 
 ;;;###autoload
 (defun doom-docs-generate-id (&optional force?)
@@ -467,8 +467,8 @@ This primes `org-mode' for reading."
         (org-id-locations-file doom-docs--id-location-file)
         (org-id-locations doom-docs--id-locations)
         (org-id-files doom-docs--id-files))
-    (doom/reload-docs)
-    (when-let (fname (buffer-file-name (buffer-base-buffer)))
+    (doom/reload-docs force?)
+    (when-let* ((fname (buffer-file-name (buffer-base-buffer))))
       (let ((id (org-id-new)))
         (org-id-add-location id fname)
         id))))

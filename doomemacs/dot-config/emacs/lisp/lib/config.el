@@ -1,7 +1,7 @@
 ;;; lisp/lib/config.el -*- lexical-binding: t; -*-
 
 ;;;###autoload
-(defvar doom-after-reload-hook nil
+(defvar doom-after-reload-hook '(doom-kill-childframes-h)
   "A list of hooks to run after `doom/reload' has reloaded Doom.")
 
 ;;;###autoload
@@ -24,7 +24,7 @@
 
 
 ;;
-;;; Managements
+;;; * Config reloading
 
 (defmacro doom--if-compile (command on-success &optional on-failure)
   (declare (indent 2))
@@ -46,7 +46,10 @@
      (with-current-buffer
          (with-environment-variables
              (("PATH" (string-join exec-path path-separator))
-              ("EMACS" (shell-quote-argument emacs-bin))
+              ("EMACS"
+               (if (featurep :system 'windows)
+                   (replace-regexp-in-string " " "\\ " emacs-bin t t)
+                 (shell-quote-argument emacs-bin)))
               ("EMACSDIR" doom-emacs-dir)
               ("DOOMDIR" doom-user-dir)
               ("DOOMLOCALDIR" doom-local-dir)
@@ -60,7 +63,7 @@
             (if (equal status "finished\n")
                 (progn
                   (delete-window w)
-                  ,on-success)
+                  (with-current-buffer "*scratch*" ,on-success))
               ,on-failure))
           nil 'local)))))
 
@@ -75,14 +78,18 @@
 (defun doom/reload ()
   "Reloads your private config.
 
-WARNING: This command is experimental! If you haven't configured your config to
-be idempotent, then this could cause compounding slowness or errors.
+WARNING: This command is experimental, and likely always will be! It executes
+\\='doom sync', reloads the active profile, re-evaluates all modules, then your
+config, but this isn't a perfect replication of the startup process (which is
+impossible in Emacs without a hard restart), so any misconfiguration on your
+part can have compounding, deleterious effects that may result in slowness,
+missing keybinds, or breakage. This is the best you can (or should) ever expect
+from a command like this (in any Emacs starter kit, for that matter).
 
-This is experimental! It will try to do as `bin/doom sync' does, but from within
-this Emacs session. i.e. it reload autoloads files (if necessary), reloads your
-package list, and lastly, reloads your private config.el.
+Otherwise, save yourself the headache and simply run \\='doom sync' outside of
+Emacs and restart. That will always work.
 
-Runs `doom-after-reload-hook' afterwards."
+Runs `doom-before-reload-hook' first, then `doom-after-reload-hook' afterwards."
   (interactive)
   (mapc #'require (cdr doom-incremental-packages))
   (doom--if-compile doom-reload-command
@@ -92,60 +99,28 @@ Runs `doom-after-reload-hook' afterwards."
           (general-auto-unbind-keys)
           (unwind-protect
               (startup--load-user-init-file nil)
-            (general-auto-unbind-keys t)))
-        (doom-run-hooks 'doom-after-reload-hook)
+            (general-auto-unbind-keys t)
+            (doom-run-hooks 'doom-after-reload-hook)))
         (message "Config successfully reloaded!"))
     (user-error "Failed to reload your config")))
 
-;;;###autoload
-(defun doom/reload-autoloads ()
-  "Reload only the autoloads of the current profile.
-
-This is much faster and safer than `doom/reload', but not as comprehensive. This
-reloads your package and module visibility, but does not install new packages or
-remove orphaned ones. It also doesn't reload your private config.
-
-It is useful to only pull in changes performed by 'doom sync' on the command
-line."
-  (interactive)
-  (doom-require 'doom-lib 'profiles)
-  ;; TODO: Make this more robust
-  (with-doom-context 'reload
-    (dolist (file (mapcar #'car doom-profile-generators))
-      (when (string-match-p "/[0-9]+-loaddefs[.-]" file)
-        (load (doom-path doom-profile-dir doom-profile-init-dir-name file)
-              'noerror)))))
-
+;; DEPRECATED: Replaced in v3
 ;;;###autoload
 (defun doom/reload-env ()
   "Reloads your envvar file.
 
-DOES NOT REGENERATE IT. You must run 'doom env' in your shell OUTSIDE of Emacs.
-Doing so from within Emacs will taint your shell environment.
+DOES NOT REGENERATE IT. You must run \\='doom sync --env' in your shell OUTSIDE
+of Emacs. Doing so from within Emacs will taint your shell environment.
 
 An envvar file contains a snapshot of your shell environment, which can be
 imported into Emacs."
   (interactive)
   (with-doom-context 'reload
-    (let ((default-directory doom-emacs-dir))
-      (with-temp-buffer
-        (doom-load-envvars-file doom-env-file)
-        (message "Reloaded %S" (abbreviate-file-name doom-env-file))))))
-
-(defvar doom-upgrade-command
-  (format "%s upgrade -B --force"
-          ;; /usr/bin/env doesn't exist on Android
-          (if (featurep :system 'android)
-              "sh %s"
-            "%s"))
-  "Command that `doom/upgrade' runs.")
-;;;###autoload
-(defun doom/upgrade ()
-  "Run 'doom upgrade' then prompt to restart Emacs."
-  (interactive)
-  (doom--if-compile doom-upgrade-command
-      (when (y-or-n-p "You must restart Emacs for the upgrade to take effect.\n\nRestart Emacs?")
-        (doom/restart-and-restore))))
+    (require 'doom-profiles)
+    (let ((env-file (doom-profile-dir t doom-profile-init-dir-name "05-doom-env.load.el")))
+      (if (file-exists-p env-file)
+          (load-file env-file)
+        (user-error "No envvar file found! Run 'doom sync --env' in your shell to generate one!")))))
 
 (provide 'doom-lib '(config))
 ;;; config.el ends here

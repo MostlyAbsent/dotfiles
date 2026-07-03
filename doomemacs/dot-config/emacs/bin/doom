@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-:; # -*- mode: emacs-lisp; lexical-binding: t -*-
+:; # -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
 :; case "$EMACS" in *term*) EMACS=emacs ;; *) EMACS="${EMACS:-emacs}" ;; esac
 :; [ "x$EMACS" = xemacs ] && { type emacs >/dev/null 2>&1 || err=1; }
 :; [ "x$err" = x ] || { echo "Error: failed to run Emacs with command '$EMACS'"; echo; echo "Are you sure Emacs is installed and in your \$PATH?"; exit 1; } >&2
@@ -10,14 +10,14 @@
 :; export __DOOMGEOM="${__DOOMGEOM:-`tput cols 2>/dev/null`x`tput lines 2>/dev/null`}"
 :; export __DOOMGPIPE=${__DOOMGPIPE:-$__DOOMPIPE}
 :; export __DOOMPIPE=; [ -t 0 ] || __DOOMPIPE="${__DOOMPIPE}0"; [ -t 1 ] || __DOOMPIPE="${__DOOMPIPE}1"
-:; eval "$emacs --eval \"(setq warning-inhibit-types '((files missing-lexbind-cookie)))\" --load" "$0" -- "$@" || exit=$?
+:; eval "$emacs --eval \"(setq warning-inhibit-types '((files missing-lexbind-cookie)))\" --load \"$0\"" -- "$@" || exit=$?
 :; [ "${exit:-0}" -eq 254 ] && { export TMPDIR="${TMPDIR:-${TMP:-${TEMP:-`eval "$emacs -Q --eval '(princ temporary-file-directory)'" 2>/dev/null`}}}"; sh "${TMPDIR}/doom.${__DOOMPID}.${__DOOMSTEP}.sh" "$0" "$@" && true; exit="$?"; }
 :; exit $exit
 
 ;; This magical mess of a shebang is necessary for any script that relies on
 ;; Doom's CLI framework, because Emacs' tty libraries and capabilities are too
-;; immature (borderline non-existent) at the time of writing (28.1). This
-;; shebang sets out to accomplish these three goals:
+;; immature (borderline non-existent). This shebang sets out to accomplish these
+;; three goals:
 ;;
 ;; 1. To produce a more helpful error if Emacs isn't installed or broken. It
 ;;    must do so without assuming whether $EMACS is a shell command (e.g. 'snap
@@ -65,12 +65,20 @@
 ;;   do the opposite.
 ;; - I intentionally suppress loading site files (must be done with '-q
 ;;   --no-site-file' NOT '-Q', as the latter omits the site-lisp dir from
-;;   `load-path' too), so lisp/doom-cli.el can load them manually later (early
-;;   in lisp/doom-cli.el). Look there for an explanation why I do this.
+;;   `load-path' too), so `doom-initialize' can load them manually later (so I
+;;   can suppress the extraneous output that site-lisp files produce).
 ;; - POSIX-compliancy is paramount: there's no guarantee what /bin/sh will be
 ;;   symlinked to in the esoteric OSes/distros Emacs users use.
 ;; - The user may have mounted /tmp with a noexec flag, so pass the exit script
 ;;   to /bin/sh rather than executing them directly.
+;; - The (setq warning-inhibit-types '((files missing-lexbind-cookie))) is
+;;   necessary on later versions of Emacs 31, where Emacs will throw warnings
+;;   when loading elisp that lack 'lexical-binding: t' header line. Setting it
+;;   here or in early-init.el is not enough, though I do it anyway.
+
+(unless default-directory
+  (message "Error: executed from a non-existent directory. CD somewhere safe, first!")
+  (kill-emacs 1))
 
 ;; Doom's core sets up everything we need; including `doom-*-dir' variables,
 ;; universal defaults, and autoloads for doom-*-initialize functions.
@@ -103,7 +111,7 @@
 
 
 ;;
-;;; Entry point
+;;; * Entry point
 
 (defcli! doom (&args _command)
   "A command line interface to Doom Emacs.
@@ -126,12 +134,16 @@ ENVIRONMENT VARIABLES:
   `$DOOMDIR'
     The location of your private configuration for Doom Emacs (defaults to
     ~/.config/doom or ~/.doom.d; whichever it finds first). This is *not* the
-    place you've cloned doomemacs/doomemacs to. The `--doomdir' option also sets
-    this variable.
+    place you've cloned doomemacs/core to. The `--doomdir' option also sets this
+    variable.
 
   `$DOOMPAGER'
     The pager to invoke for large output (default: \"less +g\"). The `--pager'
     option also sets this variable.
+
+  `$DOOMPATH'
+    A colon-delimited list of directories where Doom's CLI searches for doom-*
+    executables when invoking an unrecognized command.
 
   `$DOOMPROFILE'
     Which Doom profile to activate (default: \"_@0\"). The `--profile' option
@@ -201,12 +213,13 @@ SEE ALSO:
 
     Warning: files loaded this way load too late to define new commands. To
     define commands, do so from `$DOOMDIR'/cli.el, `$DOOMDIR'/init.el, or a
-    .doomrc file in the current project tree."
+    doom-* executable with a doomscript shebang line in `$DOOMDIR'/bin/ or
+    `$DOOMPATH' (which you can set)."
   (when bench?
     (setq doom-cli-benchmark-threshold 'always))
   (unless init-file-debug ; debug-mode implies verbose
     (when verbose?
-      (setq doom-print-minimum-level 'info)))
+      (setq doom-print-level 'info)))
   (when color?
     (setq doom-print-backend (if (eq color? :yes) 'ansi)))
   (when pager
@@ -220,7 +233,7 @@ SEE ALSO:
             doomdir)
     (let (omit)
       (when debug?
-        (setenv "DEBUG" "1")
+        (setenv "DEBUG" "3")
         (setq init-file-debug t)
         (push "--debug" omit)
         (push "-D" omit))
@@ -244,12 +257,21 @@ SEE ALSO:
 
 
 ;;
-;;; Load user config + commands
+;;; * Load user config + commands
 
 ;; Load $DOOMDIR/init.el, to read the user's `doom!' block and give users an
 ;; opportunity to customize the CLI environment, if they like. Otherwise, they
 ;; can do so in .doomrc or .doomproject.
-(doom-modules-initialize)
+(doom-modules-initialize t)
+
+;; Look for doom-* executables and autoloaded CLIs in these places. Like $PATH,
+;; but for Doom CLIs.
+(add-to-list 'doom-cli-load-path (doom-core-dir "cli/")) ; DEPRECATED
+(add-to-list 'doom-cli-load-path (doom-emacs-dir "bin/"))
+(add-to-list 'doom-cli-load-path (doom-user-dir "bin/"))
+(when-let* ((doompath (getenv "DOOMPATH")))
+  (dolist (dir (nreverse (split-string doompath path-separator)))
+    (add-to-list 'doom-cli-load-path dir)))
 
 ;; There are a lot of CLIs, and some have expensive initialization, so best we
 ;; load them lazily.
@@ -261,45 +283,37 @@ SEE ALSO:
   ;; And suggest its use when errors occur.
   (add-to-list 'doom-help-commands "%p h[elp] %c")
 
-  (defcli-autoload! ((doctor doc)))
-  (defcli-autoload! (info))
+  ;; Eagerly load the two commands that should always be present. Running one of
+  ;; these commands is required for the rest of the commands to work.
+  (let ((doom-cli--loading t))
+    (load! "doom-install")
+    (load! "doom-sync"))
 
-  (defcli-group! "Config Management"
-    :docs "Commands for maintaining your Doom Emacs configuration."
-    (defcli-autoload! ((sync s)))
-    (defcli-autoload! ((profile pf)))
-    (defcli-autoload! ((upgrade up)))
-    (defcli-autoload! (env))
-    (defcli-autoload! (gc))
-    (defcli-autoload! (install))
+  (defcli-alias! s sync)
+  (defcli-alias! pf profile)
+  (defcli-alias! up upgrade)
+  (defcli-alias! doc doctor)
 
-    (defcli-obsolete! (profiles sync) (profile sync "--all") "3.0.0")
-    (defcli-obsolete! ((build b)) (sync "--rebuild") "3.0.0")
-    (defcli-obsolete! ((purge p)) (gc) "3.0.0")
+  (defcli-obsolete! (profiles sync) (profile sync "--all") "2.1.0")
+  (defcli-obsolete! ((build b)) (sync "--rebuild") "2.1.0")
+  (defcli-obsolete! ((purge p)) (gc) "2.1.0")
+  (defcli-obsolete! (run) (emacs) "2.1.0")
 
-    ;; TODO Post-3.0 commands
-    (defcli-stub! module)
-    (defcli-stub! nuke)
-    (defcli-stub! package)
-    (defcli-stub! rollback))
+  (defcli-stub! module)
+  (defcli-stub! nuke)
+  (defcli-stub! package)
+  (defcli-stub! rollback)
 
-  (defcli-group! "Development"
-    :docs "Commands for developing or launching Doom."
-    (defcli-autoload! (ci))
-    (defcli-autoload! (make))
-    (defcli-autoload! (emacs))
-    (defcli-obsolete! (run) (emacs) "3.0.0")
-
-    ;; TODO Post-3.0 commands
-    (defcli-stub! test))
-
-  (let ((cli-file "cli.el"))
-    (defcli-group! "Module commands"
-      (with-doom-context 'module
-        (dolist (key (doom-module-list))
-          (when-let (path (doom-module-locate-path key cli-file))
-            (defcli-group! :prefix (if (cdr key) (format "+%s" (cdr key)))
-              (doom-load (file-name-sans-extension path))))))))
+  (with-doom-context 'module
+    (dolist (key (doom-module-list))
+      (when (eq (car key) :doom)
+        (when-let* ((bindir (doom-module-locate-path key "bin/")))
+          (add-to-list 'doom-cli-exec-path (doom-module-locate-path key "bin/") 'append)))
+      (when-let* ((path (doom-module-locate-path key doom-module-cli-file)))
+        (if (eq (car key) :doom)
+            (doom-load (file-name-sans-extension path))
+          (defcli-group! "Module commands" :prefix (if (cdr key) (format "+%s" (cdr key)))
+            (doom-load (file-name-sans-extension path)))))))
 
   ;; Execute arbitrary CLI configuration in a local .doom.el file
   (let (doomrc)
@@ -311,7 +325,7 @@ SEE ALSO:
 
 
 ;;
-;;; Let 'er rip
+;;; * Let 'er rip
 
 (run! "doom" (cdr (member "--" argv)))
 

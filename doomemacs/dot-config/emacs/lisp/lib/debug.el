@@ -1,15 +1,10 @@
 ;;; lisp/lib/debug.el -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
-
-;;
-;;; Doom's debug mode
 
 ;;;###autoload
 (defvar doom-debug--variables
   `(;; Doom variables
-    (doom-print-minimum-level . debug)
-    (doom-inhibit-log . nil)
+    (doom-print-level debug)
+    (doom-inhibit-log nil)
 
     ;; Emacs variables
     (async-debug t 2)
@@ -27,7 +22,7 @@
 
 ;;;###autoload
 (progn
-  (cl-defun set-debug-variable! (var &optional (debug-val t) (level 1))
+  (cl-defun set-debug-var! (var &optional (debug-val t) (level 1))
     "Set VAR to DEBUG-VAL (or `t') when `doom-debug-mode' is active at >=LEVEL."
     (setf (alist-get var doom-debug--variables) (cons debug-val level))))
 
@@ -42,12 +37,12 @@
   (cond ((listp spec)
          (pcase-let ((`(,var ,val ,level) spec))
            (if (boundp var)
-               (set-default
+               (set-default-toplevel-value
                 var (if (or (not doom-debug-mode)
                             (> (or level 1) doom-log-level))
                         (prog1 (get var 'initial-value)
                           (put var 'initial-value nil))
-                      (doom-log 3 "debug:vars: %s = %S" var (default-toplevel-value var))
+                      (doom-log 3 "debug:vars: %s = %S" var val)
                       (put var 'initial-value (default-toplevel-value var))
                       val))
              (add-to-list 'doom-debug--unbound-variables spec))))
@@ -57,10 +52,7 @@
         ((add-to-list 'doom-debug--unbound-variables (cons spec t)))))
 
 (defun doom-debug--timestamped-message-a (format-string &rest _args)
-  "Advice to run before `message' that prepends a timestamp to each message.
-
-Activate this advice with:
-(advice-add 'message :before 'doom-debug--timestamped-message-a)"
+  "Advice to run before `message' that prepends a timestamp to each message."
   (when (and (stringp format-string)
              message-log-max  ; if nil, logging is disabled
              (not (equal format-string "%s%s"))
@@ -83,22 +75,20 @@ Activate this advice with:
 (define-minor-mode doom-debug-mode
   "Toggle `debug-on-error' and `init-file-debug' for verbose logging."
   :global t
-  (when (or doom-debug-mode
-            (and (integerp current-prefix-arg)
-                 (> current-prefix-arg 0)))
-    (setq doom-debug-mode t)
-    (let ((level (max 1 (min 3 (or current-prefix-arg 1)))))
-      (put 'doom-log-level 'initial-value doom-log-level)
-      (setq doom-log-level level)))
-  (doom-log "debug: enabled! (log-level=%d)" doom-log-level)
-  (mapc #'doom-debug--set-var doom-debug--variables)
+  :group 'doom
   ;; Watch for changes in `doom-debug--variables', or when packages load (and
   ;; potentially define one of `doom-debug--variables'), in case some of them
   ;; aren't defined when `doom-debug-mode' is first loaded.
   (cond (doom-debug-mode
-         (unless noninteractive
-           (message "Debug mode level %d enabled! (Run 'M-x view-echo-area-messages' to open the log buffer)"
+         (when (called-interactively-p 'any)
+           (message "Debug mode level %d enabled! (Run 'M-x view-echo-area-messages' to see logs)"
                     doom-log-level))
+         (when-let* ((level (and (integerp current-prefix-arg)
+                                 (> current-prefix-arg 0)
+                                 (max 1 (min 3 (or current-prefix-arg 1))))))
+           (setf (alist-get 'doom-log-level doom-debug--variables)
+                 (list level)))
+         (doom-log "debug: enabled! (log-level=%d)" doom-log-level)
          ;; Produce more helpful (and visible) error messages from errors
          ;; emitted from hooks (particularly mode hooks), that usually go
          ;; unnoticed otherwise.
@@ -111,16 +101,14 @@ Activate this advice with:
          (add-variable-watcher 'doom-debug--variables #'doom-debug--watch-vars-h)
          (add-hook 'after-load-functions #'doom-debug--watch-vars-h))
         (t
-         (when-let* ((last-level (get 'doom-log-level 'initial-value)))
-           (put 'doom-log-level 'initial-value nil)
-           (setq doom-log-level last-level))
          (advice-remove #'run-hooks #'doom-run-hooks)
          (advice-remove #'message #'doom-debug--timestamped-message-a)
          (advice-remove #'gcmh-idle-garbage-collect #'doom-debug-shut-up-a)
          (remove-variable-watcher 'doom-debug--variables #'doom-debug--watch-vars-h)
          (remove-hook 'after-load-functions #'doom-debug--watch-vars-h)
          (doom-log "debug: disabled")
-         (message "Debug mode disabled!"))))
+         (message "Debug mode disabled!")))
+  (mapc #'doom-debug--set-var doom-debug--variables))
 
 (defun doom-debug-shut-up-a (fn &rest args)
   "Suppress output from FN, even in debug mode."
@@ -129,7 +117,7 @@ Activate this advice with:
 
 
 ;;
-;;; Custom debugger
+;;; * Custom debugger
 
 ;; HACK: I advise `debug' instead of changing `debugger' to hide the debugger
 ;;   itself from the backtrace. Doing it manually would require reimplementing
@@ -200,7 +188,7 @@ Activate this advice with:
 
 
 ;;
-;;; Hooks
+;;; * Hooks
 
 ;;;###autoload
 (defun doom-run-all-startup-hooks-h ()
@@ -220,7 +208,7 @@ Activate this advice with:
 
 
 ;;
-;;; Helpers
+;;; * Helpers
 
 (defsubst doom--collect-forms-in (file form)
   (when (file-readable-p file)
@@ -242,9 +230,9 @@ Activate this advice with:
   "Returns diagnostic information about the current Emacs session in markdown,
 ready to be pasted in a bug report on github."
   (require 'vc-git)
-  (doom-require 'doom-lib 'profiles)
-  (doom-require 'doom-lib 'modules)
-  (doom-require 'doom-lib 'packages)
+  (require 'doom-profiles)
+  (require 'doom-modules)
+  (require 'doom-packages)
   (let ((default-directory doom-emacs-dir))
     (letf! ((defun sh (&rest args) (cdr (apply #'doom-call-process args)))
             (defun cat (file &optional limit)
@@ -294,7 +282,7 @@ ready to be pasted in a bug report on github."
                             'server-running)
                         (if (boundp 'chemacs-version)
                             (intern (format "chemacs-%s" chemacs-version)))
-                        (if (file-exists-p doom-env-file)
+                        (if (get 'process-environment 'doom)
                             'envvar-file)
                         (if (featurep 'exec-path-from-shell)
                             'exec-path-from-shell)
@@ -316,6 +304,12 @@ ready to be pasted in a bug report on github."
              (cl-loop for (type var _) in (get 'user 'theme-settings)
                       if (eq type 'theme-value)
                       collect var)))
+        (sources
+         ,@(cl-loop for default-directory in (doom-glob doom-emacs-dir "sources/*/")
+                    if (file-exists-p ".git")
+                    collect (cons (or (doom-config `(,default-directory project name) t)
+                                      (file-name-base (directory-file-name default-directory)))
+                                  (cdr (doom-call-process "git" "log" "-1" "--format=%D %h %ci")))))
         (modules
          ,@(or (cl-loop with lastcat = nil
                         for (cat . mod) in (seq-filter #'cdr (doom-module-list))
@@ -330,7 +324,7 @@ ready to be pasted in a bug report on github."
                                 (append
                                  (cond ((null path)
                                         (list '&nopath))
-                                       ((not (file-in-directory-p path doom-modules-dir))
+                                       ((file-in-directory-p path doom-user-dir)
                                         (list '&user)))
                                  (if flags
                                      `(,mod ,@flags)
@@ -369,17 +363,18 @@ ready to be pasted in a bug report on github."
 
 FILL-COLUMN determines the column at which lines will be broken."
   (with-temp-buffer
+    (doom-require 'doom-cli 'print)
     (let ((doom-print-backend (unless nocolor doom-print-backend))
           (doom-print-indent 0))
       (dolist (spec (cl-remove-if-not #'cdr (doom-info)) (buffer-string))
-        ;; FIXME Refactor this horrible cludge, either here or in `format!'
+        ;; REVIEW: Refactor this horrible cludge, either here or in `format!'
         (insert! ((bold "%-10s ") (symbol-name (car spec)))
                  ("%s\n"
                   (string-trim-left
                    (indent
                     (fill
                      (if (listp (cdr spec))
-                         (mapconcat (doom-partial #'format "%s")
+                         (mapconcat (apply-partially #'format "%s")
                                     (cdr spec)
                                     " ")
                        (cdr spec))
@@ -388,54 +383,63 @@ FILL-COLUMN determines the column at which lines will be broken."
 
 
 ;;
-;;; Commands
+;;; * Commands
 
 ;;;###autoload
 (defun doom/version ()
   "Display the running version of Doom core, module sources, and Emacs."
   (interactive)
-  (print! "%s\n%s\n%s"
-          (format "%-13s v%-15s %s"
-                  "GNU Emacs"
-                  emacs-version
-                  emacs-repository-version)
-          (format "%-13s v%-15s %s"
-                  "Doom core"
-                  doom-version
-                  (or (cdr (doom-call-process
-                            "git" "-C" (expand-file-name doom-emacs-dir)
-                            "log" "-1" "--format=%D %h %ci"))
-                      "n/a"))
-          ;; NOTE This is a placeholder. Our modules will be moved to its own
-          ;;   repo eventually, and Doom core will later be capable of managing
-          ;;   them like package sources.
-          (format "%-13s v%-15s %s"
-                  "Doom modules"
-                  doom-modules-version
-                  (or (cdr (doom-call-process
-                            "git" "-C" (expand-file-name doom-modules-dir)
-                            "log" "-1" "--format=%D %h %ci"))
-                      "n/a"))))
+  (letf! ((defun gitinfo (dir)
+            (let ((default-directory (expand-file-name dir)))
+              (if (locate-dominating-file ".git" default-directory)
+                  (format "%s %s"
+                          (or (cdr (doom-call-process "git" "log" "-1" "--format=%h %cs"))
+                              "-")
+                          (or (cdr (doom-call-process "git" "branch" "--show-current"))
+                              "-"))
+                "[not a git repo]")))
+          (fmt "%-10s v%-10s %s\n"))
+    ;; Using `princ' instead of `message' because the latter writes to stderr in
+    ;; noninteractive sessions, while the latter writes to stdout.
+    (princ (format fmt "emacs" emacs-version
+                   (and (stringp emacs-repository-version)
+                        (substring emacs-repository-version 0 9))))
+    (princ (format fmt "doom" doom-version (gitinfo doom-emacs-dir)))
+    (dolist (dir (cddr doom-module-load-path))
+      (princ (format fmt
+                     (or (doom-config `(,dir modules name))
+                         (doom-config `(,dir project name))
+                         (file-name-nondirectory (expand-file-name ".." dir)))
+                     (or (doom-config `(,dir modules version))
+                         (doom-config `(,dir project version))
+                         "n/a")
+                     (gitinfo dir))))))
 
 ;;;###autoload
 (defun doom/info ()
-  "Collects some debug information about your Emacs session, formats it and
-copies it to your clipboard, ready to be pasted into bug reports!"
+  "Collects some formatted information about your Doom environment.
+
+Please include it anytime you make a bug report or ask for help with Doom
+anywhere!"
   (interactive)
   (let ((buffer (get-buffer-create "*doom info*")))
     (with-current-buffer buffer
       (setq buffer-read-only t)
-      (with-silent-modifications
+      (setq default-directory "~/")
+      (when (eq major-mode 'fundamental-mode)
+        (text-mode))
+      (let ((inhibit-read-only t))
         (erase-buffer)
         (insert (doom-info-string 86)))
       (pop-to-buffer buffer)
       (kill-new (buffer-string))
-      (when (y-or-n-p "Your doom-info was copied to the clipboard.\n\nOpen pastebin.com?")
-        (browse-url "https://pastebin.com")))))
+      (setq-local header-line-format
+                  (substitute-command-keys
+                   "Type \\[save-buffer] to save this to a file")))))
 
 
 ;;
-;;; Profiling
+;;; * Profiling
 
 (defvar doom--profiler nil)
 ;;;###autoload

@@ -217,6 +217,7 @@ Automatically accepts default filename."
 
 (add-hook 'markdown-mode-hook #'hl-todo-mode)
 (add-hook 'gfm-mode-hook #'hl-todo-mode)
+(add-hook 'markdown-mode-hook (lambda () (auto-fill-mode)))
 
 (after! apheleia
   (setf (alist-get 'python-mode apheleia-formatters)
@@ -226,3 +227,45 @@ Automatically accepts default filename."
              '("\\.env\\(?:\\..*\\)?\\'" . conf-mode))
 
 (add-to-list 'org-file-apps '("\\.docx\\'" . system))
+
+;; (use-package! flycheck-ruff
+;;   :after flycheck
+;;   :hook (python-mode . flycheck-ruff-setup))
+
+(defun jtt/insert-ieee-formatted-citation ()
+  "Insert an IEEE-style reference from a bibtex file into the current buffer.
+
+Gemini generated, then fixed."
+  (interactive)
+  (require 'citar)
+  (let* ((key (citar-select-ref)) ; Select the bibtex key
+         (entry (citar-get-entry key)) ; Get the raw data
+         ;; Extract fields using regex/assoc
+         (title (or (cdr (assoc "title" entry)) "No Title"))
+         (author (or (cdr (assoc "author" entry)) "No Author"))
+         (journal (or (cdr (assoc "journal" entry))
+                      (cdr (assoc "booktitle" entry))
+                      "Unknown Source"))
+         (year (or (cdr (assoc "year" entry)) "n.d."))
+         (url (cdr (assoc "url" entry))))
+
+    ;; Replace curly braces often found in BibTeX titles
+    (setq title (replace-regexp-in-string "[{}]" "" title))
+
+    ;; Build the string
+    (let ((ref-string (format "%s, \"%s,\" %s, %s."
+                              author title journal year)))
+      ;; Add URL if it exists
+      (when url
+        (setq ref-string (concat ref-string " [Online]. Available: " url)))
+
+      ;; Insert into buffer
+      (insert ref-string "\n"))))
+
+(map! :after markdown-mode
+      :map markdown-mode-map
+      :n "SPC m @" #'jtt/insert-ieee-formatted-citation)
+
+(map! :after markdown-mode
+      :map markdown-mode-map
+      :i "<backtab>" #'markdown-promote)
